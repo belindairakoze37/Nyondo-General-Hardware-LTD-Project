@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stock Details - NYONDO Hardware</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* ========== PROFESSIONAL STYLES FOR STOCK DETAILS PAGE ========== */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background: #f0f2f5;
+    color: #1a1a2e;
+    line-height: 1.5;
+}
+
+/* Container */
+.container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 30px 20px;
+}
+
+/* ========== PAGE HEADER ========== */
+.page-header {
+    margin-bottom: 25px;
+}
+
+.page-header h2 {
+    font-size: 28px;
+    font-weight: 700;
+    color: #1a1a2e;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.page-header h2 i {
+    color: #ff8c00;
+}
+
+.page-header p {
+    color: #666;
+    font-size: 14px;
+    margin-top: 8px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* ========== CARD STYLES ========== */
+.card {
+    background: white;
+    border-radius: 20px;
+    padding: 30px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+    margin-bottom: 25px;
+}
+
+/* Section Headers */
+.section-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+    padding-bottom: 12px;
+    border-bottom: 2px solid #e5e7eb;
+}
+
+.section-header i {
+    font-size: 20px;
+    color: #ff8c00;
+}
+
+.section-header h4 {
+    font-size: 18px;
+    font-weight: 600;
+    color: #1a1a2e;
+    margin: 0;
+}
+
+/* Info Grid */
+.info-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+}
+
+.info-item {
+    display: flex;
+    align-items: baseline;
+    flex-wrap: wrap;
+}
+
+.info-label {
+    font-weight: 600;
+    color: #666;
+    width: 130px;
+    font-size: 14px;
+}
+
+.info-value {
+    color: #1a1a2e;
+    font-size: 14px;
+    flex: 1;
+}
+
+.info-value strong {
+    font-weight: 600;
+    color: #1a1a2e;
+}
+
+/* Full Width Info */
+.info-full {
+    margin-top: 10px;
+}
+
+.info-full .info-label {
+    margin-bottom: 8px;
+}
+
+.info-full .info-value {
+    background: #f8f9fa;
+    padding: 12px;
+    border-radius: 10px;
+    width: 100%;
+}
+
+/* ========== BADGES ========== */
+.badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.badge.bg-danger {
+    background: #fee2e2;
+    color: #f44336;
+}
+
+.badge.bg-warning {
+    background: #fff3e0;
+    color: #ff9800;
+}
+
+.badge.bg-success {
+    background: #e8f5e9;
+    color: #4caf50;
+}
+
+.badge.bg-info {
+    background: #e3f2fd;
+    color: #2196f3;
+}
+
+.badge.text-dark {
+    color: #1a1a2e;
+}
+
+/* ========== BUTTONS ========== */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 24px;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.3s;
+    text-decoration: none;
+    border: none;
+    font-family: 'Inter', sans-serif;
+}
+
+.btn-warning {
+    background: #ff9800;
+    color: white;
+}
+
+.btn-warning:hover {
+    background: #e68900;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(255, 152, 0, 0.3);
+}
+
+.btn-danger {
+    background: #f44336;
+    color: white;
+}
+
+.btn-danger:hover {
+    background: #d32f2f;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(244, 67, 54, 0.3);
+}
+
+.btn-secondary {
+    background: #f8f9fa;
+    border: 2px solid #e5e7eb;
+    color: #666;
+}
+
+.btn-secondary:hover {
+    border-color: #ff8c00;
+    color: #ff8c00;
+    transform: translateY(-2px);
+}
+
+/* Action Buttons Container */
+.action-buttons {
+    display: flex;
+    gap: 15px;
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 1px solid #e5e7eb;
+    flex-wrap: wrap;
+}
+
+/* ========== RESPONSIVE ========== */
+@media (max-width: 600px) {
+    .container {
+        padding: 20px 15px;
+    }
+    
+    .card {
+        padding: 20px;
+    }
+    
+    .info-grid {
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+    
+    .info-item {
+        flex-direction: column;
+        gap: 5px;
+    }
+    
+    .info-label {
+        width: 100%;
+    }
+    
+    .action-buttons {
+        flex-direction: column;
+    }
+    
+    .btn {
+        justify-content: center;
+    }
+    
+    .page-header h2 {
+        font-size: 24px;
+    }
+}
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <!-- Page Header with Icons -->
+    <div class="page-header">
+        <h2>
+            <i class="fas fa-info-circle"></i> Stock Details
+        </h2>
+        <p>
+            <i class="fas fa-box"></i> View complete information about this product
+        </p>
+    </div>
+
+    <div class="card">
+        <!-- PRODUCT INFORMATION SECTION -->
+        <div class="section-header">
+            <i class="fas fa-boxes"></i>
+            <h4>Product Information</h4>
+        </div>
+        <div class="info-grid">
+            <div class="info-item">
+                <span class="info-label"><i class="fas fa-tag"></i> Name:</span>
+                <span class="info-value"><strong>{{ stock.product_name }}</strong></span>
+            </div>
+            <div class="info-item">
+                <span class="info-label"><i class="fas fa-th-large"></i> Category:</span>
+                <span class="info-value">{{ stock.category }}</span>
+            </div>
+            <div class="info-item info-full">
+                <span class="info-label"><i class="fas fa-align-left"></i> Description:</span>
+                <span class="info-value">{{ stock.description|default:"No description" }}</span>
+            </div>
+        </div>
+
+        <!-- STOCK LEVELS SECTION -->
+        <div class="section-header" style="margin-top: 25px;">
+            <i class="fas fa-cubes"></i>
+            <h4>Stock Levels</h4>
+        </div>
+        <div class="info-grid">
+            <div class="info-item">
+                <span class="info-label"><i class="fas fa-sort-numeric-up"></i> Quantity:</span>
+                <span class="info-value {% if stock.quantity < 10 %}text-danger{% endif %}">
+                    <strong>{{ stock.quantity }}</strong>
+                </span>
+            </div>
+            <div class="info-item">
+                <span class="info-label"><i class="fas fa-arrow-down"></i> Minimum Level:</span>
+                <span class="info-value">{{ stock.minimum_stock_level }}</span>
+            </div>
+            <div class="info-item">
+                <span class="info-label"><i class="fas fa-arrow-up"></i> Maximum Level:</span>
+                <span class="info-value">{{ stock.maximum_stock_level }}</span>
+            </div>
+            <div class="info-item">
+                <span class="info-label"><i class="fas fa-exchange-alt"></i> Reorder Quantity:</span>
+                <span class="info-value">{{ stock.reorder_quantity }}</span>
+            </div>
+        </div>
+
+        <!-- PRICING SECTION -->
+        <div class="section-header" style="margin-top: 25px;">
+            <i class="fas fa-money-bill-wave"></i>
+            <h4>Pricing</h4>
+        </div>
+        <div class="info-grid">
+            <div class="info-item">
+                <span class="info-label"><i class="fas fa-dollar-sign"></i> Unit Cost:</span>
+                <span class="info-value">UGX {{ stock.unit_cost }}</span>
+            </div>
+            <div class="info-item">
+                <span class="info-label"><i class="fas fa-tag"></i> Selling Price:</span>
+                <span class="info-value">UGX {{ stock.selling_price }}</span>
+            </div>
+        </div>
+
+        <!-- SUPPLIER & PAYMENT SECTION -->
+        <div class="section-header" style="margin-top: 25px;">
+            <i class="fas fa-building"></i>
+            <h4>Supplier & Payment</h4>
+        </div>
+        <div class="info-grid">
+            <div class="info-item">
+                <span class="info-label"><i class="fas fa-truck"></i> Supplier:</span>
+                <span class="info-value">{{ stock.supplier }}</span>
+            </div>
+            <div class="info-item">
+                <span class="info-label"><i class="fas fa-credit-card"></i> Payment Method:</span>
+                <span class="info-value">{{ stock.payment_method }}</span>
+            </div>
+            <div class="info-item">
+                <span class="info-label"><i class="fas fa-calendar"></i> Credit Due Date:</span>
+                <span class="info-value">{{ stock.credit_due_date|default:"N/A" }}</span>
+            </div>
+            <div class="info-item">
+                <span class="info-label"><i class="fas fa-check-circle"></i> Paid:</span>
+                <span class="info-value">{{ stock.is_paid|yesno:"Yes,No" }}</span>
+            </div>
+        </div>
+
+        <!-- STATUS SECTION -->
+        <div class="section-header" style="margin-top: 25px;">
+            <i class="fas fa-chart-line"></i>
+            <h4>Status</h4>
+        </div>
+        <div class="info-item">
+            <span class="info-label"><i class="fas fa-flag-checkered"></i> Status:</span>
+            <span class="info-value">
+                {% if stock.status == 'critical' %}
+                    <span class="badge bg-danger"><i class="fas fa-exclamation-circle"></i> Critical</span>
+                {% elif stock.status == 'low' %}
+                    <span class="badge bg-warning text-dark"><i class="fas fa-exclamation-triangle"></i> Low</span>
+                {% elif stock.status == 'overstock' %}
+                    <span class="badge bg-info"><i class="fas fa-chart-line"></i> Overstock</span>
+                {% else %}
+                    <span class="badge bg-success"><i class="fas fa-check-circle"></i> Normal</span>
+                {% endif %}
+            </span>
+        </div>
+
+        <!-- NOTES SECTION -->
+        <div class="section-header" style="margin-top: 25px;">
+            <i class="fas fa-sticky-note"></i>
+            <h4>Notes</h4>
+        </div>
+        <div class="info-full">
+            <div class="info-value">
+                <i class="fas fa-file-alt" style="color: #ff8c00; margin-right: 8px;"></i>
+                {{ stock.notes|default:"No notes available" }}
+            </div>
+        </div>
+
+        <!-- ACTION BUTTONS -->
+        <div class="action-buttons">
+            <a href="{% url 'edit_stock' stock.id %}" class="btn btn-warning">
+                <i class="fas fa-edit"></i> Edit
+            </a>
+    
+            <a href="{% url 'stock_list' %}" class="btn btn-secondary">
+                <i class="fas fa-arrow-left"></i> Back to List
+            </a>
+        </div>
+    </div>
+</div>
+{% include 'footer.html'   %}
+</body>
+</html>
