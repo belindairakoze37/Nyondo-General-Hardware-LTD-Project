@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Payment | Dashboard</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+            background: #f0f2f8;
+            padding: 40px 28px;
+            color: #1a2634;
+        }
+
+        .payment-container {
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        
+        .payment-card {
+            background: white;
+            border-radius: 24px;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.02);
+            overflow: hidden;
+            border: 1px solid #eef2f6;
+            transition: all 0.2s ease;
+        }
+
+        /* header with gradient - consistent with sales list */
+        .card-header {
+            background: #111927;
+            padding: 28px 32px;
+            border-bottom: 1px solid #2a3a4a;
+        }
+
+        .card-header h1 {
+            font-size: 1.8rem;
+            font-weight: 600;
+            letter-spacing: -0.3px;
+            background: linear-gradient(135deg, #ffffff, #cbd5e6);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin: 0;
+        }
+
+        .card-header h1::before {
+        
+            font-size: 1.8rem;
+            background: none;
+            -webkit-background-clip: unset;
+            background-clip: unset;
+            color: #ffd966;
+        }
+
+        
+        .card-content {
+            padding: 32px;
+        }
+
+        
+        .form-group {
+            margin-bottom: 24px;
+        }
+
+        .form-group label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            letter-spacing: 0.3px;
+            color: #1e2f3f;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+        }
+
+        .form-group label::before {
+            font-size: 1rem;
+        }
+
+        .form-group select,
+        .form-group input {
+            width: 100%;
+            padding: 14px 18px;
+            font-size: 0.9rem;
+            font-family: 'Inter', sans-serif;
+            border: 1px solid #e2e8f0;
+            border-radius: 14px;
+            background: white;
+            transition: all 0.2s ease;
+            color: #1a2634;
+            font-weight: 500;
+        }
+
+        .form-group select:focus,
+        .form-group input:focus {
+            outline: none;
+            border-color: #2c7da0;
+            box-shadow: 0 0 0 3px rgba(44, 125, 160, 0.1);
+        }
+
+        .form-group select {
+            cursor: pointer;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23475569' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 18px center;
+        }
+
+
+        .balance-hint {
+            display: inline-block;
+            background: #f1f5f9;
+            padding: 4px 12px;
+            border-radius: 40px;
+            font-size: 0.7rem;
+            font-weight: 500;
+            color: #c23d2c;
+            margin-left: 10px;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        
+        .amount-input-wrapper {
+            position: relative;
+        }
+
+        .currency-symbol {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #64748b;
+            font-weight: 600;
+            font-size: 0.9rem;
+            pointer-events: none;
+        }
+
+        .amount-input-wrapper input {
+            padding-left: 40px;
+        }
+
+    
+        .form-actions {
+            display: flex;
+            gap: 16px;
+            margin-top: 32px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 12px 28px;
+            border-radius: 40px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.2s ease;
+            letter-spacing: 0.3px;
+            gap: 8px;
+            cursor: pointer;
+            border: none;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #1e2a3a, #0f1722);
+            color: white;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+            border: 1px solid #2c3e4e;
+        }
+
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #2c3e50, #1a2532);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 18px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn-secondary {
+            background: white;
+            color: #1e6f9f;
+            border: 1px solid #cde0ef;
+        }
+
+        .btn-secondary:hover {
+            background: #e1edf9;
+            border-color: #9bb7d0;
+            transform: translateY(-2px);
+        }
+
+        
+        .info-note {
+            margin-top: 24px;
+            padding: 14px 18px;
+            background: #f8fafd;
+            border-radius: 16px;
+            border-left: 4px solid #2c7da0;
+            font-size: 0.75rem;
+            color: #475569;
+        }
+
+        .info-note::before {
+        
+            font-weight: 600;
+        }
+
+        
+        @media (max-width: 600px) {
+            body {
+                padding: 20px 16px;
+            }
+            .card-header {
+                padding: 20px;
+            }
+            .card-header h1 {
+                font-size: 1.4rem;
+            }
+            .card-content {
+                padding: 24px;
+            }
+            .form-actions {
+                flex-direction: column;
+            }
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+
+        
+        select option {
+            padding: 12px;
+        }
+
+        
+        input:invalid, select:invalid {
+            border-color: #fecaca;
+        }
+
+        
+        .helper-text {
+            font-size: 0.7rem;
+            color: #6b7c8f;
+            margin-top: 6px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        hr {
+            margin: 20px 0;
+            border: none;
+            border-top: 1px solid #eef2f6;
+        }
+    </style>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<div class="payment-container">
+    <div class="payment-card">
+        <div class="card-header">
+            <h1>Add Payment</h1>
+        </div>
+
+        <div class="card-content">
+            <form method="POST">
+                {% csrf_token %}
+
+                <div class="form-group">
+                    <label> Select Sale</label>
+                    <select name="sale" required>
+                        <option value="" disabled selected>— Choose a sale transaction —</option>
+                        {% for sale in sales %}
+                        <option value="{{ sale.id }}">
+                            {{ sale.customer.name }} — {{ sale.product.product_name }} — Balance Due: UGX {{ sale.balance_due|floatformat:2 }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                    <div class="helper-text">
+                        <span>🔍</span> Only sales with outstanding balance are shown
+                    </div>
+                </div>
+
+                <!-- Amount Paid -->
+                <div class="form-group">
+                    <label> Amount Paid</label>
+                    <div class="amount-input-wrapper">
+                        <span class="currency-symbol"></span>
+                        <input type="number" step="0.01" name="amount" placeholder="UGX 0.00" required min="0.01">
+                    </div>
+                    <div class="helper-text">
+                        <span>⚠️</span> Amount cannot exceed the outstanding balance
+                    </div>
+                </div>
+
+                <!-- Payment Method -->
+                <div class="form-group">
+                    <label> Payment Method</label>
+                    <select name="method">
+                        <option value="Cash"> Cash</option>
+                        <option value="Mobile Money"> Mobile Money</option>
+                        <option value="Bank"> Bank Transfer</option>
+                        <option value="Cheque"> Cheque</option>
+                        <option value="Credit"> Credit Card</option>
+                    </select>
+                </div>
+
+                <hr>
+
+                <!-- Form Actions -->
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">
+                         Save Payment
+                    </button>
+                    <a href="{% url 'credit_list' %}" class="btn btn-secondary">
+                        ← Cancel & Back
+                    </a>
+                </div>
+
+                <div class="info-note">
+                    Recording a payment will automatically update the sale's balance due. 
+                    Once the balance reaches zero, the sale status will change to "Paid".
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- footer note matching design language -->
+    <div style="margin-top: 20px; text-align: center; font-size: 0.7rem; color: #6b7c8f;">
+        All payments are securely recorded • Receipt will be generated automatically
+    </div>
+</div>
+
+</body>
+</html>

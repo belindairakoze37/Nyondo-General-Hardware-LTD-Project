@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Payment History | Dashboard</title>
+
+    <style>
+        /* ===== BASE STYLES (YOUR EXISTING COLORS + ENHANCED VISUAL CONSISTENCY) ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, sans-serif;
+            background: #f0f2f8;      /* original soft background */
+            padding: 30px;
+            color: #1a2634;           /* original text color */
+            line-height: 1.4;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+            font-size: 1.9rem;
+            font-weight: 600;
+            letter-spacing: -0.3px;
+            background: linear-gradient(135deg, #1a2634 0%, #1f6392 100%);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            display: inline-block;
+        }
+
+        /* ===== SUMMARY BAR (keep original structure, elevate with subtle depth) ===== */
+        .summary-bar {
+            background: white;
+            padding: 18px 28px;
+            border-radius: 20px;
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 28px;
+            border: 1px solid #eef2f6;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02), 0 1px 2px rgba(0, 0, 0, 0.03);
+            transition: all 0.2s;
+        }
+
+        .summary-item {
+            font-size: 0.9rem;
+            background: #fafcff;
+            padding: 0 12px;
+            border-left: 2px solid #e4e9f0;
+        }
+        .summary-item:first-child {
+            border-left: none;
+            padding-left: 0;
+        }
+        .summary-item:last-child {
+            padding-right: 0;
+        }
+
+        .summary-label {
+            font-weight: 600;
+            color: #4a5b6e;
+            text-transform: uppercase;
+            font-size: 0.7rem;
+            letter-spacing: 0.5px;
+            margin-bottom: 6px;
+        }
+
+        .summary-value {
+            font-weight: 800;
+            color: #1f6392;   /* primary accent — matches link color from original */
+            font-size: 1.3rem;
+            letter-spacing: -0.2px;
+        }
+
+        /* ===== TABLE ENHANCEMENTS (preserving original colors, better readability & polish) ===== */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 5px 18px rgba(0, 0, 0, 0.03), 0 0 0 1px rgba(0, 0, 0, 0.01);
+        }
+
+        th {
+            background: #111927;      /* original dark header */
+            color: white;
+            padding: 14px 12px;
+            text-align: left;
+            font-size: 0.8rem;
+            font-weight: 600;
+            letter-spacing: 0.3px;
+            text-transform: uppercase;
+        }
+
+        td {
+            padding: 14px 12px;
+            border-bottom: 1px solid #edf2f7;
+            font-size: 0.85rem;
+            vertical-align: middle;
+            transition: background 0.2s;
+        }
+
+        tr:hover td {
+            background: #f9fbff;    /* same light hover as original, but more refined */
+        }
+
+        /* payment method badges (exact same classes as original, no changes) */
+        .method-badge {
+            padding: 5px 12px;
+            border-radius: 40px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            display: inline-block;
+            text-align: center;
+            background: #f2f4f8;
+            color: #2c3e4e;
+        }
+
+        .cash {
+            background: #e1f7ea;
+            color: #0e6b2b;
+        }
+
+        .mobile_money {
+            background: #ffe8e6;
+            color: #c23d2c;
+        }
+
+        .bank_transfer {
+            background: #e1edf9;
+            color: #1e6f9f;
+        }
+
+        /* fallback for unknown method (keeps consistent look) */
+        .method-badge:not(.cash):not(.mobile_money):not(.bank_transfer) {
+            background: #eceff5;
+            color: #334155;
+        }
+
+        .empty {
+            text-align: center;
+            padding: 48px 20px;
+            color: #6c7a8e;
+            font-style: italic;
+            font-size: 0.9rem;
+        }
+
+        .link {
+            color: #1e6f9f;   /* original link blue */
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            border-bottom: 1px dashed rgba(30, 111, 159, 0.3);
+        }
+
+        .link:hover {
+            color: #0b4e72;
+            border-bottom-color: #1e6f9f;
+            text-decoration: none;
+        }
+
+        /* customer name styling: keep bold, with subtle contrast */
+        td strong {
+            font-weight: 700;
+            color: #111927;
+        }
+
+        /* sale id small reference */
+        td small {
+            color: #5e6f8d;
+            font-size: 0.7rem;
+            display: inline-block;
+            margin-top: 2px;
+        }
+
+        /* make amount numbers slightly more prominent */
+        td:nth-child(2) {
+            font-weight: 600;
+            color: #1a2c3c;
+        }
+
+        /* responsive touch: table can scroll horizontally on small devices */
+        @media (max-width: 750px) {
+            body {
+                padding: 20px 16px;
+            }
+            .container {
+                overflow-x: auto;
+            }
+            table {
+                min-width: 680px;
+            }
+            .summary-bar {
+                flex-direction: column;
+                gap: 14px;
+            }
+            .summary-item {
+                border-left: none;
+                padding-left: 0;
+                border-bottom: 1px solid #eef2f8;
+                padding-bottom: 10px;
+            }
+            .summary-item:last-child {
+                border-bottom: none;
+            }
+            .summary-value {
+                font-size: 1.2rem;
+            }
+        }
+
+        /* subtle entrance animations (no structural change) */
+        .summary-bar, table {
+            animation: fadeSlideUp 0.35s ease-out;
+        }
+        @keyframes fadeSlideUp {
+            from {
+                opacity: 0;
+                transform: translateY(8px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* additional polish for card-like clarity (no code removed) */
+        .method-badge {
+            font-weight: 600;
+            letter-spacing: -0.2px;
+        }
+
+        /* make 'View Sale' text neatly aligned */
+        td:last-child a {
+            white-space: nowrap;
+            font-size: 0.8rem;
+        }
+    </style>
+</head>
+
+<body>
+<div class="container">
+
+    <h1>Payment History</h1>
+
+    <!-- SUMMARY (original structure exactly preserved: total_transactions, total_collected, latest_payment) -->
+    <div class="summary-bar">
+        <div class="summary-item">
+            <div class="summary-label">Total Transactions</div>
+            <div class="summary-value">{{ payments|length }}</div>
+        </div>
+
+        <div class="summary-item">
+            <div class="summary-label">Total Collected</div>
+            <div class="summary-value">
+                UGX {{ total_collected|default:"0.00" }}
+            </div>
+        </div>
+
+        <div class="summary-item">
+            <div class="summary-label">Latest Payment</div>
+            <div class="summary-value">
+                {% if latest_payment %}
+                    {{ latest_payment.payment_date|date:"M d, Y" }}
+                {% else %}
+                    —
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- TABLE (EXACT ORIGINAL MARKUP, NO MODIFICATIONS) -->
+    <table>
+        <thead>
+        <tr>
+            <th>Customer</th>
+            <th>Amount</th>
+            <th>Payment Method</th>
+            <th>Date</th>
+            <th>Sale</th>
+        </tr>
+        </thead>
+
+        <tbody>
+
+        {% for payment in payments %}
+            <tr>
+                <td>
+                    <strong>{{ payment.sale.customer.name }}</strong><br>
+                    <small style="color: gray;">
+                        {{ payment.sale.customer.contact }}
+                    </small>
+                </td>
+
+                <td>
+                    UGX {{ payment.amount|floatformat:2 }}
+                </td>
+
+                <!-- FIXED PAYMENT METHOD (original classes preserved) -->
+                <td>
+                    <span class="method-badge {{ payment.method }}">
+                        {{ payment.get_method_display }}
+                    </span>
+                </td>
+
+                <td>
+                    {{ payment.payment_date|date:"M d, Y" }}
+                </td>
+
+                <td>
+                    <a class="link" href="{% url 'sale_details' payment.sale.id %}">
+                        View Sale #{{ payment.sale.id }}
+                    </a>
+                </td>
+            </tr>
+        {% empty %}
+            <tr>
+                <td colspan="5" class="empty">
+                    No payments found
+                </td>
+            </tr>
+        {% endfor %}
+
+        </tbody>
+    </table>
+
+</div>
+</body>
+</html>

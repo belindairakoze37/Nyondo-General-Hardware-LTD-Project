@@ -461,7 +461,7 @@
               type="number"
               step="0.01"
               name="distance_km"
-              value="{{ sale.distance|default:'0' }}"
+              value="{{ sale.customer.distance_km|default:'0' }}"
               placeholder="Additional delivery cost"
             />
           </div>
@@ -604,7 +604,7 @@
         <a href="{% url 'sale_list' %}"> ← Back to Sales List </a>
       </div>
       <div class="form-footer-note">
-        🔄 Consistent with stock management | All fields marked * are required.
+         Consistent with stock management | All fields marked * are required.
         Credit sales will reflect pending balance in Sales List. Check 'Is Fully
         Paid' when payment is complete.
       </div>

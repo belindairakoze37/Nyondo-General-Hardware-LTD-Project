@@ -3,6 +3,7 @@ from web.models import Supplier
 from web.models import Stock
 from web.models import Sale
 from web.models import Customer
+from web.models import Payment
 from decimal import Decimal
 import datetime
 from django.db.models import Sum, Count
@@ -234,16 +235,16 @@ def add_sale(request):
         newSale.sale_date = request.POST.get("sale_date") or None
         newSale.due_date = request.POST.get("due_date") or None
         newSale.sold_by = request.POST.get("sold_by")
-        newSale.distance_km = int(request.POST.get("distance_km"))
+        newSale.distance_km = Customer.distance_km
         newSale.quantity_sold = int(request.POST.get("quantity_sold"))
         newSale.unit_selling_price = Decimal(request.POST.get("unit_selling_price"))
         newSale.unit_cost_price = Decimal(request.POST.get("unit_cost_price"))
         newSale.notes = request.POST.get("notes")
         transport_fee = 30000
-        if newSale.customer.distance_km <= 10 and product.selling_price <= 500000:
-            transport_fee == 0
+        if newSale.distance_km <= 10 and product.selling_price >= 500000:
+            newSale.transport_fee = 0
         else:
-            transport_fee = 30000
+            newSale.transport_fee = 30000
         newSale.transport_fee = transport_fee
         newSale.save()
         return redirect('sale_list')
@@ -267,7 +268,7 @@ def edit_sale(request,pk):
         sale.quantity_sold = int(request.POST.get("quantity_sold"))
         sale.unit_selling_price = Decimal(request.POST.get("unit_selling_price"))
         sale.unit_cost_price = Decimal(request.POST.get("unit_cost_price"))
-        sale.distance_km = int(request.POST.get("distance_km"))
+        sale.distance_km = Customer.distance_km
         sale.payment_method = request.POST.get("payment_method")
         sale.sold_by = request.POST.get("sold_by")
         sale.sale_date = request.POST.get("sale_date") or sale.sale_date
@@ -275,7 +276,7 @@ def edit_sale(request,pk):
         sale.amount_paid = Decimal(request.POST.get("amount_paid"))
         sale.notes = request.POST.get("notes")
         sale.is_fully_paid = request.POST.get("is_fully_paid") == "on"
-        if sale.customer.distance_km <= 10 and sale.product.selling_price <= 500000:
+        if sale.distance_km <= 10 and sale.product.selling_price >= 500000:
             sale.transport_fee = 0
         else:
             sale.transport_fee = 30000
@@ -330,15 +331,62 @@ def sale_dashboard(request):
     return render(request,"sale_dashboard.html", context)
 
 def credit_list(request):
-    return render(request, "customer_credit_list.html")
+    credit_sales = Sale.objects.filter(is_fully_paid = False)
+    context = {
+        "credit_sales":credit_sales,
+        "today":datetime.date.today()
+    }
+    return render(request, "customer_credit_list.html", context)
 
 def sale_details(request,pk):
-    return render(request,"sale_details.html")
+    sale = get_object_or_404(Sale,pk=pk)
+    context ={
+        "sale":sale
+    }
+    return render(request,"sale_details.html",context)
 
 def payment(request):
     return render(request,"payment.html")
+def receipt(request,pk):
+    sale = get_object_or_404(Sale,pk=pk)
+    context = {
+        "sale":sale
+    }
+    return render(request,"receipt.html", context)
 def add_payment(request):
-    return render(request, "add_payment.html")
+    sales = Sale.objects.all()
+
+    if request.method == "POST":
+        sale = Sale.objects.get(id=request.POST.get("sale"))
+
+        payment = Payment()
+        payment.sale = sale
+        payment.amount = Decimal(request.POST.get("amount"))
+        payment.method = request.POST.get("method")
+        payment.save()
+
+        # Update sale amount paid
+        sale.amount_paid += payment.amount
+
+        # Check balance
+        if sale.amount_paid >= sale.final_total:
+            sale.is_fully_paid = True
+
+        sale.save()
+
+        return redirect('payment_history')
+
+    context = {
+        "sales": sales
+    }
+
+    return render(request, "add_payment.html", context)
 
 def payment_history(request):
-    return render(request,"payment_history.html")
+    payments = Payment.objects.all().order_by('-payment_date')
+    latest_payment = payments.first()
+    context = {
+        "payments":payments,
+        "latest_payment":latest_payment
+    }
+    return render(request,"payment_history.html", context)

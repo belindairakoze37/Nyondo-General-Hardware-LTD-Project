@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sales Receipt | Nyondo Hardware</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+            background: #f0f2f8;
+            padding: 40px 28px;
+            color: #1a2634;
+        }
+
+        .receipt-wrapper {
+            max-width: 780px;
+            margin: 0 auto;
+        }
+
+        
+        .receipt-container {
+            background: white;
+            border-radius: 24px;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.02);
+            overflow: hidden;
+            border: 1px solid #eef2f6;
+            transition: all 0.2s ease;
+        }
+
+        
+        .receipt-header {
+            background: #111927;
+            padding: 28px 32px;
+            text-align: center;
+            border-bottom: 1px solid #2a3a4a;
+        }
+
+        .receipt-header h1 {
+            font-size: 1.9rem;
+            font-weight: 700;
+            letter-spacing: -0.3px;
+            background: linear-gradient(135deg, #ffffff, #cbd5e6);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            margin-bottom: 8px;
+        }
+
+        .receipt-header p {
+            color: #94a3b8;
+            font-size: 0.8rem;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            font-weight: 500;
+        }
+
+        
+        .receipt-content {
+            padding: 32px;
+        }
+
+        
+        .receipt-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 18px;
+            margin-bottom: 32px;
+            background: #f8fafd;
+            padding: 18px 20px;
+            border-radius: 20px;
+            border: 1px solid #eef2f8;
+        }
+
+        .info-block {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .info-label {
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: #5a6e7c;
+        }
+
+        .info-value {
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: #1e2f3f;
+            font-family: 'JetBrains Mono', monospace;
+            background: white;
+            padding: 5px 12px;
+            border-radius: 40px;
+            display: inline-block;
+            width: fit-content;
+            border: 1px solid #e2e8f0;
+        }
+
+        
+        .items-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 28px;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.03);
+        }
+
+        .items-table th {
+            background: #111927;
+            color: #f0f3f8;
+            padding: 14px 12px;
+            font-weight: 600;
+            font-size: 0.75rem;
+            letter-spacing: 0.3px;
+            text-transform: uppercase;
+            text-align: left;
+            border-bottom: 1px solid #2a3a4a;
+        }
+
+        .items-table td {
+            padding: 12px;
+            border-bottom: 1px solid #e9edf2;
+            font-size: 0.85rem;
+            color: #1f2c38;
+            font-weight: 500;
+            background-color: white;
+        }
+
+        .items-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .items-table td:nth-child(2), 
+        .items-table td:nth-child(3),
+        .items-table td:nth-child(4) {
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 500;
+        }
+
+        /* totals section - card like */
+        .totals-card {
+            background: #fafcff;
+            border-radius: 20px;
+            padding: 20px 24px;
+            margin-top: 10px;
+            border: 1px solid #eef2f6;
+        }
+
+        .total-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            font-size: 0.9rem;
+            border-bottom: 1px dashed #e2e8f0;
+        }
+
+        .total-row:last-child {
+            border-bottom: none;
+        }
+
+        .total-label {
+            font-weight: 600;
+            color: #2c3e50;
+            letter-spacing: 0.2px;
+        }
+
+        .total-amount {
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 600;
+            color: #1a2c3c;
+        }
+
+        .grand-total {
+            font-size: 1.2rem;
+            font-weight: 800;
+            color: #0f1722;
+            border-top: 2px solid #cbd5e1;
+            margin-top: 8px;
+            padding-top: 14px;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .grand-total .total-amount {
+            font-size: 1.3rem;
+            color: #1e6f9f;
+        }
+
+        
+        .status-paid {
+            background: #e1f7ea;
+            color: #0e6b2b;
+            padding: 5px 16px;
+            border-radius: 40px;
+            font-weight: 700;
+            font-size: 0.7rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            letter-spacing: 0.3px;
+            box-shadow: inset 0 0 0 1px rgba(34, 197, 94, 0.2);
+        }
+
+        .status-pending {
+            background: #ffe8e6;
+            color: #c23d2c;
+            padding: 5px 16px;
+            border-radius: 40px;
+            font-weight: 700;
+            font-size: 0.7rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            letter-spacing: 0.3px;
+            box-shadow: inset 0 0 0 1px rgba(220, 53, 69, 0.2);
+        }
+
+        
+        .receipt-footer {
+            background: #f8fafd;
+            padding: 20px 32px;
+            text-align: center;
+            border-top: 1px solid #eef2f6;
+            color: #5a6e7c;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
+        
+        .button-group {
+            margin-top: 28px;
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 10px 28px;
+            border-radius: 40px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.2s ease;
+            letter-spacing: 0.3px;
+            gap: 8px;
+            cursor: pointer;
+            border: none;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .print-btn {
+            background: linear-gradient(135deg, #1e2a3a, #0f1722);
+            color: white;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+            border: 1px solid #2c3e4e;
+        }
+
+        .print-btn:hover {
+            background: linear-gradient(135deg, #2c3e50, #1a2532);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 18px rgba(0, 0, 0, 0.1);
+        }
+
+        .back-btn {
+            background: white;
+            color: #1e6f9f;
+            border: 1px solid #cde0ef;
+        }
+
+        .back-btn:hover {
+            background: #e1edf9;
+            border-color: #9bb7d0;
+            transform: translateY(-2px);
+        }
+
+        
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+                margin: 0;
+            }
+            .receipt-wrapper {
+                max-width: 100%;
+                margin: 0;
+                padding: 0;
+            }
+            .receipt-container {
+                box-shadow: none;
+                border-radius: 0;
+                border: none;
+            }
+            .button-group {
+                display: none;
+            }
+            .receipt-header {
+                background: #111927;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+            .items-table th {
+                background: #111927;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+            .status-paid, .status-pending {
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+            .btn {
+                display: none;
+            }
+        }
+
+    
+        @media (max-width: 600px) {
+            body {
+                padding: 20px 16px;
+            }
+            .receipt-content {
+                padding: 20px;
+            }
+            .receipt-header {
+                padding: 20px;
+            }
+            .receipt-info {
+                grid-template-columns: 1fr;
+                gap: 12px;
+            }
+            .info-value {
+                font-size: 0.8rem;
+            }
+            .total-row {
+                font-size: 0.8rem;
+            }
+            .grand-total {
+                font-size: 1rem;
+            }
+        }
+
+        
+        .currency-symbol {
+            font-size: 0.7rem;
+            opacity: 0.7;
+        }
+
+        .product-name {
+            font-weight: 600;
+            color: #1e2b38;
+        }
+    </style>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<div class="receipt-wrapper">
+    <div class="receipt-container">
+    
+        <div class="receipt-header">
+            <h1>Nyondo Hardware</h1>
+            <p>Official Sales Receipt</p>
+        </div>
+
+        <div class="receipt-content">
+            
+            <div class="receipt-info">
+                <div class="info-block">
+                    <span class="info-label"> Receipt No.</span>
+                    <span class="info-value">#{{ sale.id }}</span>
+                </div>
+                <div class="info-block">
+                    <span class="info-label"> Date</span>
+                    <span class="info-value">{{ sale.sale_date }}</span>
+                </div>
+                <div class="info-block">
+                    <span class="info-label"> Customer</span>
+                    <span class="info-value">{{ sale.customer.name }}</span>
+                </div>
+                <div class="info-block">
+                    <span class="info-label"> Sold By</span>
+                    <span class="info-value">{{ sale.sold_by }}</span>
+                </div>
+            </div>
+
+            
+            <table class="items-table">
+                <thead>
+                    <tr>
+                        <th>Product Description</th>
+                        <th>Qty</th>
+                        <th>Unit Price (UGX)</th>
+                        <th>Total (UGX)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="product-name">{{ sale.product.product_name }}</td>
+                        <td>{{ sale.quantity_sold }}</td>
+                        <td>{{ sale.unit_selling_price|floatformat:2 }}</td>
+                        <td>{{ sale.total_price|floatformat:2 }}</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <!-- Totals section - elegant -->
+            <div class="totals-card">
+                <div class="total-row">
+                    <span class="total-label"> Transport Fee</span>
+                    <span class="total-amount">UGX {{ sale.transport_fee|floatformat:2 }}</span>
+                </div>
+                <div class="total-row">
+                    <span class="total-label"> Amount Paid</span>
+                    <span class="total-amount">UGX {{ sale.amount_paid|floatformat:2 }}</span>
+                </div>
+                <div class="total-row">
+                    <span class="total-label"> Balance Due</span>
+                    <span class="total-amount">UGX {{ sale.balance_due|floatformat:2 }}</span>
+                </div>
+                <div class="total-row grand-total">
+                    <span class="total-label"> Final Total</span>
+                    <span class="total-amount">UGX {{ sale.final_total|floatformat:2 }}</span>
+                </div>
+                <div class="total-row" style="margin-top: 8px;">
+                    <span class="total-label"> Payment Status</span>
+                    <span>
+                        {% if sale.is_fully_paid %}
+                            <span class="status-paid">✓ FULLY PAID</span>
+                        {% else %}
+                            <span class="status-pending">⚠ PENDING BALANCE</span>
+                        {% endif %}
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        
+        <div class="receipt-footer">
+            <span> Thank you for shopping with Nyondo Hardware </span><br>
+            <span style="font-size: 0.65rem; opacity: 0.7;">For inquiries, please contact support | Quality guaranteed</span>
+        </div>
+    </div>
+
+    
+    <div class="button-group">
+        <button onclick="window.print()" class="btn print-btn">
+            🖨️ Print Receipt
+        </button>
+        <a href="{% url 'sale_list' %}" class="btn back-btn">
+            ← Back to Sales
+        </a>
+    </div>
+</div>
+
+</body>
+</html>

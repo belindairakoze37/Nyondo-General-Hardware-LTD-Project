@@ -41,9 +41,10 @@ urlpatterns = [
     path('sale/edit/<int:pk>/', views.edit_sale, name="edit_sale"),
     path('sale/details/<int:pk>/', views.sale_details, name= "sale_details"),
     path('sale_dashboard/', views.sale_dashboard, name="sale_dashboard"),
-    path('sale/payment/<int:pk>/', views.payment, name="payment"),
-    path('sale/add_payment/', views.add_payment, name="add_payment"),
-    path('sale/payment_history/', views.payment_history, name="payment_history"),
+    path('sale/payment', views.payment, name="payment"),
+    path('sale/receipt/<int:pk>', views.receipt, name="receipt"),
+    path('payment/add', views.add_payment, name="add_payment"),
+    path('payment/history', views.payment_history, name="payment_history"),
     path('sale/customer_credit_list/', views.credit_list, name="credit_list"),
     # urls for customer
     path('customer/', views.customer_list, name="customer_list"),

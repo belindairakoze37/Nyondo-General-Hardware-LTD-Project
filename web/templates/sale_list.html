@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
     <title>Sales List | Dashboard</title>
 
     <style>
@@ -81,21 +81,23 @@
         table {
             width: 100%;
             border-collapse: collapse;
-            font-size: 0.85rem;
-            min-width: 1100px;
+            font-size: 0.8rem;        
+            min-width: 1250px;          
+            table-layout: auto;          
         }
 
         
         table th {
             background: #111927;
             color: #f0f3f8;
-            padding: 16px 14px;
+            padding: 12px 8px;        
             font-weight: 600;
-            font-size: 0.8rem;
+            font-size: 0.72rem;         
             letter-spacing: 0.3px;
             text-transform: uppercase;
             border-bottom: 1px solid #2a3a4a;
             border-right: 1px solid #242f3a;
+            white-space: nowrap;          
         }
 
         table th:last-child {
@@ -103,13 +105,14 @@
         }
 
         table td {
-            padding: 14px 14px;
+            padding: 10px 8px;            
             border-bottom: 1px solid #e9edf2;
             border-right: 1px solid #f0f2f5;
             vertical-align: middle;
             background-color: white;
             color: #1f2c38;
             font-weight: 450;
+            font-size: 0.78rem;
         }
 
         table td:last-child {
@@ -124,21 +127,21 @@
         }
 
     
-        td:nth-child(5), td:nth-child(6), td:nth-child(7) {
+        td:nth-child(5), td:nth-child(6), td:nth-child(7), td:nth-child(8), td:nth-child(9) {
             font-weight: 500;
             font-family: 'JetBrains Mono', monospace, 'Courier New';
             letter-spacing: 0.2px;
+            font-size: 0.75rem;
         }
-
     
         .paid {
             background: #e1f7ea;
             color: #0e6b2b;
             font-weight: 600;
-            padding: 5px 12px;
+            padding: 4px 10px;
             border-radius: 40px;
             display: inline-block;
-            font-size: 0.7rem;
+            font-size: 0.68rem;
             text-align: center;
             min-width: 68px;
             letter-spacing: 0.3px;
@@ -149,10 +152,10 @@
             background: #ffe8e6;
             color: #c23d2c;
             font-weight: 600;
-            padding: 5px 12px;
+            padding: 4px 10px;
             border-radius: 40px;
             display: inline-block;
-            font-size: 0.7rem;
+            font-size: 0.68rem;
             min-width: 68px;
             text-align: center;
             letter-spacing: 0.3px;
@@ -162,9 +165,10 @@
         
         .action-group {
             display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
+            flex-wrap: nowrap;       
+            gap: 6px;
             align-items: center;
+            justify-content: flex-start;
         }
 
         .btn {
@@ -183,10 +187,11 @@
             background: transparent;
             gap: 4px;
             box-shadow: 0 1px 1px rgba(0,0,0,0.02);
+            white-space: nowrap;       
         }
 
+        
         .view-btn {
-            /* background: #eef3fc; */
             color: #1e6f9f;
             border: 1px solid #cde0ef;
         }
@@ -198,8 +203,8 @@
             border-color: #9bb7d0;
         }
 
+        
         .edit-btn {
-            /* background: #fef5e7; */
             color: #b45f1b;
             border: 1px solid #f7e3c1;
         }
@@ -209,48 +214,28 @@
             color: #8e4a0e;
             transform: translateY(-1px);
         }
-
-        .payment-btn {
-            
-            color: #1f7840;
-            border: 1px solid #cdecdb;
+        .receipt-btn {
+            color: #4b2303;
+            border: 1px solid #f7e3c1;
         }
-
-        .payment-btn:hover {
-            background: #d4f0e3;
-            color: #0f5a30;
+        .receipt-btn:hover {
+            background: #fbefdb;
+            color: #f59643;
             transform: translateY(-1px);
         }
-
-        .delete-btn {
-            background: #feeceb;
-            color: #bc3f31;
-            border: 1px solid #fadad6;
-        }
-
-        .delete-btn:hover {
-            background: #fbe0de;
-            color: #9c2e22;
-            transform: translateY(-1px);
+        
+        th:last-child, td:last-child {
+            min-width: 130px;          
+            white-space: nowrap;
         }
 
         
-        .btn::before {
-            font-weight: 600;
-            margin-right: 4px;
-            display: inline-block;
-        }
-
-        
-        td:nth-child(9) {
-            font-family: monospace;
-            font-size: 0.75rem;
-            color: #4b5a6b;
-        }
-
         td:nth-child(2), td:nth-child(3) {
             font-weight: 500;
             color: #1e2b38;
+            max-width: 180px;
+            white-space: normal;
+            word-break: break-word;
         }
 
         
@@ -258,6 +243,18 @@
             font-weight: 600;
         }
 
+    
+        td:nth-child(9), td:nth-child(10) {
+            font-family: monospace;
+        }
+
+        
+        td:nth-child(12) {
+            font-size: 0.72rem;
+            white-space: nowrap;
+        }
+        
+        
         @media (max-width: 780px) {
             body {
                 padding: 20px 16px;
@@ -270,8 +267,17 @@
                 padding: 4px 10px;
                 font-size: 0.65rem;
             }
+            .action-group {
+                flex-wrap: wrap; 
+                gap: 5px;
+            }
+            th:last-child, td:last-child {
+                min-width: 110px;
+            }
+            table {
+                min-width: 1100px;  
+            }
         }
-
         
         .empty-state {
             text-align: center;
@@ -283,10 +289,9 @@
             box-shadow: 0 4px 10px rgba(0,0,0,0.02);
         }
 
-    
         .table-wrapper {
             border-radius: 20px;
-            overflow: hidden;
+            overflow-x: auto;
         }
 
         .table-footer-note {
@@ -297,17 +302,14 @@
             font-weight: 400;
         }
 
-        
         .badge-pulse {
             transition: all 0.1s;
         }
-
 
         .action-group a {
             text-decoration: none;
         }
 
-    
         td:first-child, th:first-child {
             border-left: none;
         }
@@ -317,26 +319,57 @@
             color: #2c5a7a;
         }
 
-    
         .status-cell {
             line-height: 1;
         }
 
-        button{
-        width: 10%;
-        padding: 14px;
-        background: linear-gradient(135deg, #ffd700, #ff8c00);
-        border: none;
-        border-radius: 12px;
-        color: #1a1a2e;
-        font-weight: 700;
-        font-size: 16px;
-        cursor: pointer;
-        transition: all 0.3s;
-        align-items: center;
-        font-family: "Inter", sans-serif;
-        margin-top: 5px;
-        margin-bottom: 10px;
+        button.add-sale-button {
+            width: auto;
+            padding: 10px 24px;
+            background: linear-gradient(135deg, #ffd700, #ff8c00);
+            border: none;
+            border-radius: 40px;
+            color: #1a1a2e;
+            font-weight: 700;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-family: "Inter", sans-serif;
+            margin-top: 5px;
+            margin-bottom: 10px;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+        }
+        
+        button.add-sale-button:hover {
+            transform: translateY(-2px);
+            background: linear-gradient(135deg, #ffde9e, #ffa43c);
+            box-shadow: 0 6px 14px rgba(0,0,0,0.1);
+        }
+
+    
+        td:nth-child(10) {
+            font-family: monospace;
+            font-weight: 500;
+        }
+        
+    
+        td:nth-child(12) {
+            white-space: nowrap;
+        }
+
+        
+        td:nth-child(2), td:nth-child(3) {
+            font-weight: 500;
+            font-size: 0.78rem;
+        }
+        
+    
+        td:nth-child(4), td:nth-child(6) {
+            font-family: monospace;
+            font-size: 0.73rem;
         }
     </style>
 
@@ -345,12 +378,16 @@
 <body>
 <div class="sales-container">
     <div class="stats-badge">
-        <h1>📋 Sales List</h1>
+        <h1> Sales List</h1>
         <div class="sales-summary">
-            💰 Track payments · Manage transactions
+             Track payments · Manage transactions
         </div>
     </div>
-<a href="{% url 'add_sale' %}"><button>Add Sale</button></a>
+    
+    <a href="{% url 'add_sale' %}" style="text-decoration: none; display: inline-block; margin-bottom: 18px;">
+        <button class="add-sale-button">+ Add Sale</button>
+    </a>
+    
     <div class="table-wrapper">
         <table>
             <thead>
@@ -376,13 +413,14 @@
                     <td>{{ sale.id }}</td>
                     <td>{{ sale.customer.name }}</td>
                     <td>{{ sale.product.product_name }}</td>
-                    <td>{{sale.unit_cost_price}}</td>
+                    <td>{{ sale.unit_cost_price }}</td>
                     <td>{{ sale.quantity_sold }}</td>
-                    <td>{{sale.unit_selling_price}}</td>
+                    <td>{{ sale.unit_selling_price }}</td>
                     <td>{{ sale.final_total }}</td>
                     <td>{{ sale.amount_paid }}</td>
                     <td>{{ sale.balance_due }}</td>
-                    <td>{{sale.transport_fee}}</td>
+                    <td>{{ sale.transport_fee }}</td>
+                    
                     <td class="status-cell">
                         {% if sale.is_fully_paid %}
                             <span class="paid">✓ Paid</span>
@@ -392,22 +430,22 @@
                     </td>
                     <td>{{ sale.sale_date }}</td>
                     <td>
-                        <div class="action-group" >
+                        <div class="action-group">
                             <a href="{% url 'sale_details' sale.id %}" class="btn view-btn">
-                                 View
+                                View
                             </a>
                             <a href="{% url 'edit_sale' sale.id %}" class="btn edit-btn">
-                                 Edit
+                                Edit
                             </a>
-                            <a href="{% url 'add_payment' %}" class="btn payment-btn">
-                                 Payment
+                         <a href="{% url 'receipt' sale.id %}" class="btn receipt-btn">
+                                Receipt
                             </a>
                         </div>
                     </td>
                 </tr>
                 {% empty %}
                 <tr>
-                    <td colspan="10" style="text-align: center; padding: 48px 20px; background: #fff;">
+                    <td colspan="13" style="text-align: center; padding: 48px 20px; background: #fff;">
                         <div class="empty-state">
                              No sales records found.<br>
                             <span style="font-size: 0.75rem; opacity: 0.7;">Start by adding a new sale.</span>
