@@ -1,3 +1,4 @@
+{% load humanize %}
 <!doctype html>
 <html lang="en">
   <head>
@@ -26,7 +27,7 @@
         color: #1a1a2e;
       }
 
-      /* Container */
+  
       .container {
         max-width: 1400px;
         margin: 0 auto;
@@ -316,12 +317,12 @@
 
     
       .text-danger {
-        color: #f44336 !important;
+        color: #f44336;
         font-weight: 600;
       }
 
       .text-warning {
-        color: #ff9800 !important;
+        color: #ff9800;
         font-weight: 600;
       }
 
@@ -371,7 +372,7 @@
   </head>
   <body>
     <div class="container">
-      <!-- Page Header with Icons -->
+      
       <div class="page-header">
         <h2><i class="fas fa-boxes"></i> Stock List</h2>
         <p>
@@ -379,7 +380,7 @@
         </p>
       </div>
 
-      <!-- Add Stock Button with Icon -->
+    
       <a href="{% url 'add_stock' %}" class="btn btn-primary mb-3">
         <i class="fas fa-plus"></i> Add Stock
       </a>
@@ -387,7 +388,7 @@
         Back to Dashboard
       </a>
 
-      <!-- Search Section -->
+      
 <div class="filter-section">
 
   <div class="filter-title">
@@ -419,7 +420,7 @@
   </form>
 </div>
 
-      <!-- Stock Table with Icons in Headers -->
+      
       <div class="table-wrapper">
         <table class="stock-table">
           <thead>
@@ -445,8 +446,8 @@
               >
                 {{ item.quantity }}
               </td>
-              <td>UGX {{ item.unit_cost }}</td>
-              <td>UGX {{ item.selling_price }}</td>
+              <td>UGX {{ item.unit_cost |intcomma}}</td>
+              <td>UGX {{ item.selling_price |intcomma}}</td>
               <td>{{ item.supplier }}</td>
               <td>
                 {% if item.quantity < 10 %}

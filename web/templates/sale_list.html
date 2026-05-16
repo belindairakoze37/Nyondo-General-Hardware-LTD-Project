@@ -1,3 +1,4 @@
+{% load humanize %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -358,6 +359,7 @@
     
         td:nth-child(12) {
             white-space: nowrap;
+            
         }
 
         
@@ -392,7 +394,6 @@
         <table>
             <thead>
                 <tr>
-                    <th>Sale ID</th>
                     <th>Customer</th>
                     <th>Product</th>
                     <th>Unit Cost</th>
@@ -410,16 +411,15 @@
             <tbody>
                 {% for sale in sales %}
                 <tr>
-                    <td>{{ sale.id }}</td>
                     <td>{{ sale.customer.name }}</td>
                     <td>{{ sale.product.product_name }}</td>
-                    <td>{{ sale.unit_cost_price }}</td>
-                    <td>{{ sale.quantity_sold }}</td>
-                    <td>{{ sale.unit_selling_price }}</td>
-                    <td>{{ sale.final_total }}</td>
-                    <td>{{ sale.amount_paid }}</td>
-                    <td>{{ sale.balance_due }}</td>
-                    <td>{{ sale.transport_fee }}</td>
+                    <td>{{ sale.unit_cost_price |intcomma}}</td>
+                    <td>{{ sale.quantity_sold |intcomma}}</td>
+                    <td>{{ sale.unit_selling_price |intcomma}}</td>
+                    <td>{{ sale.final_total |intcomma }}</td>
+                    <td>{{ sale.amount_paid |intcomma}}</td>
+                    <td>{{ sale.balance_due |intcomma}}</td>
+                    <td>{{ sale.transport_fee |intcomma}}</td>
                     
                     <td class="status-cell">
                         {% if sale.is_fully_paid %}

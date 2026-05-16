@@ -1,9 +1,11 @@
+from django.utils import timezone
 from django.shortcuts import render,redirect,get_object_or_404
 from web.models import Supplier
 from web.models import Stock
 from web.models import Sale
 from web.models import Customer
 from web.models import Payment
+from web.models import Deposit
 from decimal import Decimal
 import datetime
 from django.db.models import Sum, Count
@@ -178,6 +180,7 @@ def add_customer(request):
         sent_email = payload.get("email")
         sent_address = payload.get("address")
         sent_nin = payload.get("nin")
+        sent_distance_km = int(payload.get("distance_km") or 0) 
         sent_is_credit_customer = payload.get("is_credit_customer") == "on"
 
         newCustomer = Customer()
@@ -186,6 +189,7 @@ def add_customer(request):
         newCustomer.email = sent_email
         newCustomer.address = sent_address
         newCustomer.nin = sent_nin
+        newCustomer.distance_km = sent_distance_km
         newCustomer.is_credit_customer = sent_is_credit_customer
         newCustomer.save()
         return redirect('customer_list')
@@ -199,6 +203,7 @@ def edit_customer(request,pk):
         customer.email = request.POST.get("email")
         customer.contact = request.POST.get("contact")
         customer.address = request.POST.get("address")
+        customer.distance_km = int(request.POST.get("distance_km"))
         customer.nin = request.POST.get("nin")
         customer.is_credit_customer = request.POST.get("is_credit_customer") == "on"
         customer.save()
@@ -235,17 +240,17 @@ def add_sale(request):
         newSale.sale_date = request.POST.get("sale_date") or None
         newSale.due_date = request.POST.get("due_date") or None
         newSale.sold_by = request.POST.get("sold_by")
-        newSale.distance_km = Customer.distance_km
+        newSale.distance_km = int(customer.distance_km)
+
         newSale.quantity_sold = int(request.POST.get("quantity_sold"))
         newSale.unit_selling_price = Decimal(request.POST.get("unit_selling_price"))
         newSale.unit_cost_price = Decimal(request.POST.get("unit_cost_price"))
         newSale.notes = request.POST.get("notes")
-        transport_fee = 30000
-        if newSale.distance_km <= 10 and product.selling_price >= 500000:
+        total_amount = (newSale.quantity_sold * newSale.unit_selling_price)
+        if newSale.distance_km <= 10 and total_amount >= 500000:
             newSale.transport_fee = 0
         else:
             newSale.transport_fee = 30000
-        newSale.transport_fee = transport_fee
         newSale.save()
         return redirect('sale_list')
     
@@ -268,7 +273,8 @@ def edit_sale(request,pk):
         sale.quantity_sold = int(request.POST.get("quantity_sold"))
         sale.unit_selling_price = Decimal(request.POST.get("unit_selling_price"))
         sale.unit_cost_price = Decimal(request.POST.get("unit_cost_price"))
-        sale.distance_km = Customer.distance_km
+        total_amount = (sale.quantity_sold * sale.unit_selling_price)
+        sale.distance_km = int(sale.customer.distance_km)
         sale.payment_method = request.POST.get("payment_method")
         sale.sold_by = request.POST.get("sold_by")
         sale.sale_date = request.POST.get("sale_date") or sale.sale_date
@@ -276,7 +282,7 @@ def edit_sale(request,pk):
         sale.amount_paid = Decimal(request.POST.get("amount_paid"))
         sale.notes = request.POST.get("notes")
         sale.is_fully_paid = request.POST.get("is_fully_paid") == "on"
-        if sale.distance_km <= 10 and sale.product.selling_price >= 500000:
+        if sale.distance_km <= 10 and total_amount >= 500000:
             sale.transport_fee = 0
         else:
             sale.transport_fee = 30000
@@ -293,6 +299,7 @@ def edit_sale(request,pk):
 
 def sale_dashboard(request):
     all_sale = Sale.objects.all()
+    recent_sales = Sale.objects.all().order_by('-sale_date')[:10]
     current_date = datetime.date.today()
     total_revenue = Sale.objects.aggregate(
         total=Sum('final_total')
@@ -301,8 +308,9 @@ def sale_dashboard(request):
     total_transport = Sale.objects.aggregate(
         total=Sum('transport_fee')
     )['total'] or 0
+    sales_date = timezone.now().date()
     today_sales = Sale.objects.filter(
-    sale_date=datetime.date.today()
+    sale_date__date=sales_date
     ).aggregate(
     total=Sum('final_total')
     )['total'] or 0
@@ -319,7 +327,7 @@ def sale_dashboard(request):
 
     context = {
         "current_date": current_date,
-        "recent_sales":all_sale,
+        "recent_sales":recent_sales,
         "total_transactions":total_transactions,
         "total_profit":total_profit,
         "total_transport":total_transport,
@@ -328,6 +336,7 @@ def sale_dashboard(request):
         "total_revenue":total_revenue,
         "total_sales_today": today_sales,
     }
+    # print(context)
     return render(request,"sale_dashboard.html", context)
 
 def credit_list(request):
@@ -365,10 +374,10 @@ def add_payment(request):
         payment.method = request.POST.get("method")
         payment.save()
 
-        # Update sale amount paid
+        # for  updating sale amount paid
         sale.amount_paid += payment.amount
 
-        # Check balance
+        # for checking the  balance
         if sale.amount_paid >= sale.final_total:
             sale.is_fully_paid = True
 
@@ -390,3 +399,41 @@ def payment_history(request):
         "latest_payment":latest_payment
     }
     return render(request,"payment_history.html", context)
+
+def deposit_list(request):
+    all_deposits = Deposit.objects.all()
+    total_amount = all_deposits.aggregate(
+        Sum("amount")
+    )["amount__sum"] or 0
+
+    customer_count = all_deposits.values("customer_name").distinct().count()
+
+    context = {
+        "deposits":all_deposits,
+        "total_amount":total_amount,
+        "customer_count":customer_count
+    }
+    return render(request, "deposit_list.html", context)
+
+def add_deposit(request):
+    customers = Customer.objects.all()
+    if request.method == "POST":
+        payload = request.POST
+        customer_id = request.POST.get("customer_name")
+        customer = get_object_or_404(Customer,id=customer_id)
+        sent_amount = Decimal(payload.get("amount"))
+        sent_payment_method = payload.get("payment_method")
+        
+        # creating a new deposit 
+        newDeposit = Deposit()
+        newDeposit.customer_name = customer
+        newDeposit.amount = sent_amount
+        newDeposit.payment_method = sent_payment_method
+        newDeposit.save()
+        return redirect('deposit_list')
+    return render(request,"add_deposit.html", {"customers":customers} )
+    
+
+def edit_deposit(request,pk):
+    pass
+

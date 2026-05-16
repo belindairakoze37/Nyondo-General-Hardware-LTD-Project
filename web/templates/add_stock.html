@@ -30,14 +30,14 @@
         padding: 20px;
       }
 
-      /* Container */
+
       .container {
         max-width: 800px;
         width: 50%;
         margin: 0 auto;
       }
 
-      /* Card */
+      
       .add-card {
         background: white;
         border-radius: 24px;
@@ -51,7 +51,7 @@
         box-shadow: 0 15px 40px rgba(0, 0, 0, 0.12);
       }
 
-      /* Header */
+    
       .card-header {
         text-align: center;
         margin-bottom: 30px;
@@ -78,13 +78,13 @@
         margin-top: 8px;
       }
 
-      /* Form Styles */
+      
       .stock-form {
         display: flex;
         flex-direction: column;
       }
 
-      /* Two Column Grid */
+      
       .form-row {
         display: grid;
         grid-template-columns: 1fr 1fr;
@@ -141,7 +141,7 @@
         box-shadow: 0 0 0 3px rgba(255, 140, 0, 0.1);
       }
 
-      /* Checkbox Group Styles */
+      
       .checkbox-group {
         flex-direction: row;
         align-items: center;
@@ -161,14 +161,12 @@
         accent-color: #ff8c00;
         margin: 0;
       }
-
-      /* HTML5 Validation Styles */
       .form-group input:invalid:focus,
       .form-group select:invalid:focus {
         border-color: #f44336;
       }
 
-      /* Profit Preview */
+      
       .profit-preview {
         margin-top: 15px;
         margin-bottom: 20px;
@@ -195,7 +193,7 @@
         font-size: 16px;
       }
 
-      /* Button */
+      
       .btn-save {
         width: 100%;
         padding: 14px;
@@ -220,7 +218,7 @@
         box-shadow: 0 5px 15px rgba(255, 140, 0, 0.3);
       }
 
-      /* Back Link */
+    
       .back-link {
         text-align: center;
         margin-top: 20px;
@@ -244,7 +242,7 @@
         color: #e67e22;
       }
 
-      /* Responsive */
+
       @media (max-width: 600px) {
         .add-card {
           padding: 25px;
@@ -281,14 +279,14 @@
         <div class="card-header">
           <h2><i class="fas fa-plus-circle"></i> Add New Stock</h2>
           <p>
-            <i class="fas fa-boxes"></i> Receive new inventory from suppliers
+             Receive new inventory from suppliers
           </p>
         </div>
 
         <form method="POST" class="stock-form" action="{% url 'add_stock' %}">
           {% csrf_token %}
 
-          <!-- Row 1: Product Name + Quantity -->
+          
           <div class="form-row">
             <div class="form-group">
               <label>
@@ -338,11 +336,11 @@
             </div>
           </div>
 
-          <!-- Row 2: Unit Price + Selling Price -->
+          
           <div class="form-row">
             <div class="form-group">
               <label>
-                <i class="fas fa-dollar-sign"></i> Unit Cost (UGX)
+                 Unit Cost (UGX)
                 <span class="required">*</span>
               </label>
               <input
@@ -411,11 +409,11 @@
               </label>
               <select name="payment_method" required>
                 <option value="">-- Select Payment Method --</option>
-                <option value="cash">💰 Cash</option>
-                <option value="bank_transfer">🏦 Bank Transfer</option>
-                <option value="credit">📝 Credit (Pay Later)</option>
-                <option value="cheque">📄 Cheque</option>
-                <option value="mobile_money">📱 Mobile Money</option>
+                <option value="cash"> Cash</option>
+                <option value="bank_transfer"> Bank Transfer</option>
+                <option value="credit"> Credit (Pay Later)</option>
+                <option value="cheque"> Cheque</option>
+                <option value="mobile_money"> Mobile Money</option>
               </select>
             </div>
           </div>

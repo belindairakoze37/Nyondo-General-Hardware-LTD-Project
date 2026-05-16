@@ -46,6 +46,9 @@ urlpatterns = [
     path('payment/add', views.add_payment, name="add_payment"),
     path('payment/history', views.payment_history, name="payment_history"),
     path('sale/customer_credit_list/', views.credit_list, name="credit_list"),
+    path('deposit_list/', views.deposit_list, name="deposit_list"),
+    path('deposit_list/add/', views.add_deposit, name="add_deposit"),
+    path('deposit_list/edit/<int:pk>/', views.edit_deposit, name="edit_deposit"),
     # urls for customer
     path('customer/', views.customer_list, name="customer_list"),
     path('customer/add/', views.add_customer, name="add_customer"),

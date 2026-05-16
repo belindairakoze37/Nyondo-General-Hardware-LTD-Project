@@ -6,7 +6,7 @@
     <title>Payment History | Dashboard</title>
 
     <style>
-        /* ===== BASE STYLES (YOUR EXISTING COLORS + ENHANCED VISUAL CONSISTENCY) ===== */
+    
         * {
             margin: 0;
             padding: 0;
@@ -15,9 +15,9 @@
 
         body {
             font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, sans-serif;
-            background: #f0f2f8;      /* original soft background */
+            background: #f0f2f8;     
             padding: 30px;
-            color: #1a2634;           /* original text color */
+            color: #1a2634;           
             line-height: 1.4;
         }
 
@@ -38,7 +38,7 @@
             display: inline-block;
         }
 
-        /* ===== SUMMARY BAR (keep original structure, elevate with subtle depth) ===== */
+    
         .summary-bar {
             background: white;
             padding: 18px 28px;
@@ -76,12 +76,12 @@
 
         .summary-value {
             font-weight: 800;
-            color: #1f6392;   /* primary accent — matches link color from original */
+            color: #1f6392; 
             font-size: 1.3rem;
             letter-spacing: -0.2px;
         }
 
-        /* ===== TABLE ENHANCEMENTS (preserving original colors, better readability & polish) ===== */
+        
         table {
             width: 100%;
             border-collapse: collapse;
@@ -92,7 +92,7 @@
         }
 
         th {
-            background: #111927;      /* original dark header */
+            background: #111927;    
             color: white;
             padding: 14px 12px;
             text-align: left;
@@ -111,10 +111,10 @@
         }
 
         tr:hover td {
-            background: #f9fbff;    /* same light hover as original, but more refined */
+            background: #f9fbff;  
         }
 
-        /* payment method badges (exact same classes as original, no changes) */
+        
         .method-badge {
             padding: 5px 12px;
             border-radius: 40px;
@@ -141,7 +141,7 @@
             color: #1e6f9f;
         }
 
-        /* fallback for unknown method (keeps consistent look) */
+        
         .method-badge:not(.cash):not(.mobile_money):not(.bank_transfer) {
             background: #eceff5;
             color: #334155;
@@ -156,7 +156,7 @@
         }
 
         .link {
-            color: #1e6f9f;   /* original link blue */
+            color: #1e6f9f;   
             text-decoration: none;
             font-weight: 500;
             transition: all 0.2s ease;
@@ -169,7 +169,7 @@
             text-decoration: none;
         }
 
-        /* customer name styling: keep bold, with subtle contrast */
+        
         td strong {
             font-weight: 700;
             color: #111927;
@@ -183,13 +183,13 @@
             margin-top: 2px;
         }
 
-        /* make amount numbers slightly more prominent */
+        
         td:nth-child(2) {
             font-weight: 600;
             color: #1a2c3c;
         }
 
-        /* responsive touch: table can scroll horizontally on small devices */
+    
         @media (max-width: 750px) {
             body {
                 padding: 20px 16px;
@@ -218,7 +218,7 @@
             }
         }
 
-        /* subtle entrance animations (no structural change) */
+        
         .summary-bar, table {
             animation: fadeSlideUp 0.35s ease-out;
         }
@@ -233,13 +233,13 @@
             }
         }
 
-        /* additional polish for card-like clarity (no code removed) */
+        
         .method-badge {
             font-weight: 600;
             letter-spacing: -0.2px;
         }
 
-        /* make 'View Sale' text neatly aligned */
+        
         td:last-child a {
             white-space: nowrap;
             font-size: 0.8rem;
@@ -252,7 +252,7 @@
 
     <h1>Payment History</h1>
 
-    <!-- SUMMARY (original structure exactly preserved: total_transactions, total_collected, latest_payment) -->
+    
     <div class="summary-bar">
         <div class="summary-item">
             <div class="summary-label">Total Transactions</div>
@@ -278,7 +278,6 @@
         </div>
     </div>
 
-    <!-- TABLE (EXACT ORIGINAL MARKUP, NO MODIFICATIONS) -->
     <table>
         <thead>
         <tr>
@@ -305,7 +304,7 @@
                     UGX {{ payment.amount|floatformat:2 }}
                 </td>
 
-                <!-- FIXED PAYMENT METHOD (original classes preserved) -->
+                
                 <td>
                     <span class="method-badge {{ payment.method }}">
                         {{ payment.get_method_display }}

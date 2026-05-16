@@ -1,3 +1,4 @@
+{% load humanize %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -20,7 +21,7 @@
             overflow-x: hidden;
         }
 
-        /* Custom Scrollbar */
+    
         ::-webkit-scrollbar {
             width: 10px;
         }
@@ -32,7 +33,7 @@
             border-radius: 5px;
         }
 
-        /* ========== SIDEBAR STYLES ========== */
+
         .sidebar {
             position: fixed;
             left: 0;
@@ -48,7 +49,7 @@
             box-shadow: 2px 0 20px rgba(0, 0, 0, 0.1);
         }
 
-        /* Logo Section */
+    
         .logo {
             display: flex;
             align-items: center;
@@ -76,7 +77,7 @@
             background-clip: text;
         }
 
-        /* Navigation Links */
+    
         .nav-links {
             flex: 1;
             list-style: none;
@@ -121,7 +122,7 @@
             color: #1a1a2e;
         }
 
-        /* Bottom Section */
+        
         .bottom {
             padding: 20px 16px;
             border-top: 1px solid rgba(255, 255, 255, 0.1);
@@ -151,14 +152,14 @@
             color: white;
         }
 
-        /* ========== MAIN CONTENT STYLES ========== */
+        
         .main-content {
             margin-left: 280px;
             padding: 25px 30px;
             min-height: 100vh;
         }
 
-        /* Page Header */
+
         .page-header {
             margin-bottom: 25px;
         }
@@ -182,7 +183,7 @@
             margin-top: 5px;
         }
 
-        /* Stats Cards */
+    
         .cards {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
@@ -237,7 +238,7 @@
             margin-top: 10px;
         }
 
-        /* Section Styles */
+        
         .section {
             background: white;
             border-radius: 20px;
@@ -278,7 +279,7 @@
             text-decoration: underline;
         }
 
-        /* Table Styles */
+    
         .data-table {
             width: 100%;
             border-collapse: collapse;
@@ -304,7 +305,7 @@
             background: #f8f9fa;
         }
 
-        /* Low Stock Items */
+    
         .low-stock-list {
             list-style: none;
         }
@@ -373,7 +374,7 @@
             display: block;
         }
 
-        /* Quick Actions */
+        
         .quick-actions {
             display: flex;
             gap: 15px;
@@ -412,7 +413,7 @@
             color: #1a1a2e;
         }
 
-        /* Responsive */
+    
         @media (max-width: 1000px) {
             .sidebar {
                 left: -280px;
@@ -443,7 +444,6 @@
 </head>
 <body>
 
-<!-- Sidebar -->
 <div class="sidebar">
     <div class="logo">
         <i class="fas fa-warehouse"></i>
@@ -502,14 +502,14 @@
     </div>
 </div>
 
-<!-- Main Content -->
+
 <div class="main-content">
-    <!-- Page Header -->
+
     <div class="page-header">
         <h2>
-            <i class="fas fa-tachometer-alt"></i> Dashboard
+             Dashboard
         </h2>
-        <p><i class="fas fa-chart-line"></i> Welcome back! Here's your stock overview</p>
+        <p> Welcome back! Here's your stock overview</p>
     </div>
 
     <!-- Summary Cards -->
@@ -517,7 +517,7 @@
         <div class="card">
             <div class="card-header">
                 <h3><i class="fas fa-cubes"></i> Total Products</h3>
-                <i class="fas fa-box"></i>
+                
             </div>
             <div class="card-value">{{ total_products }}</div>
             <div class="card-footer">Unique products in inventory</div>
@@ -526,32 +526,32 @@
         <div class="card">
             <div class="card-header">
                 <h3><i class="fas fa-sort-numeric-up"></i> Total Quantity</h3>
-                <i class="fas fa-cubes"></i>
+        
             </div>
-            <div class="card-value">{{ total_quantity }}</div>
+            <div class="card-value">{{ total_quantity |intcomma}}</div>
             <div class="card-footer">Total units in stock</div>
         </div>
 
         <div class="card">
             <div class="card-header">
                 <h3><i class="fas fa-chart-line"></i> Total Stock Value</h3>
-                <i class="fas fa-dollar-sign"></i>
+                
             </div>
-            <div class="card-value">UGX {{ total_value }}</div>
+            <div class="card-value">UGX {{ total_value |intcomma}}</div>
             <div class="card-footer">Current inventory value</div>
         </div>
 
         <div class="card">
             <div class="card-header">
                 <h3><i class="fas fa-exclamation-triangle"></i> Low Stock Items</h3>
-                <i class="fas fa-bell"></i>
+                
             </div>
             <div class="card-value">{{ low_stock.count }}</div>
             <div class="card-footer">Need immediate attention</div>
         </div>
     </div>
 
-    <!-- Recent Stock Section -->
+    <!-- recent stock section -->
     <div class="section">
         <div class="section-header">
             <h3><i class="fas fa-clock"></i> Recent Stock Additions</h3>
@@ -570,8 +570,8 @@
                 {% for item in stocks %}
                 <tr>
                     <td><strong>{{ item.product_name }}</strong></td>
-                    <td>{{ item.quantity }}</td>
-                    <td>UGX {{ item.selling_price|floatformat:0 }}</td>
+                    <td>{{ item.quantity |intcomma}}</td>
+                    <td>UGX {{ item.selling_price|floatformat:0 |intcomma }}</td>
                 </tr>
                 {% empty %}
                 <tr>
@@ -582,7 +582,7 @@
         </table>
     </div>
 
-    <!-- Low Stock Alert Section -->
+    <!-- low stock alerts -->
     <div class="section">
         <div class="section-header">
             <h3><i class="fas fa-exclamation-triangle"></i> Low Stock Alerts</h3>
@@ -607,12 +607,12 @@
         {% empty %}
         <div class="success-message">
             <i class="fas fa-check-circle"></i>
-            <p>All stock levels are good ✅</p>
+            <p>All stock levels are good </p>
         </div>
         {% endfor %}
     </div>
 
-    <!-- Quick Actions Section -->
+     <!-- quick action section -->
     <div class="section">
         <div class="section-header">
             <h3><i class="fas fa-bolt"></i> Quick Actions</h3>

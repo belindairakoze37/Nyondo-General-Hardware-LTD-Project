@@ -47,8 +47,6 @@
         .btn-back:hover {
             background: #5a6268;
         }
-
-        /* Form Styles */
         .form-card {
             background: white;
             border-radius: 10px;
@@ -116,33 +114,13 @@
         .btn-submit:hover {
             background: #e67e22;
         }
-
-        .error-message {
-            background: #f8d7da;
-            color: #721c24;
-            padding: 12px;
-            border-radius: 6px;
-            margin-bottom: 20px;
-            border: 1px solid #f5c6cb;
-        }
-
-        .success-message {
-            background: #d4edda;
-            color: #155724;
-            padding: 12px;
-            border-radius: 6px;
-            margin-bottom: 20px;
-            border: 1px solid #c3e6cb;
-        }
-        
-
         hr {
             margin: 20px 0;
             border: none;
             border-top: 1px solid #eee;
         }
 
-        /* Checkbox styling - matching existing design */
+    
         .checkbox-group {
             margin-bottom: 20px;
             display: flex;
@@ -179,18 +157,6 @@
     </div>
 
     <div class="form-card">
-        {% if error_message %}
-        <div class="error-message">
-            {{ error_message }}
-        </div>
-        {% endif %}
-
-        {% if success_message %}
-        <div class="success-message">
-            {{ success_message }}
-        </div>
-        {% endif %}
-
         <form method="POST" action="{% url 'add_customer' %}">
             {% csrf_token %}
         <div class="form-row">
@@ -214,6 +180,12 @@
                 <div class="form-group">
                     <label for="contact">Contact Number *</label>
                     <input type="tel" id="contact" name="contact" required placeholder="+2564567890" value="{{ form_data.contact|default:'' }}">
+                </div>
+
+
+                <div class="form-group">
+                    <label for="contact">Distance *</label>
+                    <input type="number"  name="distance_km"  value="{{ form_data.distance_km|default:'0' }}">
                 </div>
             </div>
 

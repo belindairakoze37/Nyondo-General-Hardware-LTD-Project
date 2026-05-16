@@ -30,14 +30,14 @@
         padding: 20px;
       }
 
-      /* Container */
+      
       .container {
         max-width: 800px;
         width: 50%;
         margin: 0 auto;
       }
 
-      /* Card */
+      
       .edit-card {
         background: white;
         border-radius: 24px;
@@ -51,7 +51,7 @@
         box-shadow: 0 15px 40px rgba(0, 0, 0, 0.12);
       }
 
-      /* Header */
+      
       .card-header {
         text-align: center;
         margin-bottom: 30px;
@@ -78,13 +78,13 @@
         margin-top: 8px;
       }
 
-      /* Form Styles */
+      
       .stock-form {
         display: flex;
         flex-direction: column;
       }
 
-      /* Two Column Grid */
+      
       .form-row {
         display: grid;
         grid-template-columns: 1fr 1fr;
@@ -138,7 +138,7 @@
         cursor: not-allowed;
       }
 
-      /* Checkbox Group Styles */
+      
       .checkbox-group {
         flex-direction: row;
         align-items: center;
@@ -159,7 +159,7 @@
         margin: 0;
       }
 
-      /* Button */
+      
       .btn-update {
         width: 100%;
         padding: 14px;
@@ -184,7 +184,7 @@
         box-shadow: 0 5px 15px rgba(255, 140, 0, 0.3);
       }
 
-      /* Back Link */
+      
       .back-link {
         text-align: center;
         margin-top: 20px;
@@ -208,7 +208,7 @@
         color: #e67e22;
       }
 
-      /* Responsive */
+      
       @media (max-width: 600px) {
         .container {
           max-width: 550px;
@@ -249,17 +249,35 @@
         >
           {% csrf_token %}
 
-          <!-- Row 1: Product Name + Quantity -->
+          
           <div class="form-row">
             <div class="form-group">
               <label> <i class="fas fa-tag"></i> Product Name </label>
-              <input
-                type="text"
-                name="product_name"
-                value="{{ stock.product_name }}"
-                placeholder="Enter product name"
-                required
-              />
+              <select name="product_name" required>
+                <option value="">-- Select Product --</option>
+                <option value="Cement - CEM II N" {% if stock.product_name %}selected{% endif %}>Cement - CEM II N</option>
+                <option value="Cement - CEM III N" {% if stock.product_name %}selected{% endif %}>Cement - CEM III N</option>
+                <option value="Iron Bar - 10mm" {% if stock.product_name %}selected{% endif %}>Iron Bar - 10mm</option>
+                <option value="Iron Bar - 12mm" {% if stock.product_name %}selected{% endif %}>Iron Bar - 12mm</option>
+                <option value="Iron Bar - 16mm" {% if stock.product_name %}selected{% endif %}>Iron Bar - 16mm</option>
+                <option value="Nails - 1 inch" {% if stock.product_name %}selected{% endif %}>Nails - 1 inch</option>
+                <option value="Nails - 3 inch" {% if stock.product_name %}selected{% endif %}>Nails - 3 inch</option>
+                <option value="Nails - 4 inch" {% if stock.product_name %}selected{% endif %}>Nails - 4 inch</option>
+                <option value="Nails - 5 inch" {% if stock.product_name %}selected{% endif %}>Nails - 5 inch</option>
+                <option value="Roofing Nails" {% if stock.product_name %}selected{% endif %}>Roofing Nails</option>
+                <option value="Wheelbarrow" {% if stock.product_name %}selected{% endif %}>Wheelbarrow</option>
+                <option value="Wire Mesh" {% if stock.product_name %}selected{% endif %}>Wire Mesh</option>
+                <option value="Barbed Wire - High Tensile" {% if stock.product_name %}selected{% endif %}>
+                  Barbed Wire - High Tensile
+                </option>
+                <option value="Barbed Wire - Low Tensile" {% if stock.product_name %}selected{% endif %}>
+                  Barbed Wire - Low Tensile
+                </option>
+                <option value="Iron Sheets - Green" {% if stock.product_name %}selected{% endif %}>Iron Sheets - Green</option>
+                <option value="Iron Sheets - Blue" {% if stock.product_name %}selected{% endif %}>Iron Sheets - Blue</option>
+                <option value="Iron Sheets - Red" {% if stock.product_name %}selected{% endif %}>Iron Sheets - Red</option>
+                <option value="Iron Sheets - White" {% if stock.product_name %}selected{% endif %}>Iron Sheets - White</option>
+              </select>
             </div>
 
             <div class="form-group">
@@ -269,13 +287,13 @@
                 name="quantity"
                 value="{{ stock.quantity }}"
                 placeholder="0"
-                min="0"
+                min="1"
                 required
               />
             </div>
           </div>
 
-          <!-- Row 2: Unit Cost + Selling Price -->
+          
           <div class="form-row">
             <div class="form-group">
               <label>
@@ -283,6 +301,7 @@
               </label>
               <input
                 type="number"
+                min="1"
                 name="unit_cost"
                 value="{{ stock.unit_cost }}"
                 placeholder="Cost from supplier"
@@ -304,30 +323,34 @@
             </div>
           </div>
 
-          <!-- Row 3: Category + Payment Method -->
+          
           <div class="form-row">
             <div class="form-group">
               <label> <i class="fas fa-th-large"></i> Category </label>
-              <input
-                type="text"
-                name="category"
-                value="{{ stock.category }}"
-                required
-              />
+               <select name="category" class="form-control" required>
+                <option value=""> --select category--</option>    
+                <option value="cement" {% if stock.category == 'cement' %}selected{% endif %}>Cement</option>
+                <option value="steel" {% if stock.category == 'steel' %}selected{% endif %}>Steel</option>
+                <option value="nails" {% if stock.category == 'nails' %}selected{% endif %}>Nails</option>
+                <option value="hardware" {% if stock.category == 'hardware' %}selected{% endif %}>Hardware</option>
+                <option value="roofing" {% if stock.category == 'roofing' %}selected{% endif %}>Roofing</option>
+              </select>
             </div>
 
             <div class="form-group">
               <label> <i class="fas fa-credit-card"></i> Payment Method </label>
-              <input
-                type="text"
-                name="payment_method"
-                value="{{ stock.payment_method }}"
-                required
-              />
+               <select name="payment_method" required>
+                <option value="">-- Select Payment Method --</option>
+                <option value="cash" {% if stock.payment_method %}selected{% endif %}> Cash</option>
+                <option value="bank_transfer" {% if stock.payment_method %}selected{% endif %}> Bank Transfer</option>
+                <option value="credit" {% if stock.payment_method %}selected{% endif %}> Credit (Pay Later)</option>
+                <option value="cheque" {% if stock.payment_method %}selected{% endif %}> Cheque</option>
+                <option value="mobile_money" {% if stock.payment_method %}selected{% endif %}> Mobile Money</option>
+              </select>
             </div>
           </div>
 
-          <!-- Row 4: Received Date + Credit Due Date -->
+          
           <div class="form-row">
             <div class="form-group">
               <label> <i class="fas fa-calendar"></i> Received Date </label>
@@ -351,7 +374,7 @@
             </div>
           </div>
 
-          <!-- Row 5: Supplier + Unit Of Measure -->
+        
           <div class="form-row">
             <div class="form-group">
               <label> <i class="fas fa-building"></i> Supplier </label>

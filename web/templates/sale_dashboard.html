@@ -1,3 +1,4 @@
+{% load humanize %}
 <!doctype html>
 <html lang="en">
   <head>
@@ -26,7 +27,7 @@
         overflow-x: hidden;
       }
 
-      /* Custom Scrollbar */
+  
       ::-webkit-scrollbar {
         width: 10px;
       }
@@ -38,7 +39,7 @@
         border-radius: 5px;
       }
 
-      /* ========== SIDEBAR STYLES ========== */
+      
       .sidebar {
         position: fixed;
         left: 0;
@@ -54,7 +55,7 @@
         box-shadow: 2px 0 20px rgba(0, 0, 0, 0.1);
       }
 
-      /* Logo Section */
+      
       .logo {
         display: flex;
         align-items: center;
@@ -82,7 +83,7 @@
         background-clip: text;
       }
 
-      /* Navigation Links */
+      
       .nav-links {
         flex: 1;
         list-style: none;
@@ -127,7 +128,7 @@
         color: #1a1a2e;
       }
 
-      /* Bottom Section */
+    
       .bottom {
         padding: 20px 16px;
         border-top: 1px solid rgba(255, 255, 255, 0.1);
@@ -157,14 +158,14 @@
         color: white;
       }
 
-      /* ========== MAIN CONTENT STYLES ========== */
+      
       .main-content {
         margin-left: 280px;
         padding: 25px 30px;
         min-height: 100vh;
       }
 
-      /* Page Header */
+  
       .page-header {
         margin-bottom: 25px;
       }
@@ -188,7 +189,7 @@
         margin-top: 5px;
       }
 
-      /* Stats Cards */
+      
       .cards {
         display: grid;
         grid-template-columns: repeat(4, 1fr);
@@ -243,7 +244,7 @@
         margin-top: 10px;
       }
 
-      /* Section Styles */
+    
       .section {
         background: white;
         border-radius: 20px;
@@ -284,7 +285,7 @@
         text-decoration: underline;
       }
 
-      /* Table Styles */
+    
       .data-table {
         width: 100%;
         border-collapse: collapse;
@@ -310,7 +311,7 @@
         background: #f8f9fa;
       }
 
-      /* Badge Styles */
+      
       .badge-success {
         background: #e8f5e9;
         color: #2e7d32;
@@ -341,7 +342,7 @@
         display: inline-block;
       }
 
-      /* Top Products List */
+  
       .top-product-item {
         display: flex;
         justify-content: space-between;
@@ -406,7 +407,7 @@
         display: block;
       }
 
-      /* Quick Actions */
+      
       .quick-actions {
         display: flex;
         gap: 15px;
@@ -445,7 +446,7 @@
         color: #1a1a2e;
       }
 
-      /* Responsive */
+      
       @media (max-width: 1000px) {
         .sidebar {
           left: -280px;
@@ -475,7 +476,7 @@
     </style>
   </head>
   <body>
-    <!-- Sidebar -->
+    
     <div class="sidebar">
       <div class="logo">
         <i class="fas fa-warehouse"></i>
@@ -525,7 +526,7 @@
         </li>
         
         <li>
-          <a href="{% url 'payment' %}">
+          <a href="{% url 'deposit_list' %}">
             <i class="fas fa-users"></i>
             <span>Deposits</span>
           </a>
@@ -546,25 +547,25 @@
       </div>
     </div>
 
-    <!-- Main Content -->
+  
     <div class="main-content">
-      <!-- Page Header -->
+      
       <div class="page-header">
-        <h2><i class="fas fa-chart-line"></i> Sales Dashboard</h2>
+        <h2> Sales Dashboard</h2>
         <p>
-          <i class="fas fa-calendar-alt"></i> {{ current_date|date:"d M Y" }} • Track your sales performance
+         {{ current_date|date:"d M Y" }} • Track your sales performance
         </p>
       </div>
 
-      <!-- Summary Cards -->
+      
       <div class="cards">
         <div class="card">
           <div class="card-header">
             <h3><i class="fas fa-calendar-day"></i> Today's Sales</h3>
-            <i class="fas fa-wallet"></i>
+            
           </div>
           <div class="card-value">
-            UGX {{ total_sales_today|default:"0"|floatformat:0 }}
+            UGX {{ total_sales_today|default:"0"|floatformat:0 |intcomma}}
           </div>
           <div class="card-footer">Sales from today</div>
         </div>
@@ -572,10 +573,10 @@
         <div class="card">
           <div class="card-header">
             <h3><i class="fas fa-chart-line"></i> Total Revenue</h3>
-            <i class="fas fa-money-bill-wave"></i>
+            
           </div>
           <div class="card-value">
-            UGX {{ total_revenue|default:"0"|floatformat:0 }}
+            UGX {{ total_revenue|default:"0"|floatformat:0 |intcomma }}
           </div>
           <div class="card-footer">All-time sales revenue</div>
         </div>
@@ -583,10 +584,10 @@
         <div class="card">
           <div class="card-header">
             <h3><i class="fas fa-truck"></i> Transport Fees</h3>
-            <i class="fas fa-shipping-fast"></i>
+            
           </div>
           <div class="card-value">
-            UGX {{ total_transport|default:"0"|floatformat:0 }}
+            UGX {{ total_transport|default:"0"|floatformat:0 |intcomma}}
           </div>
           <div class="card-footer">Total delivery fees collected</div>
         </div>
@@ -594,7 +595,7 @@
         <div class="card">
           <div class="card-header">
             <h3><i class="fas fa-exchange-alt"></i> Transactions</h3>
-            <i class="fas fa-receipt"></i>
+            
           </div>
           <div class="card-value">{{ total_transactions|default:"0" }}</div>
           <div class="card-footer">Total sales transactions</div>
@@ -603,10 +604,10 @@
         <div class="card">
           <div class="card-header">
             <h3><i class="fas fa-chart-line"></i> Total Profit</h3>
-            <i class="fas fa-leaf"></i>
+            
           </div>
           <div class="card-value" style="color: #2e7d32">
-            UGX {{ total_profit|default:"0"|floatformat:0 }}
+            UGX {{ total_profit|default:"0"|floatformat:0 |intcomma}}
           </div>
           <div class="card-footer">Net profit from sales</div>
         </div>
@@ -614,7 +615,7 @@
         <div class="card">
           <div class="card-header">
             <h3><i class="fas fa-crown"></i> Best Seller</h3>
-            <i class="fas fa-star"></i>
+            
           </div>
           <div class="card-value" style="font-size: 20px">
             {{ best_selling.product__name|default:"—" }}
@@ -645,8 +646,8 @@
             <tr>
               <td><strong>{{ sale.product }}</strong></td>
               <td>{{ sale.quantity_sold }}</td>
-              <td>UGX {{ sale.transport_fee|floatformat:0 }}</td>
-              <td>UGX {{ sale.final_total|floatformat:0 }}</td>
+              <td>UGX {{ sale.transport_fee|floatformat:0 |intcomma}}</td>
+              <td>UGX {{ sale.final_total|floatformat:0 |intcomma}}</td>
               <td>
                 <span class="badge-info">{{ sale.sale_date|date:"d M Y" }}</span>
               </td>
@@ -675,12 +676,12 @@
               <i class="fas fa-box"></i>
             </div>
             <div class="top-product-details">
-              <h4>{{ product.product__name }}</h4>
-              <p>Sold: {{ product.total_quantity }} units</p>
+              <h4>{{ product.product_name }}</h4>
+              <p>Sold: {{ product.total_sold }} units</p>
             </div>
           </div>
           <div class="top-product-revenue">
-            UGX {{ product.total_revenue|floatformat:0 }}
+            UGX {{ product.total_revenue|floatformat:0 |intcomma}}
           </div>
         </div>
         {% empty %}

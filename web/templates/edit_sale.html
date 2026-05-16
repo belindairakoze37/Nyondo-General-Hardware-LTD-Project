@@ -433,6 +433,7 @@
             <input
               type="number"
               step="0.01"
+              min="1"
               name="unit_selling_price"
               value="{{ sale.unit_selling_price }}"
               required
@@ -448,6 +449,7 @@
             <input
               type="number"
               step="0.01"
+              min="1"
               name="unit_cost_price"
               value="{{ sale.unit_cost_price }}"
               required
@@ -460,6 +462,7 @@
             <input
               type="number"
               step="0.01"
+              min="1"
               name="distance_km"
               value="{{ sale.customer.distance_km|default:'0' }}"
               placeholder="Additional delivery cost"
@@ -561,6 +564,7 @@
             <input
               type="number"
               step="0.01"
+              min="1"
               name="amount_paid"
               value="{{ sale.amount_paid|default:'0' }}"
               placeholder="Partial or full payment"

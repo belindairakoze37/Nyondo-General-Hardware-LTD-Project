@@ -2,6 +2,18 @@ from django.db import models
 from django.core.validators import MinValueValidator
 from decimal import Decimal
 
+# This model is for tracking users or employess
+class User(models.Model):
+    ROLE_CHOICES = [
+        ('admin','Admin'),
+        ('store_manager','Store Manager'),
+        ('sales_attendant','Sales Attendant')
+    ]
+    name = models.CharField(max_length=50)
+    email = models.EmailField(max_length=255, unique=True)
+    role = models.CharField(max_length=50, choices=ROLE_CHOICES)
+    phone_number = models.CharField(max_length=14)
+
 # This model is for tracking  a supplier
 class Supplier(models.Model):
 
@@ -304,7 +316,7 @@ class Sale(models.Model):
         # Check if new sale
         is_new = self.pk is None
 
-        # Auto pricing calculations
+    
         self.subtotal = (
             self.quantity_sold *
             self.unit_selling_price
@@ -452,3 +464,13 @@ class SupplierCredit(models.Model):
 
     def __str__(self):
         return f"{self.supplier.name} Credit"
+    
+class Deposit(models.Model):
+    customer_name = models.ForeignKey(Customer, on_delete=models.CASCADE)
+    amount = models.DecimalField(max_digits=10, decimal_places=2)
+    payment_method = models.CharField(max_length=50)
+    date = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.customer_name} - {self.amount}"
+    

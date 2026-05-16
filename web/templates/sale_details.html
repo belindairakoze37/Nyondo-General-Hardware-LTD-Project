@@ -1,3 +1,4 @@
+{% load humanize %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -19,13 +20,13 @@
             color: #1a2634;
         }
 
-        /* container matching the dashboard layout */
+        
         .details-container {
             max-width: 900px;
             margin: 0 auto;
         }
 
-        /* card styling - same premium feel as stock/table wrapper */
+        
         .card {
             background: white;
             border-radius: 24px;
@@ -35,7 +36,7 @@
             transition: all 0.2s ease;
         }
 
-        /* header section with gradient accent like sales list h1 */
+
         .card-header {
             background: #111927;
             padding: 24px 32px;
@@ -65,12 +66,11 @@
             color: #ffd966;
         }
 
-        /* content area */
+        
         .card-content {
             padding: 28px 32px 32px 32px;
         }
 
-        /* detail rows with clean separation */
         .detail-grid {
             display: flex;
             flex-direction: column;
@@ -118,7 +118,7 @@
             min-width: 140px;
         }
 
-        /* special styling for status badges */
+        
         .paid-badge {
             background: #e1f7ea;
             color: #0e6b2b;
@@ -147,26 +147,26 @@
             box-shadow: inset 0 0 0 1px rgba(220, 53, 69, 0.2);
         }
 
-        /* Payment method and sold by highlight */
+    
         .value.special {
             background: #f1f5f9;
             font-family: 'Inter', system-ui;
         }
 
-        /* profit specific styling */
+        
         .profit-value {
             font-weight: 700;
             color: #1f7840;
             background: #e6f4ea;
         }
 
-        /* monetary values alignment */
+    
         .money-value {
             font-family: 'JetBrains Mono', monospace;
             font-weight: 600;
         }
 
-        /* notes section with slight background */
+    
         .notes-row .value {
             background: #fff7e5;
             border-left: 3px solid #ffb347;
@@ -176,7 +176,7 @@
             max-width: 100%;
         }
 
-        /* action buttons area */
+        
         .action-buttons {
             margin-top: 28px;
             padding-top: 16px;
@@ -229,7 +229,7 @@
             transform: translateY(-2px);
         }
 
-        /* responsive adjustments */
+    
         @media (max-width: 680px) {
             body {
                 padding: 20px 16px;
@@ -257,14 +257,14 @@
             }
         }
 
-        /* subtle indicator for numeric fields */
+        
         .inline-icon {
             opacity: 0.6;
             font-size: 0.75rem;
             margin-right: 4px;
         }
 
-        /* last row group spacing */
+        
         .detail-group-subtitle {
             font-size: 0.7rem;
             text-transform: uppercase;
@@ -282,7 +282,7 @@
             margin: 16px 0 4px 0;
         }
 
-        /* consistent with stock table row hover */
+    
         .card {
             transition: box-shadow 0.2s;
         }
@@ -301,14 +301,14 @@
             <h1>Sale Details</h1>
         </div>
         <div class="card-content">
-            <!-- sale identity section -->
+
             <div class="detail-grid">
                 <div class="detail-row">
                     <div class="label"> SALE ID</div>
                     <div class="value">{{ sale.id }}</div>
                 </div>
                 <div class="detail-row">
-                    <div class="label">👤 CUSTOMER</div>
+                    <div class="label"> CUSTOMER</div>
                     <div class="value">{{ sale.customer.name }}</div>
                 </div>
                 <div class="detail-row">
@@ -326,34 +326,34 @@
             </div>
             <div class="detail-row">
                 <div class="label"> Unit Selling Price</div>
-                <div class="value money-value">{{ sale.unit_selling_price }}</div>
+                <div class="value money-value">{{ sale.unit_selling_price |intcomma}}</div>
             </div>
             <div class="detail-row">
                 <div class="label"> Unit Cost Price</div>
-                <div class="value money-value">{{ sale.unit_cost_price }}</div>
+                <div class="value money-value">{{ sale.unit_cost_price |intcomma}}</div>
             </div>
             <div class="detail-row">
                 <div class="label"> Transport Fee</div>
-                <div class="value money-value">{{ sale.transport_fee }}</div>
+                <div class="value money-value">{{ sale.transport_fee |intcomma}}</div>
             </div>
             <div class="detail-row">
                 <div class="label"> Amount Paid</div>
-                <div class="value money-value">{{ sale.amount_paid }}</div>
+                <div class="value money-value">{{ sale.amount_paid |intcomma}}</div>
             </div>
             <div class="detail-row">
                 <div class="label"> Balance Due</div>
-                <div class="value money-value">{{ sale.balance_due }}</div>
+                <div class="value money-value">{{ sale.balance_due |intcomma}}</div>
             </div>
             <div class="detail-row">
                 <div class="label"> Final Total</div>
-                <div class="value money-value">{{ sale.final_total }}</div>
+                <div class="value money-value">{{ sale.final_total |intcomma}}</div>
             </div>
 
             <div class="divider-light"></div>
             <div class="detail-group-subtitle"> Profitability</div>
             <div class="detail-row">
                 <div class="label"> Profit</div>
-                <div class="value profit-value money-value">+ {{ sale.profit }}</div>
+                <div class="value profit-value money-value">+ {{ sale.profit |intcomma}}</div>
             </div>
 
             <div class="divider-light"></div>
@@ -406,9 +406,7 @@
                 <a href="{% url 'edit_sale' sale.id %}" class="btn btn-secondary">
                      Edit Sale
                 </a>
-                <!-- <a href="{% url 'add_payment' %}?sale={{ sale.id }}" class="btn btn-secondary" style="border-color: #d1e7dd; color: #1f7840;">
-                    💵 Record Payment
-                </a> -->
+    
             </div>
         </div>
     </div>

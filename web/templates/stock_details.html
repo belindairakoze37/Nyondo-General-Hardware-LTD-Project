@@ -1,3 +1,4 @@
+{% load humanize %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,7 +8,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        /* ========== PROFESSIONAL STYLES FOR STOCK DETAILS PAGE ========== */
+        
 
 * {
     margin: 0;
@@ -22,14 +23,14 @@ body {
     line-height: 1.5;
 }
 
-/* Container */
+
 .container {
     max-width: 900px;
     margin: 0 auto;
     padding: 30px 20px;
 }
 
-/* ========== PAGE HEADER ========== */
+
 .page-header {
     margin-bottom: 25px;
 }
@@ -56,7 +57,7 @@ body {
     gap: 8px;
 }
 
-/* ========== CARD STYLES ========== */
+
 .card {
     background: white;
     border-radius: 20px;
@@ -65,7 +66,7 @@ body {
     margin-bottom: 25px;
 }
 
-/* Section Headers */
+
 .section-header {
     display: flex;
     align-items: center;
@@ -86,8 +87,6 @@ body {
     color: #1a1a2e;
     margin: 0;
 }
-
-/* Info Grid */
 .info-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
@@ -118,7 +117,7 @@ body {
     color: #1a1a2e;
 }
 
-/* Full Width Info */
+
 .info-full {
     margin-top: 10px;
 }
@@ -134,7 +133,7 @@ body {
     width: 100%;
 }
 
-/* ========== BADGES ========== */
+
 .badge {
     display: inline-flex;
     align-items: center;
@@ -168,8 +167,6 @@ body {
 .badge.text-dark {
     color: #1a1a2e;
 }
-
-/* ========== BUTTONS ========== */
 .btn {
     display: inline-flex;
     align-items: center;
@@ -219,7 +216,6 @@ body {
     transform: translateY(-2px);
 }
 
-/* Action Buttons Container */
 .action-buttons {
     display: flex;
     gap: 15px;
@@ -229,7 +225,6 @@ body {
     flex-wrap: wrap;
 }
 
-/* ========== RESPONSIVE ========== */
 @media (max-width: 600px) {
     .container {
         padding: 20px 15px;
@@ -270,7 +265,7 @@ body {
 <body>
 
 <div class="container">
-    <!-- Page Header with Icons -->
+    
     <div class="page-header">
         <h2>
             <i class="fas fa-info-circle"></i> Stock Details
@@ -281,7 +276,7 @@ body {
     </div>
 
     <div class="card">
-        <!-- PRODUCT INFORMATION SECTION -->
+    
         <div class="section-header">
             <i class="fas fa-boxes"></i>
             <h4>Product Information</h4>
@@ -301,7 +296,7 @@ body {
             </div>
         </div>
 
-        <!-- STOCK LEVELS SECTION -->
+        
         <div class="section-header" style="margin-top: 25px;">
             <i class="fas fa-cubes"></i>
             <h4>Stock Levels</h4>
@@ -327,7 +322,7 @@ body {
             </div>
         </div>
 
-        <!-- PRICING SECTION -->
+    
         <div class="section-header" style="margin-top: 25px;">
             <i class="fas fa-money-bill-wave"></i>
             <h4>Pricing</h4>
@@ -335,15 +330,15 @@ body {
         <div class="info-grid">
             <div class="info-item">
                 <span class="info-label"><i class="fas fa-dollar-sign"></i> Unit Cost:</span>
-                <span class="info-value">UGX {{ stock.unit_cost }}</span>
+                <span class="info-value">UGX {{ stock.unit_cost |intcomma}}</span>
             </div>
             <div class="info-item">
                 <span class="info-label"><i class="fas fa-tag"></i> Selling Price:</span>
-                <span class="info-value">UGX {{ stock.selling_price }}</span>
+                <span class="info-value">UGX {{ stock.selling_price |intcomma}}</span>
             </div>
         </div>
 
-        <!-- SUPPLIER & PAYMENT SECTION -->
+    
         <div class="section-header" style="margin-top: 25px;">
             <i class="fas fa-building"></i>
             <h4>Supplier & Payment</h4>
@@ -367,7 +362,7 @@ body {
             </div>
         </div>
 
-        <!-- STATUS SECTION -->
+    
         <div class="section-header" style="margin-top: 25px;">
             <i class="fas fa-chart-line"></i>
             <h4>Status</h4>
@@ -387,7 +382,7 @@ body {
             </span>
         </div>
 
-        <!-- NOTES SECTION -->
+        
         <div class="section-header" style="margin-top: 25px;">
             <i class="fas fa-sticky-note"></i>
             <h4>Notes</h4>
@@ -399,7 +394,7 @@ body {
             </div>
         </div>
 
-        <!-- ACTION BUTTONS -->
+    
         <div class="action-buttons">
             <a href="{% url 'edit_stock' stock.id %}" class="btn btn-warning">
                 <i class="fas fa-edit"></i> Edit

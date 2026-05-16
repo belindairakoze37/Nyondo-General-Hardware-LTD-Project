@@ -1,3 +1,4 @@
+{% load humanize %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -147,7 +148,7 @@
             font-weight: 500;
         }
 
-        /* totals section - card like */
+    
         .totals-card {
             background: #fafcff;
             border-radius: 20px;
@@ -411,29 +412,29 @@
                     <tr>
                         <td class="product-name">{{ sale.product.product_name }}</td>
                         <td>{{ sale.quantity_sold }}</td>
-                        <td>{{ sale.unit_selling_price|floatformat:2 }}</td>
-                        <td>{{ sale.total_price|floatformat:2 }}</td>
+                        <td>{{ sale.unit_selling_price|floatformat:2 |intcomma}}</td>
+                        <td>{{ sale.total_price|floatformat:2 |intcomma}}</td>
                     </tr>
                 </tbody>
             </table>
 
-            <!-- Totals section - elegant -->
+            
             <div class="totals-card">
                 <div class="total-row">
                     <span class="total-label"> Transport Fee</span>
-                    <span class="total-amount">UGX {{ sale.transport_fee|floatformat:2 }}</span>
+                    <span class="total-amount">UGX {{ sale.transport_fee|floatformat:2 |intcomma}}</span>
                 </div>
                 <div class="total-row">
                     <span class="total-label"> Amount Paid</span>
-                    <span class="total-amount">UGX {{ sale.amount_paid|floatformat:2 }}</span>
+                    <span class="total-amount">UGX {{ sale.amount_paid|floatformat:2 |intcomma}}</span>
                 </div>
                 <div class="total-row">
                     <span class="total-label"> Balance Due</span>
-                    <span class="total-amount">UGX {{ sale.balance_due|floatformat:2 }}</span>
+                    <span class="total-amount">UGX {{ sale.balance_due|floatformat:2 |intcomma}}</span>
                 </div>
                 <div class="total-row grand-total">
                     <span class="total-label"> Final Total</span>
-                    <span class="total-amount">UGX {{ sale.final_total|floatformat:2 }}</span>
+                    <span class="total-amount">UGX {{ sale.final_total|floatformat:2 |intcomma}}</span>
                 </div>
                 <div class="total-row" style="margin-top: 8px;">
                     <span class="total-label"> Payment Status</span>
