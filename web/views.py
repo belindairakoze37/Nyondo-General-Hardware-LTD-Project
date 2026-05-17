@@ -354,34 +354,56 @@ def sale_details(request,pk):
     }
     return render(request,"sale_details.html",context)
 
+
+
 def payment(request):
-    return render(request,"payment.html")
-def receipt(request,pk):
-    sale = get_object_or_404(Sale,pk=pk)
+    return render(request, "payment.html")
+
+
+def receipt(request, pk):
+    sale = get_object_or_404(Sale, pk=pk)
+
     context = {
-        "sale":sale
+        "sale": sale
     }
-    return render(request,"receipt.html", context)
+
+    return render(request, "receipt.html", context)
+
+
 def add_payment(request):
     sales = Sale.objects.all()
 
     if request.method == "POST":
-        sale = Sale.objects.get(id=request.POST.get("sale"))
 
+        sale = Sale.objects.get(
+            id=request.POST.get("sale")
+        )
+
+        # for creating  a payment
         payment = Payment()
         payment.sale = sale
-        payment.amount = Decimal(request.POST.get("amount"))
+        payment.amount = Decimal(
+            request.POST.get("amount")
+        )
         payment.method = request.POST.get("method")
         payment.save()
 
-        # for  updating sale amount paid
+        #  for updating sale amount paid
         sale.amount_paid += payment.amount
 
-        # for checking the  balance
+        # for checking balance
         if sale.amount_paid >= sale.final_total:
             sale.is_fully_paid = True
 
         sale.save()
+
+    
+        # for automatically adding the payment into the deposit dashboard
+        newDeposit = Deposit()
+        newDeposit.customer_name = sale.customer
+        newDeposit.amount = payment.amount
+        newDeposit.payment_method = payment.method
+        newDeposit.save()
 
         return redirect('payment_history')
 
@@ -391,49 +413,130 @@ def add_payment(request):
 
     return render(request, "add_payment.html", context)
 
+
 def payment_history(request):
-    payments = Payment.objects.all().order_by('-payment_date')
+    payments = Payment.objects.all().order_by(
+        '-payment_date'
+    )
+
     latest_payment = payments.first()
+
     context = {
-        "payments":payments,
-        "latest_payment":latest_payment
+        "payments": payments,
+        "latest_payment": latest_payment
     }
-    return render(request,"payment_history.html", context)
+
+    return render(
+        request,
+        "payment_history.html",
+        context
+    )
+
 
 def deposit_list(request):
+
     all_deposits = Deposit.objects.all()
+
     total_amount = all_deposits.aggregate(
         Sum("amount")
     )["amount__sum"] or 0
 
-    customer_count = all_deposits.values("customer_name").distinct().count()
+    customer_count = all_deposits.values(
+        "customer_name"
+    ).distinct().count()
 
     context = {
-        "deposits":all_deposits,
-        "total_amount":total_amount,
-        "customer_count":customer_count
+        "deposits": all_deposits,
+        "total_amount": total_amount,
+        "customer_count": customer_count
     }
-    return render(request, "deposit_list.html", context)
+
+    return render(
+        request,
+        "deposit_list.html",
+        context
+    )
+
 
 def add_deposit(request):
+
     customers = Customer.objects.all()
+
     if request.method == "POST":
+
         payload = request.POST
-        customer_id = request.POST.get("customer_name")
-        customer = get_object_or_404(Customer,id=customer_id)
-        sent_amount = Decimal(payload.get("amount"))
-        sent_payment_method = payload.get("payment_method")
-        
-        # creating a new deposit 
+
+        customer_id = payload.get(
+            "customer_name"
+        )
+
+        customer = get_object_or_404(
+            Customer,
+            id=customer_id
+        )
+
+        sent_amount = Decimal(
+            payload.get("amount")
+        )
+
+        sent_payment_method = payload.get(
+            "payment_method"
+        )
+
+        # creating deposit
         newDeposit = Deposit()
         newDeposit.customer_name = customer
         newDeposit.amount = sent_amount
         newDeposit.payment_method = sent_payment_method
         newDeposit.save()
+
         return redirect('deposit_list')
-    return render(request,"add_deposit.html", {"customers":customers} )
-    
 
-def edit_deposit(request,pk):
-    pass
+    context = {
+        "customers": customers
+    }
 
+    return render(
+        request,
+        "add_deposit.html",
+        context
+    )
+
+
+def edit_deposit(request, pk):
+
+    deposit = get_object_or_404(
+        Deposit,
+        pk=pk
+    )
+
+    customers = Customer.objects.all()
+
+    if request.method == "POST":
+
+        deposit.customer_name = Customer.objects.get(
+            id=request.POST["customer_name"]
+        )
+
+        deposit.amount = Decimal(
+            request.POST.get("amount")
+        )
+
+        deposit.payment_method = request.POST.get(
+            "payment_method"
+        )
+
+        deposit.save()
+
+        return redirect('deposit_list')
+
+    context = {
+        "deposit": deposit,
+        "customers": customers
+    }
+
+    return render(
+        request,
+        "edit_deposit.html",
+        context
+    )

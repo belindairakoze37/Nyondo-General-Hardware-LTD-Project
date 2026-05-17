@@ -466,9 +466,14 @@ class SupplierCredit(models.Model):
         return f"{self.supplier.name} Credit"
     
 class Deposit(models.Model):
+    PAYMENT_METHOD_CHOICES = [
+        ('cash', 'Cash'),
+        ('mobile_money', 'Mobile Money'),
+        ('bank_transfer', 'Bank Transfer'),
+    ]
     customer_name = models.ForeignKey(Customer, on_delete=models.CASCADE)
     amount = models.DecimalField(max_digits=10, decimal_places=2)
-    payment_method = models.CharField(max_length=50)
+    payment_method = models.CharField(max_length=50, choices=PAYMENT_METHOD_CHOICES)
     date = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):

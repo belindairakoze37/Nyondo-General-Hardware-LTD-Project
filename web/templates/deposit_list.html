@@ -297,6 +297,9 @@
         <a href="{% url 'add_deposit' %}" class="btn btn-primary">
           <i class="fas fa-plus"></i> New Deposit
         </a>
+         <a href="{% url 'sale_dashboard' %}" class="btn btn-primary">
+           Back To Dasboard 
+        </a>
       </div>
 
     
@@ -353,12 +356,10 @@
                 </span>
               </td>
               <td>
-                <i class="far fa-clock" style="color:#888;"></i> {{ deposit.date|date:"Y-m-d H:i" }}
+                 {{ deposit.date|date:"Y-m-d" }}
               </td>
               <td class="action-buttons">
-                <a href="{% url 'deposit_detail' deposit.id %}" class="btn-sm btn-info">
-                  <i class="fas fa-eye"></i> View
-                </a>
+                
                 <a href="{% url 'edit_deposit' deposit.id %}" class="btn-sm btn-warning">
                   <i class="fas fa-edit"></i> Edit
                 </a>
