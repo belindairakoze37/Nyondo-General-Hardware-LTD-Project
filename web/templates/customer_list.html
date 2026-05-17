@@ -1,183 +1,213 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Suppliers - Nyondo Hardware</title>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Customers - Nyondo Hardware</title>
 
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap"
+      rel="stylesheet"
+    />
 
     <style>
-        body {
-            font-family: "Inter", sans-serif;
-            background: #f4f6f9;
-            margin: 0;
-            padding: 20px;
-        }
+      body {
+        font-family: "Inter", sans-serif;
+        background: #f4f6f9;
+        margin: 0;
+        padding: 20px;
+      }
 
+      .container {
+        max-width: 1000px;
+        margin: auto;
+      }
+
+      .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+      }
+
+      .header h2 {
+        margin: 0;
+        font-size: 1.8rem;
+        font-weight: 600;
+        color: #1a1a2e;
+      }
+
+      .btn-group {
+        display: flex;
+        gap: 8px;
+      }
+
+      .btn-add {
+        background: #ff8c00;
+        color: white;
+        padding: 10px 15px;
+        text-decoration: none;
+        border-radius: 6px;
+        font-weight: 500;
+        transition: background 0.2s;
+        display: inline-block;
+      }
+
+      .btn-add:hover {
+        background: #e67e22;
+      }
+
+      table {
+        width: 100%;
+        text-align: center;
+        border-collapse: collapse;
+        background: white;
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+      }
+
+      table th,
+      table td {
+        padding: 12px;
+        text-align: center;
+      }
+
+      table th {
+        background: #1a1a2e;
+        color: white;
+        font-weight: 600;
+      }
+
+      table tr:nth-child(even) {
+        background: #f9f9f9;
+      }
+
+      table tr:hover {
+        background: #f5f5f5;
+      }
+
+      .actions {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+      }
+
+      .actions a {
+        text-decoration: none;
+        font-size: 14px;
+        padding: 4px 8px;
+        border-radius: 4px;
+        transition: all 0.2s;
+      }
+      
+      .edit {
+        color: #007bff;
+        background: #e7f1ff;
+      }
+
+      .edit:hover {
+        text-decoration: underline;
+        background: #d4e4ff;
+      }
+
+      .delete {
+        color: red;
+        background: #ffe7e7;
+      }
+
+      .delete:hover {
+        text-decoration: underline;
+        background: #ffd4d4;
+      }
+
+      .empty {
+        text-align: center;
+        padding: 20px;
+        color: #777;
+      }
+
+      .table_wrapper {
+        display: flex;
+        justify-content: center;
+        width: 100%;
+      }
+
+      .table_wrapper table {
+        width: 100%;
+        max-width: 100%;
+      }
+
+    
+      .container {
+        max-width: 1200px;
+        margin-left: auto;
+        margin-right: auto;
+        padding-left: 20px;
+        padding-right: 20px;
+      }
+
+      
+      @media (min-width: 1400px) {
         .container {
-            max-width: 1000px;
-            margin: auto;
+          max-width: 1300px;
         }
-
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-
-        .header h2 {
-            margin: 0;
-            font-size: 1.8rem;
-            font-weight: 600;
-            color: #1a1a2e;
-        }
-
-        .btn-group {
-            display: flex;
-            gap: 8px;  
-        }
-
-        .btn-add {
-            background: #ff8c00;
-            color: white;
-            padding: 10px 15px;
-            text-decoration: none;
-            border-radius: 6px;
-            font-weight: 500;
-            transition: background 0.2s;
-            display: inline-block;
-        }
-
-        .btn-add:hover {
-            background: #e67e22;
-        }
-
-        table {
-            width: 100%;
-            text-align: center;
-            border-collapse: collapse;
-            background: white;
-            border-radius: 10px;
-            overflow: hidden;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-        }
-
-        table th, table td {
-            padding: 12px;
-            text-align: center;
-        }
-
-        table th {
-            background: #1a1a2e;
-            color: white;
-            font-weight: 600;
-        }
-
-        table tr:nth-child(even) {
-            background: #f9f9f9;
-        }
-
-        table tr:hover {
-            background: #f5f5f5;
-        }
-        
-        .actions {
-            display: flex;
-            gap: 10px;
-            align-items: center;
-        }
-
-        .actions a {
-            text-decoration: none;
-            font-size: 14px;
-            padding: 4px 8px;
-            border-radius: 4px;
-            transition: all 0.2s;
-        }
-
-        .edit {
-            color: #007bff;
-            background: #e7f1ff;
-        }
-
-        .edit:hover {
-            text-decoration: underline;
-            background: #d4e4ff;
-        }
-
-        .delete {
-            color: red;
-            background: #ffe7e7;
-        }
-
-        .delete:hover {
-            text-decoration: underline;
-            background: #ffd4d4;
-        }
-
-        .empty {
-            text-align: center;
-            padding: 20px;
-            color: #777;
-        }
+      }
     </style>
-</head>
-<body>
-
-<div class="container">
-
-    <div class="header">
+  </head>
+  <body>
+    <div class="container">
+      <div class="header">
         <h2>Customers</h2>
         <div class="btn-group">
-            <a href="{% url 'add_customer' %}" class="btn-add">+ Add Customer</a>
-            <a href="{% url 'sale_dashboard' %}" class="btn-add">Back to Dashboard</a>
+          <a href="{% url 'add_customer' %}" class="btn-add">+ Add Customer</a>
+          <a href="{% url 'sale_dashboard' %}" class="btn-add"
+            >Back to Dashboard</a
+          >
         </div>
-    </div>
-
-    <table>
-        <thead>
+      </div>
+      <div class="table_wrapper">
+        <table>
+          <thead>
             <tr>
-                <th>Name</th>
-                <th>Email</th>
-                <th>NIN</th>
-                <th>Distance</th>
-                <th>Contact</th>
-                <th>Address</th>
-                <th>Actions</th>
+              <th>Name</th>
+              <th>Email</th>
+              <th>NIN</th>
+              <th>Distance</th>
+              <th>Contact</th>
+              <th>Address</th>
+              <th>Actions</th>
             </tr>
-        </thead>
+          </thead>
 
-        <tbody>
-            {% if customers %}
-                {% for customer in customers %}
-                <tr>
-                    <td>{{ customer.name }}</td>
-                    <td>{{ customer.email }}</td>
-                    <td>{{ customer.nin }}</td>
-                    <td>{{customer.distance_km}}</td>
-                    <td>{{ customer.contact }}</td>
-                    <td>{{ customer.address }}</td>
-                    <td class="actions">
-                        <a href="{% url 'edit_customer' customer.id %}" class="edit">Edit</a>
-                        <a href="{% url 'delete_customer' customer.id %}" class="delete">Delete</a>
-                        
-                    </td>
-                   
-                </tr>
-                {% endfor %}
-            {% else %}
-                <tr>
-                    <td colspan="5" class="empty">
-                        No customers found. Add one to get started.
-                    </td>
-                </tr>
+          <tbody>
+            {% if customers %} {% for customer in customers %}
+            <tr>
+              <td>{{ customer.name }}</td>
+              <td>{{ customer.email }}</td>
+              <td>{{ customer.nin }}</td>
+              <td>{{customer.distance_km}}</td>
+              <td>{{ customer.contact }}</td>
+              <td>{{ customer.address }}</td>
+              <td class="actions">
+                <a href="{% url 'edit_customer' customer.id %}" class="edit"
+                  >Edit</a
+                >
+                <a href="{% url 'delete_customer' customer.id %}" class="delete"
+                  >Delete</a
+                >
+              </td>
+            </tr>
+            {% endfor %} {% else %}
+            <tr>
+              <td colspan="7" class="empty">
+                No customers found. Add one to get started.
+              </td>
+            </tr>
             {% endif %}
-        </tbody>
-    </table>
-
-</div>
-
-</body>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </body>
 </html>

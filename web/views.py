@@ -203,7 +203,7 @@ def edit_customer(request,pk):
         customer.email = request.POST.get("email")
         customer.contact = request.POST.get("contact")
         customer.address = request.POST.get("address")
-        customer.distance_km = int(request.POST.get("distance_km"))
+        customer.distance_km = Decimal(request.POST.get("distance_km"))
         customer.nin = request.POST.get("nin")
         customer.is_credit_customer = request.POST.get("is_credit_customer") == "on"
         customer.save()
@@ -496,35 +496,22 @@ def add_deposit(request):
         "customers": customers
     }
 
-    return render(
-        request,
-        "add_deposit.html",
-        context
-    )
+    return render(request,"add_deposit.html",context)
 
 
 def edit_deposit(request, pk):
 
-    deposit = get_object_or_404(
-        Deposit,
-        pk=pk
-    )
+    deposit = get_object_or_404(Deposit,pk=pk)
 
     customers = Customer.objects.all()
 
     if request.method == "POST":
 
-        deposit.customer_name = Customer.objects.get(
-            id=request.POST["customer_name"]
-        )
+        deposit.customer_name = Customer.objects.get(id=request.POST["customer_name"])
 
-        deposit.amount = Decimal(
-            request.POST.get("amount")
-        )
+        deposit.amount = Decimal( request.POST.get("amount"))
 
-        deposit.payment_method = request.POST.get(
-            "payment_method"
-        )
+        deposit.payment_method = request.POST.get("payment_method")
 
         deposit.save()
 
@@ -535,8 +522,25 @@ def edit_deposit(request, pk):
         "customers": customers
     }
 
-    return render(
-        request,
-        "edit_deposit.html",
-        context
-    )
+    return render(request,"edit_deposit.html",context)
+
+def admin_dashboard(request):
+    total_sales = Sale.objects.aggregate(Sum("final_total"))["final_total__sum"] or 0
+    total_payments = Payment.objects.aggregate(Sum("amount"))["amount__sum"] or 0
+    total_deposits = Deposit.objects.aggregate(Sum("amount"))["amount__sum"] or 0
+    customers = Customer.objects.count()
+    recent_sales = Sale.objects.all().order_by("-id")[:5]
+    recent_payments = Payment.objects.all().order_by("-payment_date")[:5]
+    recent_deposits = Deposit.objects.all().order_by("-date")[:5]
+    
+    context = {
+        "total_sales":total_sales,
+        "total_payments":total_payments,
+        "total_deposits":total_deposits,
+        "customers":customers,
+        "recent_sales":recent_sales,
+        "recent_payments":recent_payments,
+        "recent_deposits":recent_deposits
+    }
+
+    return render(request, "admin_dashboard.html", context)
