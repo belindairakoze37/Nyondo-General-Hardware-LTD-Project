@@ -389,6 +389,9 @@
     <a href="{% url 'add_sale' %}" style="text-decoration: none; display: inline-block; margin-bottom: 18px;">
         <button class="add-sale-button">+ Add Sale</button>
     </a>
+    <a href="{% url 'sale_dashboard' %}" style="text-decoration: none; display: inline-block; margin-bottom: 18px;">
+        <button class="add-sale-button">Back To Dashboard</button>
+    </a>
     
     <div class="table-wrapper">
         <table>
@@ -399,10 +402,11 @@
                     <th>Unit Cost</th>
                     <th>Quantity</th>
                     <th>Unit Price</th>
-                    <th>Total</th>
+                    <th>Sub Total</th>
                     <th>Paid</th>
-                    <th>Balance</th>
                     <th>Transport</th>
+                    <th>Final Total</th>
+                    <th>Balance</th>
                     <th>Status</th>
                     <th>Date</th>
                     <th>Actions</th>
@@ -416,10 +420,12 @@
                     <td>{{ sale.unit_cost_price |intcomma}}</td>
                     <td>{{ sale.quantity_sold |intcomma}}</td>
                     <td>{{ sale.unit_selling_price |intcomma}}</td>
-                    <td>{{ sale.final_total |intcomma }}</td>
+                    <td>{{sale.subtotal |intcomma}}</td>
                     <td>{{ sale.amount_paid |intcomma}}</td>
-                    <td>{{ sale.balance_due |intcomma}}</td>
                     <td>{{ sale.transport_fee |intcomma}}</td>
+                    <td>{{ sale.final_total |intcomma }}</td>
+                    <td>{{ sale.balance_due |intcomma}}</td>
+                   
                     
                     <td class="status-cell">
                         {% if sale.is_fully_paid %}
@@ -428,7 +434,7 @@
                             <span class="pending">⚠ Pending</span>
                         {% endif %}
                     </td>
-                    <td>{{ sale.sale_date }}</td>
+                    <td>{{ sale.sale_date |date:"Y-m-d"}}</td>
                     <td>
                         <div class="action-group">
                             <a href="{% url 'sale_details' sale.id %}" class="btn view-btn">
@@ -437,7 +443,7 @@
                             <a href="{% url 'edit_sale' sale.id %}" class="btn edit-btn">
                                 Edit
                             </a>
-                         <a href="{% url 'receipt' sale.id %}" class="btn receipt-btn">
+                         <a href="{% url 'sale_receipt' sale.id %}" class="btn receipt-btn">
                                 Receipt
                             </a>
                         </div>

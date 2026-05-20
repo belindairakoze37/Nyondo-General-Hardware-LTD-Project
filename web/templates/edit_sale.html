@@ -379,14 +379,7 @@
             <select name="customer" required>
               {% for customer in customers %}
               <option
-                value="{{ customer.id }}"
-                {%
-                if
-                sale.customer.id=""
-                ="customer.id"
-                %}selected{%
-                endif
-                %}
+                value="{{ customer.id }}" {% if sale.customer.id == customer.id %}selected{% endif %}
               >
                 {{ customer.name }}
               </option>
@@ -399,14 +392,7 @@
             <select name="product" required>
               {% for stock in stocks %}
               <option
-                value="{{ stock.id }}"
-                {%
-                if
-                sale.product.id=""
-                ="stock.id"
-                %}selected{%
-                endif
-                %}
+                value="{{ stock.id }}" {% if sale.product.id == stock.id %}selected{% endif %}
               >
                 {{ stock.product_name }} (Available: {{ stock.quantity }})
               </option>
@@ -464,7 +450,7 @@
               step="0.01"
               min="1"
               name="distance_km"
-              value="{{ sale.customer.distance_km|default:'0' }}"
+              value="{{ sale.distance_km|default:'0' }}"
               placeholder="Additional delivery cost"
             />
           </div>
@@ -475,50 +461,22 @@
             <label>Payment Method</label>
             <select name="payment_method">
               <option
-                value="cash"
-                {%
-                if
-                sale.payment_method=""
-                ="cash"
-                %}selected{%
-                endif
-                %}
+                value="cash" {% if sale.payment_method == 'cash' %}selected{% endif %}
               >
                 Cash
               </option>
               <option
-                value="mobile_money"
-                {%
-                if
-                sale.payment_method=""
-                ="mobile_money"
-                %}selected{%
-                endif
-                %}
+                value="mobile_money" {% if sale.payment_method == 'mobile_money' %}selected{% endif %}
               >
                 Mobile Money
               </option>
               <option
-                value="bank_transfer"
-                {%
-                if
-                sale.payment_method=""
-                ="bank_transfer"
-                %}selected{%
-                endif
-                %}
+                value="bank_transfer" {% if sale.payment_method == 'bank_transfer' %}selected{% endif %}
               >
                 Bank Transfer
               </option>
               <option
-                value="credit"
-                {%
-                if
-                sale.payment_method=""
-                ="credit"
-                %}selected{%
-                endif
-                %}
+                value="credit" {% if sale.payment_method == 'credit' %}selected{% endif %}
               >
                 Credit
               </option>
@@ -587,13 +545,7 @@
           <input
             type="checkbox"
             name="is_fully_paid"
-            id="isFullyPaid"
-            {%
-            if
-            sale.is_fully_paid
-            %}checked{%
-            endif
-            %}
+            id="isFullyPaid" {% if sale.is_fully_paid %}checked{% endif %}
           />
           <label for="isFullyPaid"> Is Fully Paid</label>
           <span class="helper-text"
@@ -601,7 +553,7 @@
           >
         </div>
 
-        <a href="{% url 'edit_sale' sale.id %}"><button type="submit"><span>✓</span> Update Sale Transaction</button></a>
+        <button type="submit"><span>✓</span> Update Sale Transaction</button>
       </form>
 
       <div class="back-link">

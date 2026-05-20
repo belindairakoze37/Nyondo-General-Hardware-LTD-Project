@@ -105,11 +105,10 @@
             <div class="mb-3">
                 <label class="form-label">Payment Method</label>
 
-                 <select name="payment_method" class="form-control" required>
-                            <option value="">-- Select Method --</option>
-                            <option value="cash"{% if deposit.payment_method == 'cash' %}selected{% endif %}>Cash</option>
-                            <option value="mobile_money"{% if deposit.payment_method == 'mobile_money' %}selected{% endif %}>Mobile Money</option>
-                            <option value="bank_transfer"{% if deposit.payment_method == 'bank_transfer' %}selected{% endif %}>Bank Transfer</option>
+                 <select name="method" class="form-control" required>
+                            <option value="cash" {% if deposit.method == 'cash' %}selected{% endif %}>Cash</option>
+                            <option value="mobile_money" {% if deposit.method == 'mobile_money' %}selected{% endif %}>Mobile Money</option>
+                            <option value="bank_transfer" {% if deposit.method == 'bank_transfer' %}selected{% endif %}>Bank Transfer</option>
                         </select>
             </div>
 

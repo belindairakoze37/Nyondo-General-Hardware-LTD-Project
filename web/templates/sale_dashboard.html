@@ -618,7 +618,7 @@
             
           </div>
           <div class="card-value" style="font-size: 20px">
-            {{ best_selling.product__name|default:"—" }}
+            {{ best_selling.product__product_name|default:"—" }}
           </div>
           <div class="card-footer">Top performing product</div>
         </div>
@@ -627,18 +627,18 @@
       <!-- Recent Sales Section -->
       <div class="section">
         <div class="section-header">
-          <h3><i class="fas fa-clock"></i> Recent Transactions</h3>
+          <h3> Recent Transactions</h3>
           <a href="{% url 'sale_list' %}">View All →</a>
         </div>
 
         <table class="data-table">
           <thead>
             <tr>
-              <th><i class="fas fa-tag"></i> Product</th>
-              <th><i class="fas fa-cubes"></i> Quantity</th>
-              <th><i class="fas fa-truck-fast"></i> Transport</th>
+              <th>Product</th>
+              <th> Quantity</th>
+              <th> Transport</th>
               <th> Total (UGX)</th>
-              <th><i class="fas fa-calendar-day"></i> Date</th>
+              <th> Date</th>
             </tr>
           </thead>
           <tbody>
@@ -665,18 +665,18 @@
 
       <div class="section">
         <div class="section-header">
-          <h3><i class="fas fa-fire"></i> Top Selling Products</h3>
+          <h3> Top Selling Products</h3>
           <a href="{% url 'sale_list' %}?sort=top">View All →</a>
         </div>
 
         {% for product in top_products %}
         <div class="top-product-item">
           <div class="top-product-info">
-            <div class="top-product-icon">
-              <i class="fas fa-box"></i>
+            <div>
+              
             </div>
             <div class="top-product-details">
-              <h4>{{ product.product_name }}</h4>
+              <h4>{{ product.product__product_name }}</h4>
               <p>Sold: {{ product.total_sold }} units</p>
             </div>
           </div>
@@ -695,7 +695,7 @@
       
       <div class="section">
         <div class="section-header">
-          <h3><i class="fas fa-bolt"></i> Quick Actions</h3>
+          <h3> Quick Actions</h3>
         </div>
 
         <div class="quick-actions">

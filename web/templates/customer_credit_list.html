@@ -1,3 +1,4 @@
+{% load humanize %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -324,9 +325,9 @@
                     <td>{{ sale.customer.name }}</td>
                     <td>{{ sale.product.product_name }}</td>
                     <td>{{ sale.customer.contact }}</td>
-                    <td>UGX {{ sale.final_total|floatformat:2 }}</td>
-                    <td>UGX {{ sale.amount_paid|floatformat:2 }}</td>
-                    <td><strong>UGX {{ sale.balance_due|floatformat:2 }}</strong></td>
+                    <td>UGX {{ sale.final_total|floatformat:1 |intcomma }}</td>
+                    <td>UGX {{ sale.amount_paid|floatformat:1 |intcomma }}</td>
+                    <td><strong>UGX {{ sale.balance_due|floatformat:1 |intcomma }}</strong></td>
                     <td>{{ sale.due_date }}</td>
                     <td>
                         {% if sale.due_date < today %}

@@ -244,6 +244,29 @@
             white-space: nowrap;
             font-size: 0.8rem;
         }
+        .btn {
+        align-items: center;
+        margin-left: 20px;
+        padding: 10px 20px;
+        border-radius: 8px;
+        font-weight: 600;
+        font-size: 14px;
+        cursor: pointer;
+        transition: all 0.3s;
+        text-decoration: none;
+        border: none;
+        font-family: "Inter", sans-serif;
+      }
+
+      .btn-primary {
+        background: linear-gradient(135deg, #ffd700, #ff8c00);
+        color: #1a1a2e;
+      }
+
+      .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(255, 140, 0, 0.3);
+      }
     </style>
 </head>
 
@@ -251,7 +274,9 @@
 <div class="container">
 
     <h1>Payment History</h1>
-
+    <a href="{% url 'sale_dashboard'  %}" class="btn btn-primary" mb-3>
+        Back to Dashboard
+      </a>
     
     <div class="summary-bar">
         <div class="summary-item">

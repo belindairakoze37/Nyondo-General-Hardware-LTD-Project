@@ -42,11 +42,12 @@ urlpatterns = [
     path('sale/details/<int:pk>/', views.sale_details, name= "sale_details"),
     path('sale_dashboard/', views.sale_dashboard, name="sale_dashboard"),
     path('sale/payment', views.payment, name="payment"),
-    path('sale/receipt/<int:pk>', views.receipt, name="receipt"),
+    path('sale/sale_receipt/<int:pk>', views.sale_receipt, name="sale_receipt"),
     path('payment/add', views.add_payment, name="add_payment"),
     path('payment/history', views.payment_history, name="payment_history"),
     path('sale/customer_credit_list/', views.credit_list, name="credit_list"),
     path('deposit_list/', views.deposit_list, name="deposit_list"),
+    path('deposit_list/deposit_receipt/<int:pk>/', views.deposit_receipt, name="deposit_receipt"),
     path('deposit_list/add/', views.add_deposit, name="add_deposit"),
     path('deposit_list/edit/<int:pk>/', views.edit_deposit, name="edit_deposit"),
     # urls for customer

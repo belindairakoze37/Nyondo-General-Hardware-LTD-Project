@@ -363,6 +363,9 @@
                 <a href="{% url 'edit_deposit' deposit.id %}" class="btn-sm btn-warning">
                   <i class="fas fa-edit"></i> Edit
                 </a>
+                <a href="{% url 'deposit_receipt' deposit.id %}" class="btn-sm btn-warning">
+                   Receipt
+                </a>
               </td>
             </tr>
             {% empty %}

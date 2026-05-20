@@ -1,3 +1,5 @@
+import re
+from django.contrib import messages
 from django.utils import timezone
 from django.shortcuts import render,redirect,get_object_or_404
 from web.models import Supplier
@@ -179,9 +181,33 @@ def add_customer(request):
         sent_contact = payload.get("contact")
         sent_email = payload.get("email")
         sent_address = payload.get("address")
-        sent_nin = payload.get("nin")
-        sent_distance_km = int(payload.get("distance_km") or 0) 
+        sent_nin = payload.get("nin").upper()
         sent_is_credit_customer = payload.get("is_credit_customer") == "on"
+
+        # for validating ugandan phone numbers
+        phone_pattern = r'^(\+256|256|0)7\d{8}$'
+
+        # for validating ugandan NIN
+        nin_pattern = r'^C[FM][A-Z0-9]{12}$'
+
+        # for phone validation
+        if not re.match(phone_pattern, sent_contact):
+            messages.error(request, "Enter a valid Ugandan phone number")
+
+            context = {
+                "form_data":payload
+            }
+            return render(request,"add_customer.html",context)
+        
+        # for NIN validation
+        if not re.match(nin_pattern, sent_nin):
+            messages.error(request, "Enter a valid Ugandan NIN")
+
+            context = {
+                "form_data":payload
+            }
+            return render(request,"add_customer.html", context)
+
 
         newCustomer = Customer()
         newCustomer.name = sent_name
@@ -189,9 +215,10 @@ def add_customer(request):
         newCustomer.email = sent_email
         newCustomer.address = sent_address
         newCustomer.nin = sent_nin
-        newCustomer.distance_km = sent_distance_km
         newCustomer.is_credit_customer = sent_is_credit_customer
         newCustomer.save()
+        
+        messages.success(request, "Customer added successfully")
         return redirect('customer_list')
     
     return render(request,"add_customer.html")
@@ -199,14 +226,41 @@ def add_customer(request):
 def edit_customer(request,pk):
     customer = get_object_or_404(Customer,pk=pk)
     if request.method == "POST":
+        
+         
+        phone_pattern = r'^(\+256|256|0)7\d{8}$'
+        nin_pattern = r'^C[FM][A-Z0-9]{12}$'
+        sent_contact = request.POST.get("contact")
+        sent_nin = request.POST.get("nin").upper()
+
+        # phone number validation
+        if not re.match(phone_pattern, sent_contact):
+            messages.error(request, "Enter a valid Ugandan phone number")
+            context = {
+                "form_data":request.POST,
+                "customer":customer
+            }
+            return render(request, "edit_customer.html", context)
+        
+         # nin validation
+        if not re.match(nin_pattern, sent_nin):
+            messages.error(request, "Enter a valid Ugandan NIN (CF or CM only)")
+
+            context = {
+                "form_data":request.POST,
+                "customer":customer
+            }
+            return render(request, "edit_customer.html", context)
+
         customer.name = request.POST.get("name")
         customer.email = request.POST.get("email")
-        customer.contact = request.POST.get("contact")
+        customer.contact = sent_contact
         customer.address = request.POST.get("address")
-        customer.distance_km = Decimal(request.POST.get("distance_km"))
-        customer.nin = request.POST.get("nin")
+        customer.nin = sent_nin
         customer.is_credit_customer = request.POST.get("is_credit_customer") == "on"
         customer.save()
+        messages.success(request, "Customer updated successfully")
+
         return redirect('customer_list')
     return render(request,"edit_customer.html", {'customer':customer})
 
@@ -226,39 +280,66 @@ def sale_list(request):
 def add_sale(request):
     customers = Customer.objects.all()
     stocks = Stock.objects.all()
+    
+
     if request.method == "POST":
         customer = Customer.objects.get(id=request.POST["customer"])
         product = Stock.objects.get(id=request.POST["product"])
         sent_is_fully_paid = request.POST.get("is_fully_paid") == "on"
 
-        # creating a new sale
         newSale = Sale()
         newSale.customer = customer
         newSale.payment_method = request.POST.get("payment_method")
-        newSale.is_fully_paid = sent_is_fully_paid
         newSale.product = product
         newSale.sale_date = request.POST.get("sale_date") or None
         newSale.due_date = request.POST.get("due_date") or None
         newSale.sold_by = request.POST.get("sold_by")
-        newSale.distance_km = int(customer.distance_km)
-
+        newSale.distance_km = Decimal(request.POST.get("distance_km") or 0)
         newSale.quantity_sold = int(request.POST.get("quantity_sold"))
         newSale.unit_selling_price = Decimal(request.POST.get("unit_selling_price"))
         newSale.unit_cost_price = Decimal(request.POST.get("unit_cost_price"))
         newSale.notes = request.POST.get("notes")
-        total_amount = (newSale.quantity_sold * newSale.unit_selling_price)
+
+        
+        newSale.amount_paid = Decimal(request.POST.get("amount_paid") or 0)
+
+        total_amount = newSale.quantity_sold * newSale.unit_selling_price
+
+    
         if newSale.distance_km <= 10 and total_amount >= 500000:
             newSale.transport_fee = 0
         else:
             newSale.transport_fee = 30000
+
+        
         newSale.save()
+
+        
+        if sent_is_fully_paid:
+            newSale.amount_paid = newSale.final_total
+            newSale.balance_due = 0
+            newSale.is_fully_paid = True
+
+        
+        else:
+            newSale.balance_due = newSale.final_total - newSale.amount_paid
+
+            
+            if newSale.balance_due <= 0:
+                newSale.is_fully_paid = True
+                newSale.balance_due = 0
+            else:
+                newSale.is_fully_paid = False
+
+        newSale.save()
+
         return redirect('sale_list')
-    
 
     context = {
-            "customers": customers,
-            "stocks":stocks
-        }  
+        "customers": customers,
+        "stocks": stocks
+    }
+
     return render(request, "add_sale.html", context)
 
 # For updating a sale
@@ -274,7 +355,7 @@ def edit_sale(request,pk):
         sale.unit_selling_price = Decimal(request.POST.get("unit_selling_price"))
         sale.unit_cost_price = Decimal(request.POST.get("unit_cost_price"))
         total_amount = (sale.quantity_sold * sale.unit_selling_price)
-        sale.distance_km = int(sale.customer.distance_km)
+        sale.distance_km = Decimal(request.POST.get("distance_km"))
         sale.payment_method = request.POST.get("payment_method")
         sale.sold_by = request.POST.get("sold_by")
         sale.sale_date = request.POST.get("sale_date") or sale.sale_date
@@ -320,6 +401,24 @@ def sale_dashboard(request):
         total=Count('id')
     )['total'] or 0
 
+    best_selling = (
+    Sale.objects
+    .values('product__product_name')
+    .annotate(total_sold=Sum('quantity_sold'))
+    .order_by('-total_sold')
+    .first()
+    )
+
+    top_products = (
+    Sale.objects
+    .values('product__product_name')
+    .annotate(
+        total_sold=Sum('quantity_sold'),
+        total_revenue=Sum('final_total')
+    )
+    .order_by('-total_sold')[:5]
+)
+
     total_profit = 0 
     for sale in all_sale:
         total_profit += Decimal(sale.profit)
@@ -335,6 +434,8 @@ def sale_dashboard(request):
         "date":current_date,
         "total_revenue":total_revenue,
         "total_sales_today": today_sales,
+        "best_selling":best_selling,
+        "top_products":top_products
     }
     # print(context)
     return render(request,"sale_dashboard.html", context)
@@ -354,21 +455,18 @@ def sale_details(request,pk):
     }
     return render(request,"sale_details.html",context)
 
+def sale_receipt(request, pk):
+    sales = get_object_or_404(Sale, pk=pk)
+    context = {
+        "sale": sales,
+        "receipt_type": "sale"
+    }
+    return render(request, "sale_receipt.html", context)
+
 
 
 def payment(request):
     return render(request, "payment.html")
-
-
-def receipt(request, pk):
-    sale = get_object_or_404(Sale, pk=pk)
-
-    context = {
-        "sale": sale
-    }
-
-    return render(request, "receipt.html", context)
-
 
 def add_payment(request):
     sales = Sale.objects.all()
@@ -382,19 +480,22 @@ def add_payment(request):
         # for creating  a payment
         payment = Payment()
         payment.sale = sale
-        payment.amount = Decimal(
-            request.POST.get("amount")
-        )
+        payment.amount = Decimal(request.POST.get("amount"))
         payment.method = request.POST.get("method")
         payment.save()
 
-        #  for updating sale amount paid
-        sale.amount_paid += payment.amount
+        #  for recalculating data  from the database 
+        total_paid = Payment.objects.filter(sale=sale).aggregate(
+        total=Sum('amount'))['total'] or Decimal("0")
+        sale.amount_paid = total_paid
 
-        # for checking balance
-        if sale.amount_paid >= sale.final_total:
+        # for checking and updating the balance_due
+        sale.balance_due = sale.final_total - sale.amount_paid
+        if sale.balance_due <= 0:
             sale.is_fully_paid = True
-
+            sale.balance_due = 0
+        else:
+            sale.is_fully_paid = False
         sale.save()
 
     
@@ -402,6 +503,7 @@ def add_payment(request):
         newDeposit = Deposit()
         newDeposit.customer_name = sale.customer
         newDeposit.amount = payment.amount
+        newDeposit.sale = sale
         newDeposit.payment_method = payment.method
         newDeposit.save()
 
@@ -432,6 +534,25 @@ def payment_history(request):
         context
     )
 
+def deposit_receipt(request, pk):
+    deposit = get_object_or_404(Deposit, pk=pk)
+
+    sale = deposit.sale
+    sale_total = sale.final_total or Decimal('0')
+    paid_amount = deposit.amount or Decimal('0')
+
+    balance = sale_total - paid_amount
+
+    context = {
+        "deposit": deposit,
+        "sale": sale,
+        "balance": balance,
+        "sale_total": sale_total,
+        "paid_amount": paid_amount,
+    }
+
+    return render(request, "deposit_receipt.html", context)
+   
 
 def deposit_list(request):
 

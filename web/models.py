@@ -199,12 +199,6 @@ class Customer(models.Model):
         unique=True
     )
 
-    distance_km = models.DecimalField(
-        max_digits=5,
-        decimal_places=2,
-        default=Decimal('0.00')
-    )
-
     is_credit_customer = models.BooleanField(default=False)
 
     def __str__(self):
@@ -220,7 +214,6 @@ class Sale(models.Model):
         ('bank_transfer', 'Bank Transfer'),
         ('credit', 'Credit'),
     ]
-
     product = models.ForeignKey(
         Stock,
         on_delete=models.PROTECT
@@ -270,6 +263,11 @@ class Sale(models.Model):
         max_length=20,
         choices=PAYMENT_METHOD_CHOICES,
         default='cash'
+    )
+    distance_km = models.DecimalField(
+        max_digits=5,
+        decimal_places=2,
+        default=Decimal('0.00')
     )
 
     transport_fee = models.DecimalField(
@@ -338,7 +336,7 @@ class Sale(models.Model):
         )
 
         self.balance_due = (
-            self.final_total -
+            self.subtotal -
             self.amount_paid
         )
 
@@ -466,6 +464,7 @@ class SupplierCredit(models.Model):
         return f"{self.supplier.name} Credit"
     
 class Deposit(models.Model):
+    sale = models.ForeignKey(Sale, on_delete=models.CASCADE)
     PAYMENT_METHOD_CHOICES = [
         ('cash', 'Cash'),
         ('mobile_money', 'Mobile Money'),
