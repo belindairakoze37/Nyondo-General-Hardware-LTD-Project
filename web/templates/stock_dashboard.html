@@ -151,7 +151,7 @@
             background: rgba(255, 255, 255, 0.08);
             color: white;
         }
-
+        
         
         .main-content {
             margin-left: 280px;
@@ -458,40 +458,28 @@
             </a>
         </li>
 
-        <li>
+        <li class = "{% if request.resolver_match.view_name == 'stock_list' %}active{% endif %}">
             <a href="{% url 'stock_list' %}">
                 <i class="fas fa-boxes"></i>
                 <span>Stock List</span>
             </a>
         </li>
 
-        <li>
+        <li class="{% if request.resolver_match.view_name == 'add_stock' %}active{% endif %}">
             <a href="{% url 'add_stock' %}">
                 <i class="fas fa-plus-circle"></i>
                 <span>Add Stock</span>
             </a>
         </li>
 
-        <li>
-            <a href="#">
-                <i class="fas fa-chart-line"></i>
-                <span>Reports</span>
-            </a>
-        </li>
-
-        <li>
+        <li class="{% if request.resolver_match.view_name == 'supplier_list' %}active{% endif %}">
             <a href="{% url 'supplier_list' %}">
                 <i class="fas fa-truck"></i>
                 <span>Suppliers</span>
             </a>
         </li>
 
-        <li>
-            <a href="{% url 'sale_dashboard' %}">
-                <i class="fas fa-cash-register"></i>
-                <span>Sales</span>
-            </a>
-        </li>
+       
     </ul>
 
     <div class="bottom">
@@ -625,9 +613,7 @@
             <a href="{% url 'stock_list' %}" class="btn btn-outline">
                 <i class="fas fa-list"></i> View Stock
             </a>
-            <a href="#" class="btn btn-outline">
-                <i class="fas fa-chart-bar"></i> Generate Report
-            </a>
+           
         </div>
     </div>
 </div>

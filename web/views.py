@@ -18,6 +18,12 @@ from django.db.models import Sum, Count
 
 def index(request):
     return render(request,"index.html")
+
+def login(request):
+    return render(request,"login.html")
+
+    
+
 def stock_list(request):
     all_stocks = Stock.objects.all()
     
@@ -163,8 +169,7 @@ def delete_supplier(request,pk):
     supplier.delete()
     return redirect('supplier_list')
 
-def login(request):
-    return render(request,"login.html")
+
 
 ## functions handling customers
 def customer_list(request):
