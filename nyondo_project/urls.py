@@ -58,4 +58,7 @@ urlpatterns = [
     
     # url for the admin dashboard
     path('admin_dashboard/', views.admin_dashboard, name="admin_dashboard"),
+
+    # url for  the report
+    path('reports/', views.reports_dashboard , name="reports_dashboard"),
 ]

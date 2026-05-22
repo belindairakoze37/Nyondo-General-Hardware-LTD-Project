@@ -697,4 +697,42 @@ def admin_dashboard(request):
 
 
 def reports_dashboard(request):
+    # for date range filter (default = last 30 days)
+    period = request.GET.get('period', '30')
+    days = int(period)
+    start_date = timezone.now() - timedelta(days=days)
+
+    # for sales summary 
+    sales= Sale.objects.filter(sale_date__gte=start_date)
+    total_sales = sales.aggregate(total=Sum('final_total'))['total'] or 0
+    total_transactions = sales.count()
+
+    # for stock summary
+    low_stock_items = Stock.objects.filter(quantity__lte=10)
+    total_stock_value = Stock.objects.aggregate(value=Sum('quantity') * Sum('unit_cost'))['value'] or 0
+
+    # # for supplier credit 
+    # total_credit = SupplierCredit.objects.aggregate(total=Sum('amount_owed'))['total'] or 0
+    # over_due_credit = SupplierCredit.objects.filter(due_date__lte=timezone.now(), paid=False)
+
+    # for deposit scheme
+    total_deposits = Deposit.objects.aggregate(total=Sum('amount'))['total'] or 0
+    active_depositors = Deposit.objects.values('customer_name').distinct().count()
+
+    context = {
+        'period': period,
+        'total_sales': total_sales,
+        'total_transactions': total_transactions,
+        'low_stock_items': low_stock_items,
+        # 'total_credit': total_credit,
+        # 'overdue_credit': over_due_credit,
+        'total_deposits': total_deposits,
+        'total_stock_value':total_stock_value,
+        'active_depositors': active_depositors,
+        'sales_by_day': sales.values('sale_date__date').annotate(total=Sum('final_total')).order_by('sale_date__date'),
+    }
+    return render(request, 'reports_dashboard.html', context)
+
+
+
     pass

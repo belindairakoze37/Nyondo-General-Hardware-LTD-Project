@@ -1,3 +1,4 @@
+{% load humanize %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -69,7 +70,7 @@ body {
   background: white;
 }
 
-.btn-export, .btn-print {
+ .btn-print {
   padding: 6px 16px;
   border: 1px solid #2c5f8a;
   background: white;
@@ -81,7 +82,7 @@ body {
   display: inline-block;
 }
 
-.btn-export:hover, .btn-print:hover {
+ .btn-print:hover {
   background: #e6f0f9;
 }
 
@@ -307,7 +308,7 @@ body {
             <option value="90" {% if period == '90' %}selected{% endif %}>90 days</option>
           </select>
         </form>
-        <a href="{% url 'export_sales_csv' %}?period={{ period }}" class="btn-export">⬇ Export CSV</a>
+    
         <button onclick="window.print()" class="btn-print"> Print</button>
       </div>
     </div>
@@ -320,7 +321,7 @@ body {
         <div class="kpi-card kpi-sales">
           <span class="kpi-icon"> </span>
           <div class="kpi-label">Total Sales</div>
-          <div class="kpi-value">UGX {{ total_sales|floatformat:0 }}</div>
+          <div class="kpi-value">UGX {{ total_sales|floatformat:0 |intcomma }}</div>
           <div class="kpi-sub">{{ total_transactions }} transactions</div>
         </div>
 
@@ -334,14 +335,14 @@ body {
         <div class="kpi-card kpi-credit">
           <span class="kpi-icon"> </span>
           <div class="kpi-label">Supplier Credit Owed</div>
-          <div class="kpi-value">UGX {{ total_credit|floatformat:0 }}</div>
+          <div class="kpi-value">UGX {{ total_credit|floatformat:0 |intcomma }}</div>
           <div class="kpi-sub">{{ overdue_credit.count }} overdue</div>
         </div>
 
         <div class="kpi-card kpi-deposit">
           <span class="kpi-icon"> </span>
           <div class="kpi-label">Total Deposits</div>
-          <div class="kpi-value">UGX {{ total_deposits|floatformat:0 }}</div>
+          <div class="kpi-value">UGX {{ total_deposits|floatformat:0 |intcomma }}</div>
           <div class="kpi-sub">{{ active_depositors }} active depositors</div>
         </div>
 
@@ -364,8 +365,8 @@ body {
           <tbody>
             {% for row in sales_by_day %}
             <tr>
-              <td>{{ row.date__date|date:"d M Y" }}</td>
-              <td class="text-right">{{ row.total|floatformat:0 }}</td>
+              <td>{{ row.sale_date__date|date:"d M Y" }}</td>
+              <td class="text-right">{{ row.total|floatformat:0 |intcomma}}</td>
             </tr>
             {% empty %}
             <tr>
@@ -416,7 +417,7 @@ body {
       </div>
     </section>
 
-    <!-- Supplier Credit -->
+    <!-- Supplier Credit
     <section class="section">
       <h2 class="section-title">Supplier Credit Overview</h2>
       <div class="table-wrapper">
@@ -445,7 +446,7 @@ body {
           </tbody>
         </table>
       </div>
-    </section>
+    </section> -->
 
     <!-- Deposit Scheme -->
     <section class="section">
@@ -453,7 +454,7 @@ body {
       <div class="kpi-grid kpi-grid-2">
         <div class="kpi-card">
           <div class="kpi-label">Total Collected</div>
-          <div class="kpi-value">UGX {{ total_deposits|floatformat:0 }}</div>
+          <div class="kpi-value">UGX {{ total_deposits|floatformat:0 |intcomma }}</div>
         </div>
         <div class="kpi-card">
           <div class="kpi-label">Active Depositors</div>
