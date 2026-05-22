@@ -1,0 +1,59 @@
+{% load static %}
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/sale_sidebar.css' %}">
+{% endblock %}
+    <div class="sidebar">
+      <div class="logo">
+        <i class="fas fa-warehouse"></i>
+        <span>NYONDO</span>
+      </div>
+
+      <ul class="nav-links">
+        <li class="{% if request.resolver_match.view_name == 'sale_dashboard' %}active{% endif %}">
+          <a href="{% url 'sale_dashboard' %}">
+            <i class="fas fa-chart-line"></i>
+            <span>Sales Dashboard</span>
+          </a>
+        </li>
+        
+        <li class="{% if request.resolver_match.view_name == 'sale_list' %}active{% endif %}">
+          <a href="{% url 'sale_list' %}">
+            <i class="fas fa-cash-register"></i>
+            <span>Sales List</span>
+          </a>
+        </li>
+
+        <li class="{% if request.resolver_match.view_name == 'add_sale' %}active{% endif %}">
+          <a href="{% url 'add_sale' %}">
+            <i class="fas fa-plus-circle"></i>
+            <span>Add Sale</span>
+          </a>
+        </li>
+         <li class="{% if request.resolver_match.view_name == 'credit_list' %}active{% endif %}">
+          <a href="{% url 'credit_list' %}">
+            <i class="fas fa-users"></i>
+            <span>Credit Customers</span>
+          </a>
+        </li>
+        <li class="{% if request.resolver_match.view_name == 'customer_list' %}active{% endif %}">
+          <a href="{% url 'customer_list' %}">
+            <i class="fas fa-users"></i>
+            <span>Customers</span>
+          </a>
+        </li>
+        
+        <li class="{% if request.resolver_match.view_name == 'deposit_list' %}active{% endif %}">
+          <a href="{% url 'deposit_list' %}">
+            <i class="fas fa-users"></i>
+            <span>Deposits</span>
+          </a>
+        </li> 
+      </ul>
+
+      <div class="bottom">
+        <a href="{% url 'login' %}">
+          <i class="fas fa-sign-out-alt"></i>
+          <span>Logout</span>
+        </a>
+      </div>
+    </div>

@@ -6,7 +6,6 @@
         }
 
         body {
-            font-family: 'Inter', sans-serif;
             background: #f0f2f5;
             color: #1a1a2e;
             overflow-x: hidden;
@@ -27,6 +26,7 @@
 
         
         .main-content {
+            font-family: Arial, sans-serif;
             margin-left: 280px;
             padding: 25px 30px;
             min-height: 100vh;

@@ -1,0 +1,263 @@
+
+    
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #f0f2f8;     
+            padding: 30px;
+            color: #1a2634;           
+            line-height: 1.4;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin-left: 270px;
+            font-family: Arial, sans-serif;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+            font-size: 1.9rem;
+            font-weight: 600;
+            letter-spacing: -0.3px;
+            background: linear-gradient(135deg, #1a2634 0%, #1f6392 100%);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            display: inline-block;
+        }
+
+    
+        .summary-bar {
+            background: white;
+            padding: 18px 28px;
+            border-radius: 20px;
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 28px;
+            border: 1px solid #eef2f6;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02), 0 1px 2px rgba(0, 0, 0, 0.03);
+            transition: all 0.2s;
+        }
+
+        .summary-item {
+            font-size: 0.9rem;
+            background: #fafcff;
+            padding: 0 12px;
+            border-left: 2px solid #e4e9f0;
+        }
+        .summary-item:first-child {
+            border-left: none;
+            padding-left: 0;
+        }
+        .summary-item:last-child {
+            padding-right: 0;
+        }
+
+        .summary-label {
+            font-weight: 600;
+            color: #4a5b6e;
+            text-transform: uppercase;
+            font-size: 0.7rem;
+            letter-spacing: 0.5px;
+            margin-bottom: 6px;
+        }
+
+        .summary-value {
+            font-weight: 800;
+            color: #1f6392; 
+            font-size: 1.3rem;
+            letter-spacing: -0.2px;
+        }
+
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 5px 18px rgba(0, 0, 0, 0.03), 0 0 0 1px rgba(0, 0, 0, 0.01);
+        }
+
+        th {
+            background: #111927;    
+            color: white;
+            padding: 14px 12px;
+            text-align: left;
+            font-size: 0.8rem;
+            font-weight: 600;
+            letter-spacing: 0.3px;
+            text-transform: uppercase;
+        }
+
+        td {
+            padding: 14px 12px;
+            border-bottom: 1px solid #edf2f7;
+            font-size: 0.85rem;
+            vertical-align: middle;
+            transition: background 0.2s;
+        }
+
+        tr:hover td {
+            background: #f9fbff;  
+        }
+
+        
+        .method-badge {
+            padding: 5px 12px;
+            border-radius: 40px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            display: inline-block;
+            text-align: center;
+            background: #f2f4f8;
+            color: #2c3e4e;
+        }
+
+        .cash {
+            background: #e1f7ea;
+            color: #0e6b2b;
+        }
+
+        .mobile_money {
+            background: #ffe8e6;
+            color: #c23d2c;
+        }
+
+        .bank_transfer {
+            background: #e1edf9;
+            color: #1e6f9f;
+        }
+
+        
+        .method-badge:not(.cash):not(.mobile_money):not(.bank_transfer) {
+            background: #eceff5;
+            color: #334155;
+        }
+
+        .empty {
+            text-align: center;
+            padding: 48px 20px;
+            color: #6c7a8e;
+            font-style: italic;
+            font-size: 0.9rem;
+        }
+
+        .link {
+            color: #1e6f9f;   
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            border-bottom: 1px dashed rgba(30, 111, 159, 0.3);
+        }
+
+        .link:hover {
+            color: #0b4e72;
+            border-bottom-color: #1e6f9f;
+            text-decoration: none;
+        }
+
+        
+        td strong {
+            font-weight: 700;
+            color: #111927;
+        }
+
+        /* sale id small reference */
+        td small {
+            color: #5e6f8d;
+            font-size: 0.7rem;
+            display: inline-block;
+            margin-top: 2px;
+        }
+
+        
+        td:nth-child(2) {
+            font-weight: 600;
+            color: #1a2c3c;
+        }
+
+    
+        @media (max-width: 750px) {
+            body {
+                padding: 20px 16px;
+            }
+            .container {
+                overflow-x: auto;
+            }
+            table {
+                min-width: 680px;
+            }
+            .summary-bar {
+                flex-direction: column;
+                gap: 14px;
+            }
+            .summary-item {
+                border-left: none;
+                padding-left: 0;
+                border-bottom: 1px solid #eef2f8;
+                padding-bottom: 10px;
+            }
+            .summary-item:last-child {
+                border-bottom: none;
+            }
+            .summary-value {
+                font-size: 1.2rem;
+            }
+        }
+
+        
+        .summary-bar, table {
+            animation: fadeSlideUp 0.35s ease-out;
+        }
+        @keyframes fadeSlideUp {
+            from {
+                opacity: 0;
+                transform: translateY(8px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        
+        .method-badge {
+            font-weight: 600;
+            letter-spacing: -0.2px;
+        }
+
+        
+        td:last-child a {
+            white-space: nowrap;
+            font-size: 0.8rem;
+        }
+        .btn {
+        align-items: center;
+        margin-left: 20px;
+        padding: 10px 20px;
+        border-radius: 8px;
+        font-weight: 600;
+        font-size: 14px;
+        cursor: pointer;
+        transition: all 0.3s;
+        text-decoration: none;
+        border: none;
+        font-family: "Inter", sans-serif;
+      }
+
+      .btn-primary {
+        background: linear-gradient(135deg, #ffd700, #ff8c00);
+        color: #1a1a2e;
+      }
+
+      .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(255, 140, 0, 0.3);
+      }
+    

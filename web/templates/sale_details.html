@@ -1,300 +1,21 @@
+{% extends 'base.html' %}
+{% load static %}
 {% load humanize %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sale Details | Dashboard</title>
 
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+{% block title %}
+    Sale Details | Dashboard
+{% endblock %}
 
-        body {
-            font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
-            background: #f0f2f8;
-            padding: 40px 28px;
-            color: #1a2634;
-        }
-
-        
-        .details-container {
-            max-width: 900px;
-            margin: 0 auto;
-        }
-
-        
-        .card {
-            background: white;
-            border-radius: 24px;
-            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.02);
-            overflow: hidden;
-            border: 1px solid #eef2f6;
-            transition: all 0.2s ease;
-        }
+{% block sidebar %}{% endblock %}
 
 
-        .card-header {
-            background: #111927;
-            padding: 24px 32px;
-            border-bottom: 1px solid #2a3a4a;
-        }
 
-        .card-header h1 {
-            font-size: 1.7rem;
-            font-weight: 600;
-            letter-spacing: -0.3px;
-            background: linear-gradient(135deg, #ffffff, #cbd5e6);
-            background-clip: text;
-            -webkit-background-clip: text;
-            color: transparent;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            margin: 0;
-        }
-
-        .card-header h1::before {
-            content: "📋";
-            font-size: 1.8rem;
-            background: none;
-            -webkit-background-clip: unset;
-            background-clip: unset;
-            color: #ffd966;
-        }
-
-        
-        .card-content {
-            padding: 28px 32px 32px 32px;
-        }
-
-        .detail-grid {
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
-            margin-bottom: 28px;
-        }
-
-        .detail-row {
-            display: flex;
-            align-items: baseline;
-            padding: 12px 0;
-            border-bottom: 1px solid #f0f2f5;
-            transition: background 0.15s ease;
-        }
-
-        .detail-row:hover {
-            background-color: #fafcff;
-            margin-left: 4px;
-            padding-left: 8px;
-            border-radius: 10px;
-        }
-
-        .label {
-            width: 160px;
-            flex-shrink: 0;
-            font-weight: 600;
-            font-size: 0.85rem;
-            letter-spacing: 0.2px;
-            color: #1e2f3f;
-            text-transform: uppercase;
-            font-size: 0.7rem;
-            opacity: 0.8;
-        }
-
-        .value {
-            color: #1f2c38;
-            font-weight: 500;
-            font-size: 0.95rem;
-            font-family: 'JetBrains Mono', monospace, 'Courier New';
-            word-break: break-word;
-            background: #f8fafd;
-            padding: 4px 12px;
-            border-radius: 20px;
-            display: inline-block;
-            min-width: 140px;
-        }
-
-        
-        .paid-badge {
-            background: #e1f7ea;
-            color: #0e6b2b;
-            font-weight: 700;
-            padding: 5px 16px;
-            border-radius: 40px;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 0.75rem;
-            letter-spacing: 0.3px;
-            box-shadow: inset 0 0 0 1px rgba(34, 197, 94, 0.2);
-        }
-
-        .pending-badge {
-            background: #ffe8e6;
-            color: #c23d2c;
-            font-weight: 700;
-            padding: 5px 16px;
-            border-radius: 40px;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 0.75rem;
-            letter-spacing: 0.3px;
-            box-shadow: inset 0 0 0 1px rgba(220, 53, 69, 0.2);
-        }
-
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/sale_details.css' %}">
+{% endblock %}
     
-        .value.special {
-            background: #f1f5f9;
-            font-family: 'Inter', system-ui;
-        }
-
-        
-        .profit-value {
-            font-weight: 700;
-            color: #1f7840;
-            background: #e6f4ea;
-        }
-
-    
-        .money-value {
-            font-family: 'JetBrains Mono', monospace;
-            font-weight: 600;
-        }
-
-    
-        .notes-row .value {
-            background: #fff7e5;
-            border-left: 3px solid #ffb347;
-            border-radius: 12px;
-            padding: 8px 14px;
-            display: block;
-            max-width: 100%;
-        }
-
-        
-        .action-buttons {
-            margin-top: 28px;
-            padding-top: 16px;
-            display: flex;
-            gap: 16px;
-            align-items: center;
-            justify-content: flex-start;
-            border-top: 2px solid #eef2f8;
-        }
-
-        .btn {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            padding: 10px 24px;
-            border-radius: 40px;
-            font-size: 0.85rem;
-            font-weight: 600;
-            text-decoration: none;
-            transition: all 0.2s ease;
-            letter-spacing: 0.3px;
-            gap: 8px;
-            border: none;
-            cursor: pointer;
-            background: transparent;
-        }
-
-        .btn-primary {
-            background: linear-gradient(135deg, #1e2a3a, #0f1722);
-            color: white;
-            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
-            border: 1px solid #2c3e4e;
-        }
-
-        .btn-primary:hover {
-            background: linear-gradient(135deg, #2c3e50, #1a2532);
-            transform: translateY(-2px);
-            box-shadow: 0 8px 18px rgba(0, 0, 0, 0.1);
-        }
-
-        .btn-secondary {
-            background: white;
-            color: #1e6f9f;
-            border: 1px solid #cde0ef;
-        }
-
-        .btn-secondary:hover {
-            background: #e1edf9;
-            border-color: #9bb7d0;
-            transform: translateY(-2px);
-        }
-
-    
-        @media (max-width: 680px) {
-            body {
-                padding: 20px 16px;
-            }
-            .card-content {
-                padding: 20px;
-            }
-            .detail-row {
-                flex-direction: column;
-                gap: 6px;
-                padding: 14px 0;
-            }
-            .label {
-                width: 100%;
-                margin-bottom: 4px;
-            }
-            .value {
-                align-self: flex-start;
-            }
-            .card-header h1 {
-                font-size: 1.4rem;
-            }
-            .action-buttons {
-                flex-wrap: wrap;
-            }
-        }
-
-        
-        .inline-icon {
-            opacity: 0.6;
-            font-size: 0.75rem;
-            margin-right: 4px;
-        }
-
-        
-        .detail-group-subtitle {
-            font-size: 0.7rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            font-weight: 700;
-            color: #5a6e7c;
-            margin: 15px 0 8px 0;
-            border-left: 3px solid #ffc107;
-            padding-left: 12px;
-        }
-
-        .divider-light {
-            height: 1px;
-            background: #e9edf2;
-            margin: 16px 0 4px 0;
-        }
-
-    
-        .card {
-            transition: box-shadow 0.2s;
-        }
-        .card:hover {
-            box-shadow: 0 20px 30px -12px rgba(0, 0, 0, 0.1);
-        }
-    </style>
-
-    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-</head>
-<body>
-
+{% block content %}
+   
 <div class="details-container">
     <div class="card">
         <div class="card-header">
@@ -399,10 +120,7 @@
 
             
             <div class="action-buttons">
-                <a href="{% url 'sale_list' %}" class="btn btn-primary">
-                    ← Back to Sales
-                </a>
-                
+        
                 <a href="{% url 'edit_sale' sale.id %}" class="btn btn-secondary">
                      Edit Sale
                 </a>
@@ -414,6 +132,4 @@
         Fully paid sales show green badge • Pending indicates outstanding balance
     </div>
 </div>
-
-</body>
-</html>
+{% endblock %}

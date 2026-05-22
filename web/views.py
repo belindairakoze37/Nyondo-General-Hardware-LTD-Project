@@ -8,9 +8,11 @@ from web.models import Sale
 from web.models import Customer
 from web.models import Payment
 from web.models import Deposit
+from web.models import SupplierCredit
 from decimal import Decimal
 import datetime
-from django.db.models import Sum, Count
+from datetime import timedelta
+from django.db.models import Sum, Count , Q
 
 # Create your views here.
 
@@ -585,8 +587,11 @@ def deposit_list(request):
 
 
 def add_deposit(request):
-
     customers = Customer.objects.all()
+    sales = Sale.objects.all()
+    sales = [sale for sale in sales if sale.final_total > sale.amount_paid]
+    for sale in sales:
+        sale.balance = sale.final_total - sale.amount_paid
 
     if request.method == "POST":
 
@@ -594,6 +599,11 @@ def add_deposit(request):
 
         customer_id = payload.get(
             "customer_name"
+        )
+        sale_id = payload.get("sale")
+        sale = get_object_or_404(
+            Sale,
+            id=sale_id
         )
 
         customer = get_object_or_404(
@@ -613,13 +623,15 @@ def add_deposit(request):
         newDeposit = Deposit()
         newDeposit.customer_name = customer
         newDeposit.amount = sent_amount
+        newDeposit.sale = sale
         newDeposit.payment_method = sent_payment_method
         newDeposit.save()
 
         return redirect('deposit_list')
 
     context = {
-        "customers": customers
+        "customers": customers,
+        "sales":sales
     }
 
     return render(request,"add_deposit.html",context)
@@ -631,9 +643,19 @@ def edit_deposit(request, pk):
 
     customers = Customer.objects.all()
 
+    sales = Sale.objects.all()
+    sales = [sale for sale in sales if sale.final_total > sale.amount_paid]
+    for sale in sales:
+        sale.balance = sale.final_total - sale.amount_paid
+
+
     if request.method == "POST":
 
         deposit.customer_name = Customer.objects.get(id=request.POST["customer_name"])
+        
+        deposit.sale = Sale.objects.get(
+            id=request.POST["sale"]
+        )
 
         deposit.amount = Decimal( request.POST.get("amount"))
 
@@ -645,7 +667,8 @@ def edit_deposit(request, pk):
 
     context = {
         "deposit": deposit,
-        "customers": customers
+        "customers": customers,
+        "sales":sales
     }
 
     return render(request,"edit_deposit.html",context)
@@ -670,3 +693,8 @@ def admin_dashboard(request):
     }
 
     return render(request, "admin_dashboard.html", context)
+
+
+
+def reports_dashboard(request):
+    pass

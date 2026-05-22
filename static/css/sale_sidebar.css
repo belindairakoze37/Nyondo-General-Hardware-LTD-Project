@@ -1,0 +1,121 @@
+
+      .sidebar {
+        position: fixed;
+        left: 0;
+        top: 0;
+        width: 280px;
+        height: 100%;
+        background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+        color: white;
+        display: flex;
+        flex-direction: column;
+        transition: all 0.3s ease;
+        z-index: 1000;
+        box-shadow: 2px 0 20px rgba(0, 0, 0, 0.1);
+      }
+
+      
+      .logo {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 12px;
+        padding: 30px 20px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        margin-bottom: 20px;
+      }
+
+      .logo i {
+        font-size: 32px;
+        background: linear-gradient(135deg, #ffd700, #ff8c00);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
+
+      .logo span {
+        font-size: 24px;
+        font-weight: 800;
+        background: linear-gradient(135deg, #ffd700, #ff8c00);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
+
+      
+      .nav-links {
+        flex: 1;
+        list-style: none;
+        padding: 0 16px;
+      }
+
+      .nav-links li {
+        margin-bottom: 8px;
+      }
+
+      .nav-links li a {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        padding: 12px 16px;
+        color: #a0a0b0;
+        text-decoration: none;
+        border-radius: 12px;
+        transition: all 0.3s ease;
+        font-weight: 500;
+        font-size: 15px;
+      }
+
+      .nav-links li a i {
+        width: 22px;
+        font-size: 18px;
+        text-align: center;
+      }
+
+      .nav-links li a:hover {
+        background: rgba(255, 255, 255, 0.08);
+        color: white;
+      }
+
+      .nav-links li.active a {
+        background: linear-gradient(135deg, #ffd700, #ff8c00);
+        color: #1a1a2e;
+        box-shadow: 0 4px 12px rgba(255, 140, 0, 0.3);
+      }
+
+      .nav-links li.active a i {
+        color: #1a1a2e;
+      }
+
+    
+      .bottom {
+        padding: 20px 16px;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+        margin-top: auto;
+      }
+
+      .bottom a {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        padding: 12px 16px;
+        color: #a0a0b0;
+        text-decoration: none;
+        border-radius: 12px;
+        transition: all 0.3s ease;
+        font-weight: 500;
+        font-size: 15px;
+      }
+
+      .bottom a i {
+        width: 22px;
+        font-size: 18px;
+      }
+
+      .bottom a:hover {
+        background: rgba(255, 255, 255, 0.08);
+        color: white;
+      }
+
+      
+     

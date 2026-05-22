@@ -347,7 +347,7 @@
                     {% for payment in recent_payments %}
                     <li class="list-group-item">
                         <span><i class="fas fa-user me-2" style="color: #ff8c00;"></i> {{ payment.sale.customer }}</span>
-                        <span class="fw-bold text-success">{{ payment.amount||intcomma }}</span>
+                        <span class="fw-bold text-success">{{ payment.amount|intcomma }}</span>
                     </li>
                     {% empty %}
                     <li class="list-group-item text-center text-muted">
