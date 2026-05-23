@@ -37,6 +37,13 @@
             </a>
         </li>
 
+        <li class="{% if request.resolver_match.view_name == 'supplier_credit_list' %}active{% endif %}">
+            <a href="{% url 'supplier_credit_list' %}">
+                <i class="fas fa-truck"></i>
+                <span>Supplier Credit List</span>
+            </a>
+        </li>
+
     </ul>
 
     <div class="bottom">

@@ -1,0 +1,100 @@
+{% extends 'base.html' %}
+{% load humanize %}
+{% load static %}
+
+{% block title %}
+    Supplier Credit Detail
+{% endblock %}
+
+{% block navs %}{% endblock %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/supplier_credit_detail.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<div class="container">
+
+    <div class="detail-card">
+
+        <div class="detail-header">
+
+            <h2>Supplier Credit Detail</h2>
+
+            {% if credit.is_cleared %}
+
+                <span class="status-badge cleared">
+                    Cleared
+                </span>
+
+            {% else %}
+
+                <span class="status-badge pending">
+                    Pending
+                </span>
+
+            {% endif %}
+
+        </div>
+
+        <div class="detail-grid">
+
+            <div class="detail-item">
+                <label>Supplier</label>
+                <p>{{ credit.supplier.name }}</p>
+            </div>
+
+            <div class="detail-item">
+                <label>Product</label>
+                <p>{{ credit.stock.product_name }}</p>
+            </div>
+
+            <div class="detail-item">
+                <label>Amount Owed</label>
+                <p>
+                    UGX {{ credit.amount_owed|floatformat:0|intcomma }}
+                </p>
+            </div>
+
+            <div class="detail-item">
+                <label>Amount Paid</label>
+                <p>
+                    UGX {{ credit.amount_paid|floatformat:0|intcomma }}
+                </p>
+            </div>
+
+            <div class="detail-item">
+                <label>Remaining Balance</label>
+                <p>
+                    UGX {{ credit.balance|floatformat:0|intcomma }}
+                </p>
+            </div>
+
+            <div class="detail-item">
+                <label>Due Date</label>
+                <p>{{ credit.due_date }}</p>
+            </div>
+
+        </div>
+
+        {% if not credit.is_cleared %}
+
+        <div class="detail-actions">
+
+            <a href="{% url 'pay_supplier_credit' credit.id %}"
+               class="pay-btn">
+
+                Make Payment
+
+            </a>
+
+        </div>
+
+        {% endif %}
+
+    </div>
+
+</div>
+
+{% endblock %}

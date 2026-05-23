@@ -26,6 +26,10 @@ urlpatterns = [
     path('supplier/add/', views.add_supplier, name="add_supplier"),
     path('supplier/edit/<int:pk>/', views.edit_supplier, name="edit_supplier"),
     path('supplier/delete/<int:pk>/', views.delete_supplier, name="delete_supplier"),
+    path('supplier_credit_list/',views.supplier_credit_list,name='supplier_credit_list'),
+    path( 'supplier_credit_list/add_supplier_credit/',views.add_supplier_credit,name='add_supplier_credit'),
+    path('pay_supplier_credit/<int:credit_id>/',views.pay_supplier_credit,name='pay_supplier_credit'),
+    path('supplier_credit_detail/<int:credit_id>/',views.supplier_credit_detail,name='supplier_credit_detail'),
     # urls for stock
     path('stock_dashboard/', views.stock_dashboard, name="stock_dashboard"),
     path('stock/', views.stock_list, name="stock_list"),

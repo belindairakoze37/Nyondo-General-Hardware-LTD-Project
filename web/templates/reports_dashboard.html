@@ -202,11 +202,6 @@ body {
 .report-table tbody tr:hover {
   background: #fafafa;
 }
-
-.text-right {
-  text-align: right;
-}
-
 .item-name {
   font-weight: 500;
 }
@@ -244,6 +239,21 @@ body {
 .print-footer {
   display: none;
 }
+        .back-link {
+            width: 10%;
+            background: white;
+            color: #1e6f9f;
+            text-align: center;
+            border: 1px solid #cde0ef;
+        }
+         .back-link a{
+            text-decoration: none;
+         }
+        .back-link:hover {
+            background: #e1edf9;
+            border-color: #9bb7d0;
+            transform: translateY(-2px);
+        }
 
 
 @media print {
@@ -359,14 +369,14 @@ body {
           <thead>
             <tr>
               <th>Date</th>
-              <th class="text-right">Total Sales (UGX)</th>
+              <th>Total Sales (UGX)</th>
             </tr>
           </thead>
           <tbody>
             {% for row in sales_by_day %}
             <tr>
               <td>{{ row.sale_date__date|date:"d M Y" }}</td>
-              <td class="text-right">{{ row.total|floatformat:0 |intcomma}}</td>
+              <td>{{ row.total|floatformat:0 |intcomma}}</td>
             </tr>
             {% empty %}
             <tr>
@@ -417,7 +427,7 @@ body {
       </div>
     </section>
 
-    <!-- Supplier Credit
+    Supplier Credit
     <section class="section">
       <h2 class="section-title">Supplier Credit Overview</h2>
       <div class="table-wrapper">
@@ -425,7 +435,7 @@ body {
           <thead>
             <tr>
               <th>Supplier</th>
-              <th class="text-right">Amount Owed (UGX)</th>
+              <th >Amount Owed (UGX)</th>
               <th>Due Date</th>
               <th>Status</th>
             </tr>
@@ -433,8 +443,8 @@ body {
           <tbody>
             {% for credit in overdue_credit %}
             <tr>
-              <td>{{ credit.supplier_name }}</td>
-              <td class="text-right">{{ credit.amount_owed|floatformat:0 }}</td>
+              <td>{{ credit.supplier }}</td>
+              <td>{{ credit.amount_owed|floatformat:0 |intcomma}}</td>
               <td>{{ credit.due_date|date:"d M Y" }}</td>
               <td><span class="badge badge-danger">Overdue</span></td>
             </tr>
@@ -446,7 +456,7 @@ body {
           </tbody>
         </table>
       </div>
-    </section> -->
+    </section>
 
     <!-- Deposit Scheme -->
     <section class="section">
@@ -468,6 +478,10 @@ body {
       Generated on {% now "d M Y, H:i" %} &nbsp;|&nbsp; NYONDO General Hardware LTD
     </div>
 
+<div class="back-link">
+    <a href="{% url 'admin_dashboard' %}"> Back</a>
+
+  </div>
   </div>
 </body>
 </html>

@@ -1,0 +1,161 @@
+{% extends 'base.html' %}
+{% load humanize %}
+{% load static %}
+
+{% block title %}
+    Supplier Credit List
+{% endblock %}
+
+{% block navs %}{% endblock %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/supplier_credit_list.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<div class="container">
+
+    <div class="page-header">
+
+        <h2>Supplier Credit List</h2>
+
+        <a href="{% url 'add_supplier_credit' %}" class="add-btn">
+            + Add Supplier Credit
+        </a>
+
+    </div>
+
+    <div class="summary-grid">
+
+        <div class="summary-card">
+            <h4>Total Credit</h4>
+            <p>UGX {{ total_credit|floatformat:0|intcomma }}</p>
+        </div>
+
+        <div class="summary-card">
+            <h4>Total Paid</h4>
+            <p>UGX {{ total_paid|floatformat:0|intcomma }}</p>
+        </div>
+
+        <div class="summary-card">
+            <h4>Remaining Balance</h4>
+            <p>UGX {{ total_balance|floatformat:0|intcomma }}</p>
+        </div>
+
+    </div>
+
+    <div class="table-wrapper">
+
+        <table>
+
+            <thead>
+
+                <tr>
+                    <th>Supplier</th>
+                    <th>Product</th>
+                    <th>Amount Owed</th>
+                    <th>Amount Paid</th>
+                    <th>Balance</th>
+                    <th>Due Date</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+                {% for credit in credits %}
+
+                <tr>
+
+                    <td>{{ credit.supplier.name }}</td>
+
+                    <td>{{ credit.stock.product_name }}</td>
+
+                    <td>
+                        UGX {{ credit.amount_owed|floatformat:0|intcomma }}
+                    </td>
+
+                    <td>
+                        UGX {{ credit.amount_paid|floatformat:0|intcomma }}
+                    </td>
+
+                    <td>
+                        UGX {{ credit.balance|floatformat:0|intcomma }}
+                    </td>
+
+                    <td>
+                        {{ credit.due_date }}
+                    </td>
+
+                    <td>
+
+                        {% if credit.is_cleared %}
+
+                                <span class="badge cleared">
+                                         Cleared
+                                </span>
+
+                        {% else %}
+
+                            <span class="badge pending">
+                                 Pending
+                            </span>
+
+                        {% endif %}
+
+                    </td>
+
+                    <td>
+                        <div class="action-buttons">
+
+                         <a href="{% url 'supplier_credit_detail' credit.id %}"
+                           class="view-btn">
+
+                             View
+
+                         </a>
+
+                        {% if  not credit.is_cleared %}
+
+                            <a href="{% url 'pay_supplier_credit' credit.id %}"
+                                class="pay-btn">
+
+                                Pay
+
+                            </a>
+                        {% else %}
+
+                            <span class="paid-text">
+                                Fully Paid 
+                            </span>
+
+                        {% endif %}
+
+                        </div>
+
+                    </td>
+
+                </tr>
+
+                {% empty %}
+
+                <tr>
+                    <td colspan="7" class="empty-row">
+                        No supplier credits found
+                    </td>
+                </tr>
+
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+{% endblock %}

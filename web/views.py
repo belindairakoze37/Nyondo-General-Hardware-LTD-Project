@@ -129,7 +129,7 @@ def stock_details(request, pk):
     }
     return render(request, "stock_details.html", context)
 
-## functions handling suppliers
+## for all suppliers
 def supplier_list(request):
     all_suppliers = Supplier.objects.all()
     context = {
@@ -172,6 +172,111 @@ def delete_supplier(request,pk):
     return redirect('supplier_list')
 
 
+# For supplier credit 
+
+def supplier_credit_list(request):
+
+    credits = SupplierCredit.objects.all().order_by('-id')
+
+    total_credit = SupplierCredit.objects.aggregate(
+        total=Sum('amount_owed')
+    )['total'] or 0
+
+    total_paid = SupplierCredit.objects.aggregate(
+        total=Sum('amount_paid')
+    )['total'] or 0
+
+    total_balance = total_credit - total_paid
+
+    context = {
+        "credits": credits,
+        "total_credit": total_credit,
+        "total_paid": total_paid,
+        "total_balance": total_balance,
+    }
+
+    return render( request, "supplier_credit_list.html", context)
+
+def add_supplier_credit(request):
+
+    suppliers = Supplier.objects.all()
+    stocks = Stock.objects.all()
+
+    if request.method == "POST":
+
+        supplier = Supplier.objects.get(
+            id=request.POST.get("supplier")
+        )
+
+        stock = Stock.objects.get(
+            id=request.POST.get("stock")
+        )
+
+        amount_owed = Decimal(
+            request.POST.get("amount_owed")
+        )
+
+        amount_paid = Decimal(
+            request.POST.get("amount_paid") or 0
+        )
+
+        due_date = request.POST.get("due_date")
+
+        SupplierCredit.objects.create(
+            supplier=supplier,
+            stock=stock,
+            amount_owed=amount_owed,
+            amount_paid=amount_paid,
+            due_date=due_date
+        )
+
+        return redirect('supplier_credit_list')
+
+    context = {
+        "suppliers": suppliers,
+        "stocks": stocks
+    }
+
+    return render( request, "add_supplier_credit.html", context)
+
+
+def pay_supplier_credit(request, credit_id):
+
+    credit = get_object_or_404(
+        SupplierCredit,
+        id=credit_id
+    )
+
+    if request.method == "POST":
+
+        payment = Decimal(
+            request.POST.get("payment")
+        )
+
+        credit.amount_paid += payment
+
+        credit.save()
+
+        return redirect('supplier_credit_list')
+
+    context = {
+        "credit": credit
+    }
+
+    return render( request, "pay_supplier_credit.html", context)
+
+def supplier_credit_detail(request, credit_id):
+
+    credit = get_object_or_404(
+        SupplierCredit,
+        id=credit_id
+    )
+
+    context = {
+        "credit": credit
+    }
+
+    return render( request, "supplier_credit_detail.html", context)
 
 ## functions handling customers
 def customer_list(request):
@@ -711,9 +816,9 @@ def reports_dashboard(request):
     low_stock_items = Stock.objects.filter(quantity__lte=10)
     total_stock_value = Stock.objects.aggregate(value=Sum('quantity') * Sum('unit_cost'))['value'] or 0
 
-    # # for supplier credit 
-    # total_credit = SupplierCredit.objects.aggregate(total=Sum('amount_owed'))['total'] or 0
-    # over_due_credit = SupplierCredit.objects.filter(due_date__lte=timezone.now(), paid=False)
+    # for supplier credit 
+    total_credit = SupplierCredit.objects.aggregate(total=Sum('amount_owed'))['total'] or 0
+    over_due_credit = SupplierCredit.objects.filter(due_date__lte=timezone.now(), is_cleared=False)
 
     # for deposit scheme
     total_deposits = Deposit.objects.aggregate(total=Sum('amount'))['total'] or 0
@@ -724,8 +829,8 @@ def reports_dashboard(request):
         'total_sales': total_sales,
         'total_transactions': total_transactions,
         'low_stock_items': low_stock_items,
-        # 'total_credit': total_credit,
-        # 'overdue_credit': over_due_credit,
+        'total_credit': total_credit,
+        'overdue_credit': over_due_credit,
         'total_deposits': total_deposits,
         'total_stock_value':total_stock_value,
         'active_depositors': active_depositors,
@@ -735,4 +840,3 @@ def reports_dashboard(request):
 
 
 
-    pass

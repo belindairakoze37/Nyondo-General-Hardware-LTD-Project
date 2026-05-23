@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+{% load humanize %}
+{% load static %}
+
+{% block title %}
+    Pay Supplier Credit
+{% endblock %}
+
+{% block navs %}{% endblock %}
+
+{% block content %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/pay_supplier_credit.css' %}">
+{% endblock %}
+
+<div class="container">
+
+    <div class="payment-card">
+
+        <h2>Pay Supplier Credit</h2>
+
+        <div class="credit-info">
+
+            <p>
+                <strong>Supplier:</strong>
+                {{ credit.supplier.name }}
+            </p>
+
+            <p>
+                <strong>Product:</strong>
+                {{ credit.stock.product_name }}
+            </p>
+
+            <p>
+                <strong>Amount Owed:</strong>
+                UGX {{ credit.amount_owed|floatformat:0|intcomma }}
+            </p>
+
+            <p>
+                <strong>Amount Paid:</strong>
+                UGX {{ credit.amount_paid|floatformat:0|intcomma }}
+            </p>
+
+            <p>
+                <strong>Balance:</strong>
+                UGX {{ credit.balance|floatformat:0|intcomma }}
+            </p>
+
+        </div>
+
+        <form method="POST">
+
+            {% csrf_token %}
+
+            <div class="form-group">
+
+                <label>Payment Amount</label>
+
+                <input
+                    type="number"
+                    step="0.01"
+                    name="payment"
+                    required
+                >
+
+            </div>
+
+            <button type="submit">
+                Save Payment
+            </button>
+
+        </form>
+
+    </div>
+
+</div>
+
+{% endblock %}
