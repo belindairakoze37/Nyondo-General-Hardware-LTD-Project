@@ -5,7 +5,7 @@ from django.contrib.auth import logout
 # Create your views here
 
 # This is for registering a new user
-def register(request):
+def register_user(request):
     if request.method == "POST":
         form = RegistrationForm(request.POST)
         if form.is_valid():

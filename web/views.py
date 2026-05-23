@@ -12,20 +12,17 @@ from web.models import SupplierCredit
 from decimal import Decimal
 import datetime
 from datetime import timedelta
-from django.db.models import Sum, Count , Q
+from django.db.models import Sum, Count 
+from django.contrib.auth.decorators import login_required
 
 # Create your views here.
 
-## functions handling stock 
-
 def index(request):
+   
     return render(request,"index.html")
 
-def login(request):
-    return render(request,"login.html")
-
     
-
+@login_required
 def stock_list(request):
     all_stocks = Stock.objects.all()
     
@@ -45,7 +42,7 @@ def stock_list(request):
 
     return render(request, "stock_list.html", context)
 
-
+@login_required
 def add_stock(request):
  # Needed for dropdown 
     suppliers = Supplier.objects.all() 
@@ -74,7 +71,7 @@ def add_stock(request):
 
     return render(request, "add_stock.html", {"suppliers": suppliers})
 
-
+@login_required
 def edit_stock(request, pk):
     stock = get_object_or_404(Stock, pk=pk)
     suppliers = Supplier.objects.all()  
@@ -102,7 +99,7 @@ def edit_stock(request, pk):
     })
 
 
-
+@login_required
 def stock_dashboard(request):
     stocks = Stock.objects.all()
     total_products = stocks.count()
@@ -121,6 +118,8 @@ def stock_dashboard(request):
     }
     return render(request,"stock_dashboard.html", context)
 
+
+@login_required
 def stock_details(request, pk):
     stock = get_object_or_404(Stock, pk=pk)
 
@@ -129,7 +128,9 @@ def stock_details(request, pk):
     }
     return render(request, "stock_details.html", context)
 
+
 ## for all suppliers
+@login_required
 def supplier_list(request):
     all_suppliers = Supplier.objects.all()
     context = {
@@ -137,6 +138,8 @@ def supplier_list(request):
     }
     return render (request, "supplier_list.html", context)
 
+
+@login_required
 def add_supplier(request):
      if request.method == "POST":
         payload = request.POST
@@ -154,6 +157,8 @@ def add_supplier(request):
         return redirect('supplier_list')
      return render(request,"add_supplier.html")
 
+
+@login_required
 def edit_supplier(request,pk):
     supplier = get_object_or_404(Supplier, pk=pk)
     if request.method == "POST":
@@ -166,6 +171,8 @@ def edit_supplier(request,pk):
 
     return render(request,"edit_supplier.html", {'supplier':supplier})
 
+
+@login_required
 def delete_supplier(request,pk):
     supplier = get_object_or_404(Supplier, pk=pk)
     supplier.delete()
@@ -173,7 +180,7 @@ def delete_supplier(request,pk):
 
 
 # For supplier credit 
-
+@login_required
 def supplier_credit_list(request):
 
     credits = SupplierCredit.objects.all().order_by('-id')
@@ -197,6 +204,8 @@ def supplier_credit_list(request):
 
     return render( request, "supplier_credit_list.html", context)
 
+
+@login_required
 def add_supplier_credit(request):
 
     suppliers = Supplier.objects.all()
@@ -240,6 +249,7 @@ def add_supplier_credit(request):
     return render( request, "add_supplier_credit.html", context)
 
 
+@login_required
 def pay_supplier_credit(request, credit_id):
 
     credit = get_object_or_404(
@@ -265,6 +275,8 @@ def pay_supplier_credit(request, credit_id):
 
     return render( request, "pay_supplier_credit.html", context)
 
+
+@login_required
 def supplier_credit_detail(request, credit_id):
 
     credit = get_object_or_404(
@@ -278,7 +290,9 @@ def supplier_credit_detail(request, credit_id):
 
     return render( request, "supplier_credit_detail.html", context)
 
+
 ## functions handling customers
+@login_required
 def customer_list(request):
     all_customers = Customer.objects.all()
     context = {
@@ -286,6 +300,8 @@ def customer_list(request):
     }
     return render(request,"customer_list.html", context)
 
+
+@login_required
 def add_customer(request):
     if request.method == "POST":
         payload = request.POST
@@ -335,6 +351,8 @@ def add_customer(request):
     
     return render(request,"add_customer.html")
 
+
+@login_required
 def edit_customer(request,pk):
     customer = get_object_or_404(Customer,pk=pk)
     if request.method == "POST":
@@ -376,12 +394,17 @@ def edit_customer(request,pk):
         return redirect('customer_list')
     return render(request,"edit_customer.html", {'customer':customer})
 
+
+@login_required
 def delete_customer(request,pk):
     customer = get_object_or_404(Customer, pk=pk)
     customer.delete()
     return redirect('customer_list')
 
+
+
 ## Functions handling sales
+@login_required
 def sale_list(request):
     all_sales = Sale.objects.all()
     context = {
@@ -389,6 +412,8 @@ def sale_list(request):
     }
     return render(request,"sale_list.html", context )
 
+
+@login_required
 def add_sale(request):
     customers = Customer.objects.all()
     stocks = Stock.objects.all()
@@ -455,6 +480,7 @@ def add_sale(request):
     return render(request, "add_sale.html", context)
 
 # For updating a sale
+@login_required
 def edit_sale(request,pk):
     sale = get_object_or_404(Sale,pk=pk)
     customers = Customer.objects.all()
@@ -490,6 +516,8 @@ def edit_sale(request,pk):
 
     return render(request,"edit_sale.html", context)
 
+
+@login_required
 def sale_dashboard(request):
     all_sale = Sale.objects.all()
     recent_sales = Sale.objects.all().order_by('-sale_date')[:10]
@@ -552,6 +580,8 @@ def sale_dashboard(request):
     # print(context)
     return render(request,"sale_dashboard.html", context)
 
+
+@login_required
 def credit_list(request):
     credit_sales = Sale.objects.filter(is_fully_paid = False)
     context = {
@@ -560,6 +590,8 @@ def credit_list(request):
     }
     return render(request, "customer_credit_list.html", context)
 
+
+@login_required
 def sale_details(request,pk):
     sale = get_object_or_404(Sale,pk=pk)
     context ={
@@ -567,6 +599,8 @@ def sale_details(request,pk):
     }
     return render(request,"sale_details.html",context)
 
+
+@login_required
 def sale_receipt(request, pk):
     sales = get_object_or_404(Sale, pk=pk)
     context = {
@@ -576,10 +610,12 @@ def sale_receipt(request, pk):
     return render(request, "sale_receipt.html", context)
 
 
-
+@login_required
 def payment(request):
     return render(request, "payment.html")
 
+
+@login_required
 def add_payment(request):
     sales = Sale.objects.all()
 
@@ -628,6 +664,7 @@ def add_payment(request):
     return render(request, "add_payment.html", context)
 
 
+@login_required
 def payment_history(request):
     payments = Payment.objects.all().order_by(
         '-payment_date'
@@ -646,6 +683,8 @@ def payment_history(request):
         context
     )
 
+
+@login_required
 def deposit_receipt(request, pk):
     deposit = get_object_or_404(Deposit, pk=pk)
 
@@ -664,8 +703,9 @@ def deposit_receipt(request, pk):
     }
 
     return render(request, "deposit_receipt.html", context)
-   
 
+   
+@login_required
 def deposit_list(request):
 
     all_deposits = Deposit.objects.all()
@@ -690,7 +730,7 @@ def deposit_list(request):
         context
     )
 
-
+@login_required
 def add_deposit(request):
     customers = Customer.objects.all()
     sales = Sale.objects.all()
@@ -742,6 +782,7 @@ def add_deposit(request):
     return render(request,"add_deposit.html",context)
 
 
+@login_required
 def edit_deposit(request, pk):
 
     deposit = get_object_or_404(Deposit,pk=pk)
@@ -778,6 +819,8 @@ def edit_deposit(request, pk):
 
     return render(request,"edit_deposit.html",context)
 
+
+@login_required
 def admin_dashboard(request):
     total_sales = Sale.objects.aggregate(Sum("final_total"))["final_total__sum"] or 0
     total_payments = Payment.objects.aggregate(Sum("amount"))["amount__sum"] or 0
@@ -800,7 +843,7 @@ def admin_dashboard(request):
     return render(request, "admin_dashboard.html", context)
 
 
-
+@login_required
 def reports_dashboard(request):
     # for date range filter (default = last 30 days)
     period = request.GET.get('period', '30')
