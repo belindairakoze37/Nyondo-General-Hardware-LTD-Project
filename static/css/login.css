@@ -1,12 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NYONDO Hardware - Login</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
+ 
         * {
             margin: 0;
             padding: 0;
@@ -165,40 +157,4 @@
                 align-items: flex-start;
             }
         }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <div class="login-card">
-            <div class="logo">
-                <h1>NYONDO Hardware</h1>
-                <p>Management System</p>
-            </div>
-
-            <div class="welcome-text">
-                <h2>Welcome Back!</h2>
-                <p>Login to access your dashboard</p>
-            </div>
-
-            
-            <form action="dashboard.html" method="get">
-                <div class="input-group">
-                    <i class="fas fa-envelope"></i>
-                    <input type="email" placeholder="Email Address" required>
-                </div>
-
-                <div class="input-group">
-                    <i class="fas fa-lock"></i>
-                    <input type="password" placeholder="Password" required>
-                </div>
-                    <a href="{% url 'stock_dashboard' %}"><button type="submit" class="login-btn">Login to Dashboard</button></a>
-                </div>
-
-                
-
-               
-            </form>
-        </div>
-    </div>
-</body>
-</html>
+    
