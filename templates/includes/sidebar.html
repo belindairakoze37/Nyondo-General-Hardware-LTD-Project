@@ -29,14 +29,14 @@
                 <span>Add Stock</span>
             </a>
         </li>
-
+        
         <li class="{% if request.resolver_match.view_name == 'supplier_list' %}active{% endif %}">
             <a href="{% url 'supplier_list' %}">
                 <i class="fas fa-truck"></i>
                 <span>Suppliers</span>
             </a>
         </li>
-
+   
         <li class="{% if request.resolver_match.view_name == 'supplier_credit_list' %}active{% endif %}">
             <a href="{% url 'supplier_credit_list' %}">
                 <i class="fas fa-truck"></i>
@@ -44,10 +44,18 @@
             </a>
         </li>
 
+        {%  if user.profile.role == 'admin' %}
+       <li class="{% if request.resolver_match.view_name == 'admin_dashboard' %}active{% endif %}">
+            <a href="{% url 'admin_dashboard' %}">
+                <i class="fas fa-user"></i>
+                <span>Admin</span>
+            </a>
+        </li>
+        {% endif %}
     </ul>
 
     <div class="bottom">
-        <a href="{% url 'login' %}">
+        <a href="{% url 'user_logout' %}">
             <i class="fas fa-sign-out-alt"></i>
             <span>Logout</span>
         </a>

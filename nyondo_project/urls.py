@@ -50,7 +50,7 @@ urlpatterns = [
     path('sale/customer_credit_list/', views.credit_list, name="credit_list"),
     path('deposit_list/', views.deposit_list, name="deposit_list"),
     path('deposit_list/deposit_receipt/<int:pk>/', views.deposit_receipt, name="deposit_receipt"),
-    path('deposit_list/add/', views.add_deposit, name="add_deposit"),
+    # path('deposit_list/add/', views.add_deposit, name="add_deposit"),
     path('deposit_list/edit/<int:pk>/', views.edit_deposit, name="edit_deposit"),
     # urls for customer
     path('customer/', views.customer_list, name="customer_list"),
@@ -65,7 +65,7 @@ urlpatterns = [
     path('reports/', views.reports_dashboard , name="reports_dashboard"),
 
     # urls for authetication
-    path('users/', include('django.contrib.auth.urls')),
+    # path('users/', include('django.contrib.auth.urls')),
     path('users/', include('users.urls')),
 
 ]

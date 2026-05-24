@@ -44,14 +44,24 @@
         
         <li class="{% if request.resolver_match.view_name == 'deposit_list' %}active{% endif %}">
           <a href="{% url 'deposit_list' %}">
-            <i class="fas fa-users"></i>
+            <i class="fas fa-coins"></i>
             <span>Deposits</span>
           </a>
         </li> 
+
+ {%  if user.profile.role == 'admin' %}
+       <li class="{% if request.resolver_match.view_name == 'admin_dashboard' %}active{% endif %}">
+            <a href="{% url 'admin_dashboard' %}">
+               <i class="fas fa-user"></i>
+                <span>Admin</span>
+            </a>
+        </li>
+        {% endif %}
+
       </ul>
 
       <div class="bottom">
-        <a href="{% url 'login' %}">
+        <a href="{% url 'user_logout' %}">
           <i class="fas fa-sign-out-alt"></i>
           <span>Logout</span>
         </a>

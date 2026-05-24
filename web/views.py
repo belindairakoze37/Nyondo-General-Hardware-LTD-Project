@@ -21,6 +21,8 @@ def index(request):
    
     return render(request,"index.html")
 
+
+
     
 @login_required
 def stock_list(request):
@@ -147,6 +149,18 @@ def add_supplier(request):
         sent_email =  payload.get("email")
         sent_contact = payload.get("contact")
         sent_address =  payload.get("address")
+
+        # for validating ugandan phone numbers
+        phone_pattern = r'^(\+256|256|0)7\d{8}$'
+
+        if not re.match(phone_pattern, sent_contact):
+            messages.error(request, "Enter a valid Ugandan phone number")
+
+            context = {
+                "form_data":payload
+            }
+            return render(request,"add_supplier.html",context)
+        
         
         newSupplier = Supplier()
         newSupplier.name = sent_name
@@ -154,6 +168,8 @@ def add_supplier(request):
         newSupplier.contact = sent_contact
         newSupplier.address = sent_address
         newSupplier.save()
+        messages.success(request, "Supplier added successfully")
+
         return redirect('supplier_list')
      return render(request,"add_supplier.html")
 
@@ -166,6 +182,7 @@ def edit_supplier(request,pk):
         supplier.email = request.POST.get("email")
         supplier.contact = request.POST.get("contact")
         supplier.address = request.POST.get("address")
+        
         supplier.save()
         return redirect('supplier_list')
 
@@ -655,6 +672,19 @@ def add_payment(request):
         newDeposit.payment_method = payment.method
         newDeposit.save()
 
+        # update sale payment info
+        sale.amount_paid += payment.amount
+
+        sale.balance_due = sale.final_total - sale.amount_paid
+
+        if sale.balance_due <= 0:
+            sale.balance_due = 0
+            sale.is_fully_paid = True
+        else:
+            sale.is_fully_paid = False
+
+        sale.save()
+
         return redirect('payment_history')
 
     context = {
@@ -690,10 +720,9 @@ def deposit_receipt(request, pk):
 
     sale = deposit.sale
     sale_total = sale.final_total or Decimal('0')
-    paid_amount = deposit.amount or Decimal('0')
+    paid_amount = sale.amount_paid or Decimal('0')
 
     balance = sale_total - paid_amount
-
     context = {
         "deposit": deposit,
         "sale": sale,
@@ -730,56 +759,56 @@ def deposit_list(request):
         context
     )
 
-@login_required
-def add_deposit(request):
-    customers = Customer.objects.all()
-    sales = Sale.objects.all()
-    sales = [sale for sale in sales if sale.final_total > sale.amount_paid]
-    for sale in sales:
-        sale.balance = sale.final_total - sale.amount_paid
+# @login_required
+# def add_deposit(request):
+#     customers = Customer.objects.all()
+#     sales = Sale.objects.all()
+#     sales = [sale for sale in sales if sale.final_total > sale.amount_paid]
+#     for sale in sales:
+#         sale.balance = sale.final_total - sale.amount_paid
 
-    if request.method == "POST":
+#     if request.method == "POST":
 
-        payload = request.POST
+#         payload = request.POST
 
-        customer_id = payload.get(
-            "customer_name"
-        )
-        sale_id = payload.get("sale")
-        sale = get_object_or_404(
-            Sale,
-            id=sale_id
-        )
+#         customer_id = payload.get(
+#             "customer_name"
+#         )
+#         sale_id = payload.get("sale")
+#         sale = get_object_or_404(
+#             Sale,
+#             id=sale_id
+#         )
 
-        customer = get_object_or_404(
-            Customer,
-            id=customer_id
-        )
+#         customer = get_object_or_404(
+#             Customer,
+#             id=customer_id
+#         )
 
-        sent_amount = Decimal(
-            payload.get("amount")
-        )
+#         sent_amount = Decimal(
+#             payload.get("amount")
+#         )
 
-        sent_payment_method = payload.get(
-            "payment_method"
-        )
+#         sent_payment_method = payload.get(
+#             "payment_method"
+#         )
 
-        # creating deposit
-        newDeposit = Deposit()
-        newDeposit.customer_name = customer
-        newDeposit.amount = sent_amount
-        newDeposit.sale = sale
-        newDeposit.payment_method = sent_payment_method
-        newDeposit.save()
+#         # creating deposit
+#         newDeposit = Deposit()
+#         newDeposit.customer_name = customer
+#         newDeposit.amount = sent_amount
+#         newDeposit.sale = sale
+#         newDeposit.payment_method = sent_payment_method
+#         newDeposit.save()
 
-        return redirect('deposit_list')
+#         return redirect('deposit_list')
 
-    context = {
-        "customers": customers,
-        "sales":sales
-    }
+#     context = {
+#         "customers": customers,
+#         "sales":sales
+#     }
 
-    return render(request,"add_deposit.html",context)
+#     return render(request,"add_deposit.html",context)
 
 
 @login_required

@@ -111,4 +111,12 @@
             border: none;
             border-top: 1px solid #eee;
         }
-    
+        .message{
+            background-color: #ffe6e6;
+            color: #cc0000;
+            border: 1px solid #ffb3b3;
+            padding: 12px;
+            border-radius: 5px;
+            margin-bottom: 15px;
+            font-size: 14px;
+        }

@@ -30,6 +30,15 @@
 
     <div class="form-card">
        
+           {% if messages %}
+         {% for message in messages %}
+                <div class="message">
+            {{ message }}
+                </div>
+        {% endfor %}
+        {% endif %}
+
+
         <form method="POST" action="{% url 'add_supplier' %}">
             {% csrf_token %}
 
@@ -46,7 +55,7 @@
 
                 <div class="form-group">
                     <label for="contact">Contact Number *</label>
-                    <input type="tel"  maxlength="14" id="contact" name="contact" required placeholder="+2564567890" value="{{ form_data.contact|default:'' }}">
+                    <input type="tel"  maxlength="13" id="contact" name="contact" required   placeholder="+25677567890" value="{{ form_data.contact|default:'' }}">
                 </div>
             </div>
 
