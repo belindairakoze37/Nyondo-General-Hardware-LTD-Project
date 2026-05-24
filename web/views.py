@@ -759,57 +759,6 @@ def deposit_list(request):
         context
     )
 
-# @login_required
-# def add_deposit(request):
-#     customers = Customer.objects.all()
-#     sales = Sale.objects.all()
-#     sales = [sale for sale in sales if sale.final_total > sale.amount_paid]
-#     for sale in sales:
-#         sale.balance = sale.final_total - sale.amount_paid
-
-#     if request.method == "POST":
-
-#         payload = request.POST
-
-#         customer_id = payload.get(
-#             "customer_name"
-#         )
-#         sale_id = payload.get("sale")
-#         sale = get_object_or_404(
-#             Sale,
-#             id=sale_id
-#         )
-
-#         customer = get_object_or_404(
-#             Customer,
-#             id=customer_id
-#         )
-
-#         sent_amount = Decimal(
-#             payload.get("amount")
-#         )
-
-#         sent_payment_method = payload.get(
-#             "payment_method"
-#         )
-
-#         # creating deposit
-#         newDeposit = Deposit()
-#         newDeposit.customer_name = customer
-#         newDeposit.amount = sent_amount
-#         newDeposit.sale = sale
-#         newDeposit.payment_method = sent_payment_method
-#         newDeposit.save()
-
-#         return redirect('deposit_list')
-
-#     context = {
-#         "customers": customers,
-#         "sales":sales
-#     }
-
-#     return render(request,"add_deposit.html",context)
-
 
 @login_required
 def edit_deposit(request, pk):
