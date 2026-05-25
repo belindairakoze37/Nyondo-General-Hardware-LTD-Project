@@ -1,4 +1,5 @@
 from django.db import models
+from django.core.exceptions import ValidationError
 from django.core.validators import MinValueValidator
 from decimal import Decimal
 
@@ -299,9 +300,12 @@ class Sale(models.Model):
 
     def save(self, *args, **kwargs):
 
+
         # Check if new sale
         is_new = self.pk is None
-
+        if is_new:
+            if self.quantity_sold > self.product.quantity:
+                raise ValidationError( "Not enough stock available")
     
         self.subtotal = (
             self.quantity_sold *
@@ -323,10 +327,7 @@ class Sale(models.Model):
             self.transport_fee
         )
 
-        self.balance_due = (
-            self.subtotal -
-            self.amount_paid
-        )
+        self.balance_due = (self.final_total -self.amount_paid)
 
         self.is_fully_paid = self.balance_due <= 0
 
@@ -335,12 +336,6 @@ class Sale(models.Model):
 
         # Reduce stock only when creating new sale
         if is_new:
-
-            if self.quantity_sold > self.product.quantity:
-                raise ValueError(
-                    "Not enough stock available"
-                )
-
             self.product.quantity -= self.quantity_sold
             self.product.save()
 

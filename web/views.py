@@ -437,6 +437,14 @@ def add_sale(request):
         product = Stock.objects.get(id=request.POST["product"])
         sent_is_fully_paid = request.POST.get("is_fully_paid") == "on"
 
+        quantity_sold = int(request.POST.get("quantity_sold"))
+
+        # VALIDATE STOCK
+        if quantity_sold > product.quantity:
+            messages.error( request, f"Only {product.quantity} items available.")
+            return redirect("add_sale")
+
+
         newSale = Sale()
         newSale.customer = customer
         newSale.payment_method = request.POST.get("payment_method")
@@ -445,9 +453,13 @@ def add_sale(request):
         newSale.due_date = request.POST.get("due_date") or None
         newSale.sold_by = request.POST.get("sold_by")
         newSale.distance_km = Decimal(request.POST.get("distance_km") or 0)
-        newSale.quantity_sold = int(request.POST.get("quantity_sold"))
-        newSale.unit_selling_price = Decimal(request.POST.get("unit_selling_price"))
-        newSale.unit_cost_price = Decimal(request.POST.get("unit_cost_price"))
+
+        # SET QUANTITY (after validation)
+        newSale.quantity_sold = quantity_sold
+
+    # GET PRICES FROM STOCK MODEL (IMPORTANT)
+        newSale.unit_selling_price = product.selling_price
+        newSale.unit_cost_price = product.unit_cost
         newSale.notes = request.POST.get("notes")
 
         
@@ -464,7 +476,7 @@ def add_sale(request):
         
         newSale.save()
 
-        
+        # update payment
         if sent_is_fully_paid:
             newSale.amount_paid = newSale.final_total
             newSale.balance_due = 0

@@ -2,10 +2,12 @@ from django.contrib.auth import authenticate, login
 from django.shortcuts import render, redirect
 from .forms import RegistrationForm
 from django.contrib.auth import logout
+from django.contrib.auth.decorators import login_required
 
 # Create your views here
 
 # This is for registering a new user
+@login_required
 def register_user(request):
     if request.method == "POST":
         form = RegistrationForm(request.POST)

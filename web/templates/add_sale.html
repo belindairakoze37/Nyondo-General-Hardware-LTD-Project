@@ -43,10 +43,14 @@
 
                 <div class="form-group">
                     <label>Product *</label>
-                    <select name="product" required>
+                    <select name="product"  id="product-select" required>
                         <option value="">Select Product</option>
                         {% for stock in stocks %}
-                        <option value="{{ stock.id }}">
+                        <option 
+                        value="{{ stock.id }}" 
+                        data-selling="{{ stock.selling_price }}"
+                        data-cost="{{ stock.unit_cost }}"
+                        data-quantity="{{ stock.quantity }}">
                             {{ stock.product_name }}
                             (Available: {{ stock.quantity }})
                         </option>
@@ -58,18 +62,19 @@
             <div class="row-2col" style="grid-template-columns: 1fr 1fr;">
                 <div class="form-group">
                     <label>Quantity Sold *</label>
-                    <input type="number" name="quantity_sold" min="1" required placeholder="e.g., 5">
+                    <input type="number" name="quantity_sold" min="1"  id="quantity-sold" required placeholder="e.g., 5">
+                    <p id="stock-error" style="color:red;"></p>
                 </div>
 
                 <div class="form-group">
                     <label>Unit Selling Price *</label>
-                    <input type="number" step="0.01" min="1" name="unit_selling_price" required placeholder="UGX 0.00">
+                    <input type="number" step="0.01" min="1" name="unit_selling_price"  id="unit-selling-price" readonly placeholder="UGX 0.00">
                 </div>
             </div>
 
             <div class="form-group">
                 <label>Unit Cost Price *</label>
-                <input type="number" step="0.01" min="1" name="unit_cost_price" required
+                <input type="number" step="0.01" min="1" name="unit_cost_price"   id="unit-cost-price" readonly
                     placeholder="Cost per item (for profit tracking)">
             </div>
 
@@ -137,5 +142,81 @@
             Credit sales will reflect pending balance in Sales List. Check 'Is Fully Paid' when payment is complete.
         </div>
     </div>
+
+<script>
+
+    const productSelect =
+        document.getElementById("product-select");
+
+    const sellingPriceInput =
+        document.getElementById("unit-selling-price");
+
+    const costPriceInput =
+        document.getElementById("unit-cost-price");
+
+    const quantityInput =
+        document.getElementById("quantity-sold");
+
+    const stockError =
+        document.getElementById("stock-error");
+
+
+    // AUTO FILL PRICES
+    productSelect.addEventListener("change", function () {
+
+        const selectedOption =
+            productSelect.options[
+                productSelect.selectedIndex
+            ];
+
+        const sellingPrice =
+            selectedOption.getAttribute("data-selling");
+
+        const costPrice =
+            selectedOption.getAttribute("data-cost");
+
+        sellingPriceInput.value = sellingPrice;
+
+        costPriceInput.value = costPrice;
+
+    });
+
+
+    // CHECK STOCK
+    quantityInput.addEventListener("input", function () {
+
+        const selectedOption =
+            productSelect.options[
+                productSelect.selectedIndex
+            ];
+
+        const availableStock =
+            parseInt(
+                selectedOption.getAttribute("data-quantity")
+            );
+
+        const enteredQuantity =
+            parseInt(quantityInput.value);
+
+        if (enteredQuantity > availableStock) {
+
+            stockError.innerText =
+                "Quantity exceeds available stock.";
+
+        }
+
+        else {
+
+            stockError.innerText = "";
+
+        }
+
+    });
+
+    productSelect.dispatchEvent(
+    new Event("change")
+);
+
+</script>
 
     {% endblock %}
