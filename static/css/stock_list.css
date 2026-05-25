@@ -218,8 +218,10 @@
       }
 
       .stock-table tr:hover {
-        background: #f8f9fa;
+        background: #fff4e6;
+        transition: 0.3s ease;
       }
+      
 
       .badge {
         padding: 5px 12px;

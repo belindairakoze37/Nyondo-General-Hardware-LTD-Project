@@ -6,14 +6,13 @@
         }
 
         body {
-            font-family: 'Inter', sans-serif;
-            background: #f0f2f5;
-            color: #1a1a2e;
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
+        background: #f0f2f5;
+        color: #1a1a2e;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column; 
+        justify-content: space-between; 
+        padding: 0px;
         }
 
         

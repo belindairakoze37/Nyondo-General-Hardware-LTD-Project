@@ -30,24 +30,6 @@
     <div class="cards">
         <div class="card">
             <div class="card-header">
-                <h3><i class="fas fa-cubes"></i> Total Products</h3>
-                
-            </div>
-            <div class="card-value">{{ total_products }}</div>
-            <div class="card-footer">Unique products in inventory</div>
-        </div>
-
-        <div class="card">
-            <div class="card-header">
-                <h3><i class="fas fa-sort-numeric-up"></i> Total Quantity</h3>
-        
-            </div>
-            <div class="card-value">{{ total_quantity |intcomma}}</div>
-            <div class="card-footer">Total units in stock</div>
-        </div>
-
-        <div class="card">
-            <div class="card-header">
                 <h3><i class="fas fa-chart-line"></i> Total Stock Value</h3>
                 
             </div>
@@ -65,38 +47,7 @@
         </div>
     </div>
 
-    <!-- recent stock section -->
-    <div class="section">
-        <div class="section-header">
-            <h3><i class="fas fa-clock"></i> Recent Stock Additions</h3>
-            <a href="{% url 'stock_list' %}">View All →</a>
-        </div>
-        
-        <table class="data-table">
-            <thead>
-                <tr>
-                    <th><i class="fas fa-tag"></i> Product</th>
-                    <th><i class="fas fa-cubes"></i> Quantity</th>
-                    <th> Price</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for item in stocks %}
-                <tr>
-                    <td><strong>{{ item.product_name }}</strong></td>
-                    <td>{{ item.quantity |intcomma}}</td>
-                    <td>UGX {{ item.selling_price|floatformat:0 |intcomma }}</td>
-                </tr>
-                {% empty %}
-                <tr>
-                    <td colspan="3" style="text-align: center;">No stock records available</td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    </div>
-
-    <!-- low stock alerts -->
+ <!-- low stock alerts -->
     <div class="section">
         <div class="section-header">
             <h3><i class="fas fa-exclamation-triangle"></i> Low Stock Alerts</h3>
@@ -126,21 +77,42 @@
         {% endfor %}
     </div>
 
-     <!-- quick action section -->
+
+
+    <!-- recent stock section -->
     <div class="section">
         <div class="section-header">
-            <h3><i class="fas fa-bolt"></i> Quick Actions</h3>
+            <h3><i class="fas fa-clock"></i> Brief Stock Summary </h3>
+            <a href="{% url 'stock_list' %}">View All →</a>
         </div>
         
-        <div class="quick-actions">
-            <a href="{% url 'add_stock' %}" class="btn">
-                <i class="fas fa-plus"></i> Add Stock
-            </a>
-            <a href="{% url 'stock_list' %}" class="btn btn-outline">
-                <i class="fas fa-list"></i> View Stock
-            </a>
-           
-        </div>
+
+        
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th> Stock Items</th>
+                    <th> Item Quantity</th>
+                    <th> Unit Cost Price</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in stocks %}
+                <tr>
+                    <td><strong>{{ item.product_name }}</strong></td>
+                    <td>{{ item.quantity |intcomma}}</td>
+                    <td>UGX {{ item.selling_price|floatformat:0 |intcomma }}</td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="3" style="text-align: center;">No stock records available</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+   
     </div>
 </div>
  {% endblock %}

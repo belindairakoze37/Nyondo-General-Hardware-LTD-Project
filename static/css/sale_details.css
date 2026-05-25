@@ -5,10 +5,14 @@
             box-sizing: border-box;
         }
 
-        body {
-            background: #f0f2f8;
-            padding: 40px 28px;
-            color: #1a2634;
+       body {
+        background: #f0f2f5;
+        color: #1a1a2e;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        padding: 0; 
         }
 
         

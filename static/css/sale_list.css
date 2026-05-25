@@ -7,16 +7,20 @@
         }
 
         body {
-           
-            background: #f0f2f8;
-            padding: 32px 28px;
-            color: #1a2634;
+            background: #f0f2f5;
+            color: #1a1a2e;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 0; 
         }
+
 
         .sales-container {
             font-family: Arial, sans-serif;
             max-width: 1600px;
-            margin-left: 260px;
+            margin-left: 300px;
             background: transparent;
         }
 

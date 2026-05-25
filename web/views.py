@@ -104,15 +104,11 @@ def edit_stock(request, pk):
 @login_required
 def stock_dashboard(request):
     stocks = Stock.objects.all()
-    total_products = stocks.count()
-    total_quantity = sum(item.quantity for item in stocks)
     total_value = sum(item.quantity * item.unit_cost for item in stocks)
     low_stock = stocks.filter(quantity__lt=10)
     recent_stocks = stocks
     
     context = {
-        "total_products":total_products,
-        "total_quantity":total_quantity,
         "total_value":total_value,
         "low_stock":low_stock,
         "stocks":recent_stocks

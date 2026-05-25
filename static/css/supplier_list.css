@@ -3,13 +3,13 @@
            
             background: #f4f6f9;
             margin: 0;
-            padding: 20px;
+            padding: 0px;
         }
 
         .container {
             font-family: Arial, sans-serif;
             max-width: 1000px;
-            margin-left: 270px;
+            margin-left: 300px;
         }
 
         .header {

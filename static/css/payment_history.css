@@ -7,11 +7,15 @@
         }
 
         body {
-            background: #f0f2f8;     
-            padding: 30px;
-            color: #1a2634;           
-            line-height: 1.4;
+            background: #f0f2f5;
+            color: #1a1a2e;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 0;
         }
+
 
         .container {
             max-width: 1400px;
