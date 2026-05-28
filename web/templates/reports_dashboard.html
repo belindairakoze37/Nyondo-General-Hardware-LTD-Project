@@ -405,10 +405,10 @@ body {
           <tbody>
             {% for item in low_stock_items %}
             <tr>
-              <td class="item-name">{{ item.name }}</td>
+              <td class="item-name">{{ item.product_name }}</td>
               <td>{{ item.category }}</td>
               <td class="text-right">{{ item.quantity }}</td>
-              <td class="text-right">{{ item.reorder_level }}</td>
+              <td class="text-right">{{ item.reorder_quantity }}</td>
               <td>
                 {% if item.quantity == 0 %}
                   <span class="badge badge-danger">Out of Stock</span>
