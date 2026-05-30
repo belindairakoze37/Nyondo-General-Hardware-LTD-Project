@@ -23,31 +23,33 @@
      <p>Welcome! Admin </p>
    
     <div class="row g-3">
-        <div class="col-md-3">
+        <div class="col-md-4">
             <div class="card card-box p-3">
                 <div class="card-title"><i class="fas fa-chart-line"></i> Total Sales</div>
                 <div class="card-value">{{ total_sales|default:"UGX 0"|intcomma }}</div>
+                <div class="small text-info mt-1"> All Sales Made</div>
             
             </div>
         </div>
 
-        <div class="col-md-3">
-            <div class="card card-box p-3">
+        <!-- <div class="col-md-3"> -->
+            <!-- <div class="card card-box p-3">
                 <div class="card-title"><i class="fas fa-credit-card"></i> Payments</div>
                 <div class="card-value">{{ total_payments|floatformat:0|default:"UGX 0"|intcomma }}</div>
                 <div class="small text-muted mt-1"> Received payments</div>
-            </div>
-        </div>
+            </div> -->
+        <!-- </div> -->
 
-        <div class="col-md-3">
+        <div class="col-md-4">
             <div class="card card-box p-3">
                 <div class="card-title"><i class="fas fa-coins"></i> Deposits</div>
                 <div class="card-value">{{ total_deposits|default:"UGX 0"|intcomma }}</div>
-                <div class="small text-warning mt-1"> Bank cleared</div>
+                <div class="small text-info mt-1"> All Deposits Made</div>
+                
             </div>
         </div>
 
-        <div class="col-md-3">
+        <div class="col-md-4">
             <div class="card card-box p-3">
                 <div class="card-title"><i class="fas fa-users"></i> Customers</div>
                 <div class="card-value">{{ customers|default:"0"|intcomma }}</div>
@@ -56,7 +58,7 @@
         </div>
     </div>
     <div class="row mt-4">
-        <div class="col-md-4">
+        <div class="col-md-6">
             <div class="card card-box p-3">
                 <h6> Recent Sales</h6>
                 <ul class="list-group list-group-flush">
@@ -74,10 +76,10 @@
             </div>
         </div>
 
-        <div class="col-md-4">
-            <div class="card card-box p-3">
-                <h6> Recent Payments</h6>
-                <ul class="list-group list-group-flush">
+        <!-- <div class="col-md-4"> -->
+            <!-- <div class="card card-box p-3"> -->
+                <!-- <h6> Recent Payments</h6> -->
+                <!-- <ul class="list-group list-group-flush">
                     {% for payment in recent_payments %}
                     <li class="list-group-item">
                         <span><i class="fas fa-user me-2" style="color: #ff8c00;"></i> {{ payment.sale.customer }}</span>
@@ -88,11 +90,11 @@
                         <i class="fas fa-credit-card me-2"></i> No payment records
                     </li>
                     {% endfor %}
-                </ul>
-            </div>
-        </div>
+                </ul> -->
+            <!-- </div> -->
+        <!-- </div> -->
 
-        <div class="col-md-4">
+        <div class="col-md-6">
             <div class="card card-box p-3">
                 <h6> Recent Deposits</h6>
                 <ul class="list-group list-group-flush">

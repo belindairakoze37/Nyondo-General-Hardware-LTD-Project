@@ -1,5 +1,11 @@
 from django.contrib import admin
-from . models import *
+from . models import SupplierCredit
+from . models import Supplier
+from . models import Sale
+from . models import Stock
+from . models import Customer
+from . models import Deposit
+from . models import Payment
 
 # Register your models here.
 

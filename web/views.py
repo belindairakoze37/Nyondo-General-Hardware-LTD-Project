@@ -813,7 +813,7 @@ def admin_dashboard(request):
     total_deposits = Deposit.objects.aggregate(Sum("amount"))["amount__sum"] or 0
     customers = Customer.objects.count()
     recent_sales = Sale.objects.all().order_by("-id")[:5]
-    recent_payments = Payment.objects.all().order_by("-payment_date")[:5]
+    # recent_payments = Payment.objects.all().order_by("-payment_date")[:5]
     recent_deposits = Deposit.objects.all().order_by("-date")[:5]
     
     context = {
@@ -822,7 +822,7 @@ def admin_dashboard(request):
         "total_deposits":total_deposits,
         "customers":customers,
         "recent_sales":recent_sales,
-        "recent_payments":recent_payments,
+        # "recent_payments":recent_payments,
         "recent_deposits":recent_deposits
     }
 
