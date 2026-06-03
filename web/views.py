@@ -21,18 +21,14 @@ def index(request):
    
     return render(request,"index.html")
 
-
-
     
 @login_required
 def stock_list(request):
     all_stocks = Stock.objects.all()
     
-
-    # Get search text
     search_query = request.GET.get("q")
 
-    # Search product name
+    
     if search_query:
         all_stocks = all_stocks.filter(
             product_name__icontains=search_query
@@ -46,7 +42,6 @@ def stock_list(request):
 
 @login_required
 def add_stock(request):
- # Needed for dropdown 
     suppliers = Supplier.objects.all() 
 
     if request.method == "POST":
@@ -62,7 +57,6 @@ def add_stock(request):
         newStock.selling_price = Decimal(payload.get("selling_price"))  
         newStock.category = payload.get("category")
         newStock.supplier = supplier 
-        newStock.unit = payload.get("unit")  
         newStock.payment_method = payload.get("payment_method") 
         newStock.is_paid = payload.get("is_paid") == "on"
         newStock.credit_due_date = payload.get("credit_due_date") or None
@@ -127,7 +121,7 @@ def stock_details(request, pk):
     return render(request, "stock_details.html", context)
 
 
-## for all suppliers
+
 @login_required
 def supplier_list(request):
     all_suppliers = Supplier.objects.all()
@@ -171,20 +165,39 @@ def add_supplier(request):
 
 
 @login_required
-def edit_supplier(request,pk):
+def edit_supplier(request, pk):
     supplier = get_object_or_404(Supplier, pk=pk)
+
     if request.method == "POST":
-        supplier.name = request.POST.get("name")
-        supplier.email = request.POST.get("email")
-        supplier.contact = request.POST.get("contact")
-        supplier.address = request.POST.get("address")
-        
+        sent_name = request.POST.get("name")
+        sent_email = request.POST.get("email")
+        sent_contact = request.POST.get("contact")
+        sent_address = request.POST.get("address")
+
+        phone_pattern = r'^(\+256|256|0)7\d{8}$'
+
+        if not re.match(phone_pattern, sent_contact):
+            messages.error(request, "Enter a valid Ugandan phone number.")
+
+            context = {
+                "supplier": supplier,
+                "form_data": request.POST
+            }
+
+            return render(request, "edit_supplier.html", context)
+
+        supplier.name = sent_name
+        supplier.email = sent_email
+        supplier.contact = sent_contact
+        supplier.address = sent_address
+
         supplier.save()
+
+        messages.success(request, "Supplier updated successfully")
         return redirect('supplier_list')
 
-    return render(request,"edit_supplier.html", {'supplier':supplier})
-
-
+    return render(request, "edit_supplier.html", {"supplier": supplier})
+    
 @login_required
 def delete_supplier(request,pk):
     supplier = get_object_or_404(Supplier, pk=pk)
@@ -192,7 +205,7 @@ def delete_supplier(request,pk):
     return redirect('supplier_list')
 
 
-# For supplier credit 
+
 @login_required
 def supplier_credit_list(request):
 
@@ -304,7 +317,7 @@ def supplier_credit_detail(request, credit_id):
     return render( request, "supplier_credit_detail.html", context)
 
 
-## functions handling customers
+
 @login_required
 def customer_list(request):
     all_customers = Customer.objects.all()
@@ -325,13 +338,13 @@ def add_customer(request):
         sent_nin = payload.get("nin").upper()
         sent_is_credit_customer = payload.get("is_credit_customer") == "on"
 
-        # for validating ugandan phone numbers
+        
         phone_pattern = r'^(\+256|256|0)7\d{8}$'
 
-        # for validating ugandan NIN
+        
         nin_pattern = r'^C[FM][A-Z0-9]{12}$'
 
-        # for phone validation
+        
         if not re.match(phone_pattern, sent_contact):
             messages.error(request, "Enter a valid Ugandan phone number")
 
@@ -340,7 +353,7 @@ def add_customer(request):
             }
             return render(request,"add_customer.html",context)
         
-        # for NIN validation
+        
         if not re.match(nin_pattern, sent_nin):
             messages.error(request, "Enter a valid Ugandan NIN")
 
@@ -376,7 +389,7 @@ def edit_customer(request,pk):
         sent_contact = request.POST.get("contact")
         sent_nin = request.POST.get("nin").upper()
 
-        # phone number validation
+        
         if not re.match(phone_pattern, sent_contact):
             messages.error(request, "Enter a valid Ugandan phone number")
             context = {
@@ -385,7 +398,7 @@ def edit_customer(request,pk):
             }
             return render(request, "edit_customer.html", context)
         
-         # nin validation
+         
         if not re.match(nin_pattern, sent_nin):
             messages.error(request, "Enter a valid Ugandan NIN (CF or CM only)")
 
@@ -416,7 +429,7 @@ def delete_customer(request,pk):
 
 
 
-## Functions handling sales
+
 @login_required
 def sale_list(request):
     all_sales = Sale.objects.all()
@@ -439,7 +452,7 @@ def add_sale(request):
 
         quantity_sold = int(request.POST.get("quantity_sold"))
 
-        # VALIDATE STOCK
+        
         if quantity_sold > product.quantity:
             messages.error( request, f"Only {product.quantity} items available.")
             return redirect("add_sale")
@@ -454,10 +467,10 @@ def add_sale(request):
         newSale.sold_by = request.POST.get("sold_by")
         newSale.distance_km = Decimal(request.POST.get("distance_km") or 0)
 
-        # SET QUANTITY (after validation)
+        
         newSale.quantity_sold = quantity_sold
 
-    # GET PRICES FROM STOCK MODEL (IMPORTANT)
+    
         newSale.unit_selling_price = product.selling_price
         newSale.unit_cost_price = product.unit_cost
         newSale.notes = request.POST.get("notes")
@@ -476,7 +489,7 @@ def add_sale(request):
         
         newSale.save()
 
-        # update payment
+        
         if sent_is_fully_paid:
             newSale.amount_paid = newSale.final_total
             newSale.balance_due = 0
@@ -504,7 +517,7 @@ def add_sale(request):
 
     return render(request, "add_sale.html", context)
 
-# For updating a sale
+
 @login_required
 def edit_sale(request,pk):
     sale = get_object_or_404(Sale,pk=pk)
@@ -602,7 +615,7 @@ def sale_dashboard(request):
         "best_selling":best_selling,
         "top_products":top_products
     }
-    # print(context)
+
     return render(request,"sale_dashboard.html", context)
 
 
@@ -650,19 +663,19 @@ def add_payment(request):
             id=request.POST.get("sale")
         )
 
-        # for creating  a payment
+        
         payment = Payment()
         payment.sale = sale
         payment.amount = Decimal(request.POST.get("amount"))
         payment.method = request.POST.get("method")
         payment.save()
 
-        #  for recalculating data  from the database 
+        
         total_paid = Payment.objects.filter(sale=sale).aggregate(
         total=Sum('amount'))['total'] or Decimal("0")
         sale.amount_paid = total_paid
 
-        # for checking and updating the balance_due
+        
         sale.balance_due = sale.final_total - sale.amount_paid
         if sale.balance_due <= 0:
             sale.is_fully_paid = True
@@ -672,7 +685,7 @@ def add_payment(request):
         sale.save()
 
     
-        # for automatically adding the payment into the deposit dashboard
+        
         newDeposit = Deposit()
         newDeposit.customer_name = sale.customer
         newDeposit.amount = payment.amount
@@ -680,7 +693,7 @@ def add_payment(request):
         newDeposit.payment_method = payment.method
         newDeposit.save()
 
-        # update sale payment info
+        
         sale.amount_paid += payment.amount
 
         sale.balance_due = sale.final_total - sale.amount_paid
@@ -813,7 +826,6 @@ def admin_dashboard(request):
     total_deposits = Deposit.objects.aggregate(Sum("amount"))["amount__sum"] or 0
     customers = Customer.objects.count()
     recent_sales = Sale.objects.all().order_by("-id")[:5]
-    # recent_payments = Payment.objects.all().order_by("-payment_date")[:5]
     recent_deposits = Deposit.objects.all().order_by("-date")[:5]
     
     context = {
@@ -822,7 +834,6 @@ def admin_dashboard(request):
         "total_deposits":total_deposits,
         "customers":customers,
         "recent_sales":recent_sales,
-        # "recent_payments":recent_payments,
         "recent_deposits":recent_deposits
     }
 
@@ -831,25 +842,22 @@ def admin_dashboard(request):
 
 @login_required
 def reports_dashboard(request):
-    # for date range filter (default = last 30 days)
     period = request.GET.get('period', '30')
     days = int(period)
     start_date = timezone.now() - timedelta(days=days)
 
-    # for sales summary 
+    
     sales= Sale.objects.filter(sale_date__gte=start_date)
     total_sales = sales.aggregate(total=Sum('final_total'))['total'] or 0
     total_transactions = sales.count()
 
-    # for stock summary
+    
     low_stock_items = Stock.objects.filter(quantity__lte=10)
     total_stock_value = Stock.objects.aggregate(value=Sum('quantity') * Sum('unit_cost'))['value'] or 0
 
-    # for supplier credit 
     total_credit = SupplierCredit.objects.aggregate(total=Sum('amount_owed'))['total'] or 0
     over_due_credit = SupplierCredit.objects.filter(due_date__lte=timezone.now(), is_cleared=False)
 
-    # for deposit scheme
     total_deposits = Deposit.objects.aggregate(total=Sum('amount'))['total'] or 0
     active_depositors = Deposit.objects.values('customer_name').distinct().count()
 

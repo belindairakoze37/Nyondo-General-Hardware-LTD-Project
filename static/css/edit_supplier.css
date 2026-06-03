@@ -6,6 +6,7 @@
         }
 
         body {
+        font-family: Arial, sans-serif;
         background: #f0f2f5;
         color: #1a1a2e;
         min-height: 100vh;
@@ -17,6 +18,7 @@
 
         
         .container {
+            font-family: Arial, sans-serif;
             max-width: 900px;
             width: 50%;
             margin: 0 auto;
@@ -216,5 +218,17 @@
                 flex-direction: column;
             }
         }
-    
+
+        .alert {
+            padding: 10px 15px;
+            margin-bottom: 15px;
+            border-radius: 5px;
+            font-weight: 500;
+        }
+
+        .alert-danger {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
         

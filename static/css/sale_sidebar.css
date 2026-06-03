@@ -1,6 +1,7 @@
 
       .sidebar {
         position: fixed;
+        font-family: Arial, sans-serif;
         left: 0;
         top: 0;
         width: 280px;
@@ -54,6 +55,7 @@
       }
 
       .nav-links li a {
+        font-family: Arial, sans-serif;
         display: flex;
         align-items: center;
         gap: 14px;

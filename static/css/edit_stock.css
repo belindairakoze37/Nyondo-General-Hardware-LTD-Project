@@ -6,17 +6,19 @@
       }
 
       body {
+  font-family: Arial, sans-serif;
   background: #f0f2f5;
   color: #1a1a2e;
   min-height: 100vh;
   display: flex;
-  flex-direction: column; /* stack vertically */
-  justify-content: space-between; /* push footer down */
+  flex-direction: column; 
+  justify-content: space-between; 
   padding: 0px;
 }
 
       
       .container {
+        font-family: Arial, sans-serif;
         max-width: 800px;
         width: 50%;
         margin: 0 auto;

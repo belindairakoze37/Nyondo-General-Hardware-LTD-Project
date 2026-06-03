@@ -6,7 +6,6 @@
         }
 
         body {
-            font-family: 'Inter', sans-serif;
             background: linear-gradient(rgba(255,140,0,0.15), rgba(255,140,0,0.15)),
                         url("/static/images/hammers.png") center/cover no-repeat;
             min-height: 100vh;

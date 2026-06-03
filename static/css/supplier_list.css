@@ -4,6 +4,7 @@
             background: #f4f6f9;
             margin: 0;
             padding: 0px;
+            font-family: Arial, sans-serif;
         }
 
         .container {
@@ -91,10 +92,10 @@
         .edit {
             color: #007bff;
             background: #e7f1ff;
+            
         }
 
         .edit:hover {
-            text-decoration: underline;
             background: #d4e4ff;
         }
 
@@ -104,7 +105,6 @@
         }
 
         .delete:hover {
-            text-decoration: underline;
             background: #ffd4d4;
         }
 

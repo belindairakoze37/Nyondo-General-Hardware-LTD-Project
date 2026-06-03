@@ -6,7 +6,6 @@ from django.contrib.auth.decorators import login_required
 
 # Create your views here
 
-# This is for registering a new user
 @login_required
 def register_user(request):
     if request.method == "POST":
@@ -30,7 +29,6 @@ def login_user(request):
         if user is not None:
             login(request, user)
 
-            # For redirecting users to their respective places
             role = user.profile.role  
 
             if role == "admin":

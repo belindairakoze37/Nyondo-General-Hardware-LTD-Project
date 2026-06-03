@@ -10,6 +10,7 @@
             flex-direction: column;
             transition: all 0.3s ease;
             z-index: 1000;
+            font-family: Arial, sans-serif;
             box-shadow: 2px 0 20px rgba(0, 0, 0, 0.1);
         }
 
@@ -53,6 +54,7 @@
         }
 
         .nav-links li a {
+            font-family: Arial, sans-serif;
             display: flex;
             align-items: center;
             gap: 14px;

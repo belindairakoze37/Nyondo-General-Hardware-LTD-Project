@@ -108,10 +108,7 @@
             box-shadow: 0 0 0 4px rgba(44, 125, 160, 0.15);
             background-color: #ffffff;
         }
-        input[type="number"] {
-            -moz-appearance: textfield;
-        }
-
+       
         input[type="number"]::-webkit-inner-spin-button,
         input[type="number"]::-webkit-outer-spin-button {
             opacity: 0.5;

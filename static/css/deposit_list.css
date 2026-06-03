@@ -12,6 +12,7 @@
       }
 
       .container {
+        font-family: Arial, sans-serif;
         max-width: 1400px;
         margin-left: 270px;
         padding: 20px;
