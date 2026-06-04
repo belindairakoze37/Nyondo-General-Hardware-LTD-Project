@@ -22,171 +22,231 @@
       <form method="POST" action="{% url 'edit_sale' sale.id %}">
         {% csrf_token %}
 
+        {% if messages %}
+          {% for message in messages %}
+            <div class="message {{ message.tags }}">{{ message }}</div>
+          {% endfor %}
+        {% endif %}
+
+        {% if form.non_field_errors %}
+          <div class="form-errors">
+            {% for error in form.non_field_errors %}
+              <p>{{ error }}</p>
+            {% endfor %}
+          </div>
+        {% endif %}
+
         <div class="row-2col">
-          <div class="form-group">
+          <div class="form-group{% if form.customer.errors %} has-error{% endif %}">
             <label>Customer *</label>
-            <select name="customer" required>
+            <select name="customer">
               {% for customer in customers %}
               <option
-                value="{{ customer.id }}" {% if sale.customer.id == customer.id %}selected{% endif %}
+                value="{{ customer.id }}" {% if form.customer.value|stringformat:"s" == customer.id|stringformat:"s" or sale.customer.id == customer.id %}selected{% endif %}
               >
                 {{ customer.name }}
               </option>
               {% endfor %}
             </select>
+            {% if form.customer.errors %}
+              {% for error in form.customer.errors %}
+                <small class="field-error">{{ error }}</small>
+              {% endfor %}
+            {% endif %}
           </div>
 
-          <div class="form-group">
+          <div class="form-group{% if form.product.errors %} has-error{% endif %}">
             <label>Product *</label>
-            <select name="product" required>
+            <select name="product">
               {% for stock in stocks %}
               <option
-                value="{{ stock.id }}" {% if sale.product.id == stock.id %}selected{% endif %}
+                value="{{ stock.id }}" {% if form.product.value|stringformat:"s" == stock.id|stringformat:"s" or sale.product.id == stock.id %}selected{% endif %}
               >
                 {{ stock.product_name }} (Available: {{ stock.quantity }})
               </option>
               {% endfor %}
             </select>
+            {% if form.product.errors %}
+              {% for error in form.product.errors %}
+                <small class="field-error">{{ error }}</small>
+              {% endfor %}
+            {% endif %}
           </div>
         </div>
 
         <div class="row-2col">
-          <div class="form-group">
+          <div class="form-group{% if form.quantity_sold.errors %} has-error{% endif %}">
             <label>Quantity Sold *</label>
             <input
-              type="number"
+              type="text"
               name="quantity_sold"
-              value="{{ sale.quantity_sold }}"
-              min="1"
-              required
+              value="{{ form.quantity_sold.value|default:sale.quantity_sold }}"
               placeholder="e.g., 5"
             />
+            {% if form.quantity_sold.errors %}
+              {% for error in form.quantity_sold.errors %}
+                <small class="field-error">{{ error }}</small>
+              {% endfor %}
+            {% endif %}
           </div>
 
-          <div class="form-group">
+          <div class="form-group{% if form.unit_selling_price.errors %} has-error{% endif %}">
             <label>Unit Selling Price *</label>
             <input
-              type="number"
-              step="0.01"
-              min="1"
+              type="text"
               name="unit_selling_price"
-              value="{{ sale.unit_selling_price }}"
-              required
+              value="{{ form.unit_selling_price.value|default:sale.unit_selling_price }}"
               placeholder="UGX 0.00"
             />
+            {% if form.unit_selling_price.errors %}
+              {% for error in form.unit_selling_price.errors %}
+                <small class="field-error">{{ error }}</small>
+              {% endfor %}
+            {% endif %}
           </div>
         </div>
 
         
         <div class="row-2col">
-          <div class="form-group">
+          <div class="form-group{% if form.unit_cost_price.errors %} has-error{% endif %}">
             <label>Unit Cost Price *</label>
             <input
-              type="number"
-              step="0.01"
-              min="1"
+              type="text"
               name="unit_cost_price"
-              value="{{ sale.unit_cost_price }}"
-              required
+              value="{{ form.unit_cost_price.value|default:sale.unit_cost_price }}"
               placeholder="Cost per item (for profit tracking)"
             />
+            {% if form.unit_cost_price.errors %}
+              {% for error in form.unit_cost_price.errors %}
+                <small class="field-error">{{ error }}</small>
+              {% endfor %}
+            {% endif %}
           </div>
 
-          <div class="form-group">
+          <div class="form-group{% if form.distance_km.errors %} has-error{% endif %}">
             <label>Distance (km)</label>
             <input
-              type="number"
-              step="0.01"
-              min="1"
+              type="text"
               name="distance_km"
-              value="{{ sale.distance_km|default:'0' }}"
+              value="{{ form.distance_km.value|default:sale.distance_km|default:'0' }}"
               placeholder="Additional delivery cost"
             />
+            {% if form.distance_km.errors %}
+              {% for error in form.distance_km.errors %}
+                <small class="field-error">{{ error }}</small>
+              {% endfor %}
+            {% endif %}
           </div>
         </div>
 
         <div class="row-2col">
-          <div class="form-group">
+          <div class="form-group{% if form.payment_method.errors %} has-error{% endif %}">
             <label>Payment Method</label>
             <select name="payment_method">
               <option
-                value="cash" {% if sale.payment_method == 'cash' %}selected{% endif %}
+                value="cash" {% if form.payment_method.value|stringformat:"s" == 'cash' or sale.payment_method == 'cash' %}selected{% endif %}
               >
                 Cash
               </option>
               <option
-                value="mobile_money" {% if sale.payment_method == 'mobile_money' %}selected{% endif %}
+                value="mobile_money" {% if form.payment_method.value|stringformat:"s" == 'mobile_money' or sale.payment_method == 'mobile_money' %}selected{% endif %}
               >
                 Mobile Money
               </option>
               <option
-                value="bank_transfer" {% if sale.payment_method == 'bank_transfer' %}selected{% endif %}
+                value="bank_transfer" {% if form.payment_method.value|stringformat:"s" == 'bank_transfer' or sale.payment_method == 'bank_transfer' %}selected{% endif %}
               >
                 Bank Transfer
               </option>
               <option
-                value="credit" {% if sale.payment_method == 'credit' %}selected{% endif %}
+                value="credit" {% if form.payment_method.value|stringformat:"s" == 'credit' or sale.payment_method == 'credit' %}selected{% endif %}
               >
                 Credit
               </option>
             </select>
+            {% if form.payment_method.errors %}
+              {% for error in form.payment_method.errors %}
+                <small class="field-error">{{ error }}</small>
+              {% endfor %}
+            {% endif %}
           </div>
 
-          <div class="form-group">
+          <div class="form-group{% if form.sold_by.errors %} has-error{% endif %}">
             <label>Sold By (Staff)</label>
             <input
               type="text"
               name="sold_by"
-              value="{{ sale.sold_by|default:'' }}"
+              value="{{ form.sold_by.value|default:sale.sold_by|default:'' }}"
               placeholder="Salesperson name"
             />
+            {% if form.sold_by.errors %}
+              {% for error in form.sold_by.errors %}
+                <small class="field-error">{{ error }}</small>
+              {% endfor %}
+            {% endif %}
           </div>
         </div>
 
         <div class="row-2col">
-          <div class="form-group">
+          <div class="form-group{% if form.sale_date.errors %} has-error{% endif %}">
             <label>Sale Date</label>
             <input
               type="date"
               name="sale_date"
-              value="{{ sale.sale_date|date:'Y-m-d' }}"
+              value="{{ form.sale_date.value|default:sale.sale_date|date:'Y-m-d' }}"
             />
             <div class="field-hint">Date of transaction</div>
+            {% if form.sale_date.errors %}
+              {% for error in form.sale_date.errors %}
+                <small class="field-error">{{ error }}</small>
+              {% endfor %}
+            {% endif %}
           </div>
 
-          <div class="form-group">
+          <div class="form-group{% if form.due_date.errors %} has-error{% endif %}">
             <label>Due Date (for Credit)</label>
             <input
               type="date"
               name="due_date"
-              value="{{ sale.due_date|date:'Y-m-d' }}"
+              value="{{ form.due_date.value|default:sale.due_date|date:'Y-m-d' }}"
             />
             <div class="field-hint">Optional if payment method is credit</div>
+            {% if form.due_date.errors %}
+              {% for error in form.due_date.errors %}
+                <small class="field-error">{{ error }}</small>
+              {% endfor %}
+            {% endif %}
           </div>
         </div>
 
         <div class="row-2col">
-          <div class="form-group">
+          <div class="form-group{% if form.amount_paid.errors %} has-error{% endif %}">
             <label> Amount Paid</label>
             <input
-              type="number"
-              step="0.01"
-              min="1"
+              type="text"
               name="amount_paid"
-              value="{{ sale.amount_paid|default:'0' }}"
+              value="{{ form.amount_paid.value|default:sale.amount_paid|default:'0' }}"
               placeholder="Partial or full payment"
             />
             <div class="field-hint">Leave as 0 for full credit</div>
+            {% if form.amount_paid.errors %}
+              {% for error in form.amount_paid.errors %}
+                <small class="field-error">{{ error }}</small>
+              {% endfor %}
+            {% endif %}
           </div>
-          <div class="form-group">
+          <div class="form-group{% if form.notes.errors %} has-error{% endif %}">
             <label>Notes / Reference</label>
             <textarea
               name="notes"
               rows="2"
               placeholder="Special instructions, discount, comments..."
-            >
-{{ sale.notes|default:'' }}</textarea
-            >
+            >{{ form.notes.value|default:sale.notes|default:'' }}</textarea>
+            {% if form.notes.errors %}
+              {% for error in form.notes.errors %}
+                <small class="field-error">{{ error }}</small>
+              {% endfor %}
+            {% endif %}
           </div>
         </div>
 
@@ -194,7 +254,7 @@
           <input
             type="checkbox"
             name="is_fully_paid"
-            id="isFullyPaid" {% if sale.is_fully_paid %}checked{% endif %}
+            id="isFullyPaid" {% if form.is_fully_paid.value or sale.is_fully_paid %}checked{% endif %}
           />
           <label for="isFullyPaid"> Is Fully Paid</label>
           <span class="helper-text"

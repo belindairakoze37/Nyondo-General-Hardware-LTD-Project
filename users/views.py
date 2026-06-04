@@ -20,29 +20,32 @@ def register_user(request):
 
 
 def login_user(request):
+    error_message = None
+
     if request.method == "POST":
-        username = request.POST["username"]
-        password = request.POST["password"]
+        username = request.POST.get("username", "").strip()
+        password = request.POST.get("password", "").strip()
 
-        user = authenticate(request, username=username, password=password)
+        if not username or not password:
+            error_message = "Please enter both username and password."
+        else:
+            user = authenticate(request, username=username, password=password)
+            if user is not None:
+                login(request, user)
 
-        if user is not None:
-            login(request, user)
+                role = user.profile.role
+                if role == "admin":
+                    return redirect('admin_dashboard')
+                elif role == "store_manager":
+                    return redirect('stock_dashboard')
+                elif role == "sales_attendant":
+                    return redirect('sale_dashboard')
+                else:
+                    return redirect('stock_dashboard')
+            else:
+                error_message = "Invalid username or password. Please login with the correct credentials."
 
-            role = user.profile.role  
-
-            if role == "admin":
-                return redirect('admin_dashboard')
-
-            elif role == "store_manager":
-                return redirect('stock_dashboard')
-
-            elif role == "sales_attendant":
-                return redirect('sale_dashboard')
-
-            
-
-    return render(request, "registration/login.html")
+    return render(request, "registration/login.html", {"error_message": error_message})
 
 
 def user_logout(request):

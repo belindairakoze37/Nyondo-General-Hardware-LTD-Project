@@ -9,59 +9,68 @@
 
 {% block sidenav %}{% endblock %}
 
-
-
 {% block extra_css %}
     <link rel="stylesheet" href="{% static 'css/add_supplier.css' %}">
 {% endblock %}
 
 {% block content %}
-    
-
-
-
-
-
 <div class="container">
-
     <div class="header">
         <h2>Add New Supplier</h2>
     </div>
 
     <div class="form-card">
-       
-           {% if messages %}
-         {% for message in messages %}
-                <div class="message">
-            {{ message }}
+        {% if messages %}
+            {% for message in messages %}
+                <div class="message {{ message.tags }}">
+                    {{ message }}
                 </div>
-        {% endfor %}
+            {% endfor %}
         {% endif %}
-
 
         <form method="POST" action="{% url 'add_supplier' %}">
             {% csrf_token %}
 
+            {% if form.non_field_errors %}
+                <div class="form-errors">
+                    {% for error in form.non_field_errors %}
+                        <p>{{ error }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+
             <div class="form-group">
-                <label for="name">Supplier Name *</label>
-                <input type="text" id="name" name="name" required placeholder="Enter supplier name" value="{{ form_data.name|default:'' }}">
+                <label for="{{ form.name.id_for_label }}">Supplier Name *</label>
+                {{ form.name }}
+                {% for error in form.name.errors %}
+                    <small class="field-error">{{ error }}</small>
+                {% endfor %}
             </div>
 
             <div class="form-row">
                 <div class="form-group">
-                    <label for="email">Email Address *</label>
-                    <input type="email" id="email" name="email" required placeholder="supplier@example.com" value="{{ form_data.email|default:'' }}">
+                    <label for="{{ form.email.id_for_label }}">Email Address *</label>
+                    {{ form.email }}
+                    {% for error in form.email.errors %}
+                        <small class="field-error">{{ error }}</small>
+                    {% endfor %}
                 </div>
 
                 <div class="form-group">
-                    <label for="contact">Contact Number *</label>
-                    <input type="tel"  maxlength="13" id="contact" name="contact" required   placeholder="+25677567890" value="{{ form_data.contact|default:'' }}">
+                    <label for="{{ form.contact.id_for_label }}">Contact Number *</label>
+                    {{ form.contact }}
+                    {% for error in form.contact.errors %}
+                        <small class="field-error">{{ error }}</small>
+                    {% endfor %}
                 </div>
             </div>
 
             <div class="form-group">
-                <label for="address">Address *</label>
-                <textarea id="address" name="address" required placeholder="Enter full address">{{ form_data.address|default:'' }}</textarea>
+                <label for="{{ form.address.id_for_label }}">Address *</label>
+                {{ form.address }}
+                {% for error in form.address.errors %}
+                    <small class="field-error">{{ error }}</small>
+                {% endfor %}
             </div>
 
             <hr>
@@ -69,6 +78,5 @@
             <button type="submit" class="btn-submit">+ Add Supplier</button>
         </form>
     </div>
-
 </div>
 {% endblock %}

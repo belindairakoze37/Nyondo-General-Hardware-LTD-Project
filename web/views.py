@@ -9,6 +9,14 @@ from web.models import Customer
 from web.models import Payment
 from web.models import Deposit
 from web.models import SupplierCredit
+from web.forms import (
+    StockForm,
+    SupplierForm,
+    SupplierCreditForm,
+    SupplierCreditPaymentForm,
+    AddSaleForm,
+    EditSaleForm,
+)
 from decimal import Decimal
 import datetime
 from datetime import timedelta
@@ -42,56 +50,35 @@ def stock_list(request):
 
 @login_required
 def add_stock(request):
-    suppliers = Supplier.objects.all() 
-
     if request.method == "POST":
-        payload = request.POST
+        form = StockForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Stock added successfully")
+            return redirect('add_stock')
+        messages.error(request, "Please correct the errors below.")
+    else:
+        form = StockForm()
 
-        supplier_id = payload.get("supplier")
-        supplier = Supplier.objects.get(id=supplier_id)  
-
-        newStock = Stock()
-        newStock.product_name = payload.get("product_name")
-        newStock.quantity = int(payload.get("quantity"))
-        newStock.unit_cost = Decimal(payload.get("unit_cost"))   
-        newStock.selling_price = Decimal(payload.get("selling_price"))  
-        newStock.category = payload.get("category")
-        newStock.supplier = supplier 
-        newStock.payment_method = payload.get("payment_method") 
-        newStock.is_paid = payload.get("is_paid") == "on"
-        newStock.credit_due_date = payload.get("credit_due_date") or None
-
-
-        newStock.save()
-        return redirect('stock_list')
-
-    return render(request, "add_stock.html", {"suppliers": suppliers})
+    return render(request, "add_stock.html", {"form": form})
 
 @login_required
 def edit_stock(request, pk):
     stock = get_object_or_404(Stock, pk=pk)
-    suppliers = Supplier.objects.all()  
 
     if request.method == "POST":
-        supplier_id = request.POST.get("supplier")
-        supplier = Supplier.objects.get(id=supplier_id)  
-
-        stock.product_name = request.POST.get("product_name")
-        stock.quantity = int(request.POST.get("quantity"))
-        stock.unit_cost = Decimal(request.POST.get("unit_cost"))   
-        stock.selling_price = Decimal(request.POST.get("selling_price"))  
-        stock.category = request.POST.get("category")
-        stock.supplier = supplier   
-        stock.payment_method = request.POST.get("payment_method")
-        stock.is_paid = request.POST.get("is_paid") == "on"
-        stock.credit_due_date = request.POST.get("credit_due_date") or None
-
-        stock.save()
-        return redirect('stock_list')
+        form = StockForm(request.POST, instance=stock)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Stock updated successfully")
+            return redirect('edit_stock', pk=stock.pk)
+        messages.error(request, "Please correct the errors below.")
+    else:
+        form = StockForm(instance=stock)
 
     return render(request, "edit_stock.html", {
         'stock': stock,
-        'suppliers': suppliers
+        'form': form
     })
 
 
@@ -133,35 +120,20 @@ def supplier_list(request):
 
 @login_required
 def add_supplier(request):
-     if request.method == "POST":
-        payload = request.POST
-        sent_name = payload.get("name")
-        sent_email =  payload.get("email")
-        sent_contact = payload.get("contact")
-        sent_address =  payload.get("address")
+    if request.method == "POST":
+        form = SupplierForm(request.POST)
+        if request.FILES:
+            form.is_valid()
+            form.add_error(None, "File uploads are not allowed for suppliers.")
+        elif form.is_valid():
+            form.save()
+            messages.success(request, "Supplier added successfully")
+            return redirect('supplier_list')
+        messages.error(request, "Please correct the errors below.")
+    else:
+        form = SupplierForm()
 
-        # for validating ugandan phone numbers
-        phone_pattern = r'^(\+256|256|0)7\d{8}$'
-
-        if not re.match(phone_pattern, sent_contact):
-            messages.error(request, "Enter a valid Ugandan phone number")
-
-            context = {
-                "form_data":payload
-            }
-            return render(request,"add_supplier.html",context)
-        
-        
-        newSupplier = Supplier()
-        newSupplier.name = sent_name
-        newSupplier.email = sent_email
-        newSupplier.contact = sent_contact
-        newSupplier.address = sent_address
-        newSupplier.save()
-        messages.success(request, "Supplier added successfully")
-
-        return redirect('supplier_list')
-     return render(request,"add_supplier.html")
+    return render(request, "add_supplier.html", {"form": form})
 
 
 @login_required
@@ -234,42 +206,18 @@ def supplier_credit_list(request):
 @login_required
 def add_supplier_credit(request):
 
-    suppliers = Supplier.objects.all()
-    stocks = Stock.objects.all()
-
     if request.method == "POST":
-
-        supplier = Supplier.objects.get(
-            id=request.POST.get("supplier")
-        )
-
-        stock = Stock.objects.get(
-            id=request.POST.get("stock")
-        )
-
-        amount_owed = Decimal(
-            request.POST.get("amount_owed")
-        )
-
-        amount_paid = Decimal(
-            request.POST.get("amount_paid") or 0
-        )
-
-        due_date = request.POST.get("due_date")
-
-        SupplierCredit.objects.create(
-            supplier=supplier,
-            stock=stock,
-            amount_owed=amount_owed,
-            amount_paid=amount_paid,
-            due_date=due_date
-        )
-
-        return redirect('supplier_credit_list')
+        form = SupplierCreditForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Supplier credit added successfully")
+            return redirect('supplier_credit_list')
+        messages.error(request, "Please correct the errors below.")
+    else:
+        form = SupplierCreditForm()
 
     context = {
-        "suppliers": suppliers,
-        "stocks": stocks
+        "form": form
     }
 
     return render( request, "add_supplier_credit.html", context)
@@ -284,19 +232,19 @@ def pay_supplier_credit(request, credit_id):
     )
 
     if request.method == "POST":
-
-        payment = Decimal(
-            request.POST.get("payment")
-        )
-
-        credit.amount_paid += payment
-
-        credit.save()
-
-        return redirect('supplier_credit_list')
+        form = SupplierCreditPaymentForm(request.POST, credit=credit)
+        if form.is_valid():
+            credit.amount_paid += form.cleaned_data["payment"]
+            credit.save()
+            messages.success(request, "Supplier credit payment saved successfully")
+            return redirect('supplier_credit_list')
+        messages.error(request, "Please correct the errors below.")
+    else:
+        form = SupplierCreditPaymentForm(credit=credit)
 
     context = {
-        "credit": credit
+        "credit": credit,
+        "form": form
     }
 
     return render( request, "pay_supplier_credit.html", context)
@@ -446,73 +394,73 @@ def add_sale(request):
     
 
     if request.method == "POST":
-        customer = Customer.objects.get(id=request.POST["customer"])
-        product = Stock.objects.get(id=request.POST["product"])
-        sent_is_fully_paid = request.POST.get("is_fully_paid") == "on"
-
-        quantity_sold = int(request.POST.get("quantity_sold"))
-
-        
-        if quantity_sold > product.quantity:
-            messages.error( request, f"Only {product.quantity} items available.")
-            return redirect("add_sale")
+        form = AddSaleForm(request.POST)
+        if form.is_valid():
+            customer = form.cleaned_data["customer"]
+            product = form.cleaned_data["product"]
+            sent_is_fully_paid = form.cleaned_data["is_fully_paid"]
+            quantity_sold = form.cleaned_data["quantity_sold"]
 
 
-        newSale = Sale()
-        newSale.customer = customer
-        newSale.payment_method = request.POST.get("payment_method")
-        newSale.product = product
-        newSale.sale_date = request.POST.get("sale_date") or None
-        newSale.due_date = request.POST.get("due_date") or None
-        newSale.sold_by = request.POST.get("sold_by")
-        newSale.distance_km = Decimal(request.POST.get("distance_km") or 0)
+            newSale = Sale()
+            newSale.customer = customer
+            newSale.payment_method = form.cleaned_data["payment_method"]
+            newSale.product = product
+            newSale.due_date = form.cleaned_data["due_date"]
+            newSale.sold_by = form.cleaned_data["sold_by"]
+            newSale.distance_km = form.cleaned_data["distance_km"]
 
         
-        newSale.quantity_sold = quantity_sold
+            newSale.quantity_sold = quantity_sold
 
     
-        newSale.unit_selling_price = product.selling_price
-        newSale.unit_cost_price = product.unit_cost
-        newSale.notes = request.POST.get("notes")
+            newSale.unit_selling_price = product.selling_price
+            newSale.unit_cost_price = product.unit_cost
+            newSale.notes = form.cleaned_data["notes"]
 
         
-        newSale.amount_paid = Decimal(request.POST.get("amount_paid") or 0)
+            newSale.amount_paid = form.cleaned_data["amount_paid"]
 
-        total_amount = newSale.quantity_sold * newSale.unit_selling_price
+            total_amount = newSale.quantity_sold * newSale.unit_selling_price
 
     
-        if newSale.distance_km <= 10 and total_amount >= 500000:
-            newSale.transport_fee = 0
-        else:
-            newSale.transport_fee = 30000
+            if newSale.distance_km <= 10 and total_amount >= 500000:
+                newSale.transport_fee = 0
+            else:
+                newSale.transport_fee = 30000
 
         
-        newSale.save()
+            newSale.save()
 
         
-        if sent_is_fully_paid:
-            newSale.amount_paid = newSale.final_total
-            newSale.balance_due = 0
-            newSale.is_fully_paid = True
+            if sent_is_fully_paid:
+                newSale.amount_paid = newSale.final_total
+                newSale.balance_due = 0
+                newSale.is_fully_paid = True
 
         
-        else:
-            newSale.balance_due = newSale.final_total - newSale.amount_paid
+            else:
+                newSale.balance_due = newSale.final_total - newSale.amount_paid
 
             
-            if newSale.balance_due <= 0:
-                newSale.is_fully_paid = True
-                newSale.balance_due = 0
-            else:
-                newSale.is_fully_paid = False
+                if newSale.balance_due <= 0:
+                    newSale.is_fully_paid = True
+                    newSale.balance_due = 0
+                else:
+                    newSale.is_fully_paid = False
 
-        newSale.save()
+            newSale.save()
 
-        return redirect('sale_list')
+            messages.success(request, "Sale added successfully")
+            return redirect('sale_list')
+        messages.error(request, "Please correct the errors below.")
+    else:
+        form = AddSaleForm()
 
     context = {
         "customers": customers,
-        "stocks": stocks
+        "stocks": stocks,
+        "form": form
     }
 
     return render(request, "add_sale.html", context)
@@ -523,33 +471,54 @@ def edit_sale(request,pk):
     sale = get_object_or_404(Sale,pk=pk)
     customers = Customer.objects.all()
     stocks = Stock.objects.all()
-    
-    if request.method == "POST":
-        sale.customer = Customer.objects.get(id=request.POST ["customer"])
-        sale.product = Stock.objects.get(id=request.POST["product"])
-        sale.quantity_sold = int(request.POST.get("quantity_sold"))
-        sale.unit_selling_price = Decimal(request.POST.get("unit_selling_price"))
-        sale.unit_cost_price = Decimal(request.POST.get("unit_cost_price"))
-        total_amount = (sale.quantity_sold * sale.unit_selling_price)
-        sale.distance_km = Decimal(request.POST.get("distance_km"))
-        sale.payment_method = request.POST.get("payment_method")
-        sale.sold_by = request.POST.get("sold_by")
-        sale.sale_date = request.POST.get("sale_date") or sale.sale_date
-        sale.due_date = request.POST.get("due_date") or None
-        sale.amount_paid = Decimal(request.POST.get("amount_paid"))
-        sale.notes = request.POST.get("notes")
-        sale.is_fully_paid = request.POST.get("is_fully_paid") == "on"
-        if sale.distance_km <= 10 and total_amount >= 500000:
-            sale.transport_fee = 0
-        else:
-            sale.transport_fee = 30000
 
-        sale.save()
-        return redirect('sale_list')
+    if request.method == "POST":
+        form = EditSaleForm(request.POST)
+        if form.is_valid():
+            sale.customer = form.cleaned_data["customer"]
+            sale.product = form.cleaned_data["product"]
+            sale.quantity_sold = form.cleaned_data["quantity_sold"]
+            sale.unit_selling_price = form.cleaned_data["unit_selling_price"]
+            sale.unit_cost_price = form.cleaned_data["unit_cost_price"]
+            sale.distance_km = form.cleaned_data["distance_km"]
+            sale.payment_method = form.cleaned_data["payment_method"]
+            sale.sold_by = form.cleaned_data["sold_by"]
+            sale.sale_date = form.cleaned_data["sale_date"] or sale.sale_date
+            sale.due_date = form.cleaned_data["due_date"]
+            sale.amount_paid = form.cleaned_data["amount_paid"]
+            sale.notes = form.cleaned_data["notes"]
+            sale.is_fully_paid = form.cleaned_data["is_fully_paid"]
+
+            if sale.distance_km <= 10 and sale.quantity_sold * sale.unit_selling_price >= 500000:
+                sale.transport_fee = 0
+            else:
+                sale.transport_fee = 30000
+
+            sale.save()
+            messages.success(request, "Sale updated successfully")
+            return redirect('sale_list')
+    else:
+        form = EditSaleForm(initial={
+            "customer": sale.customer,
+            "product": sale.product,
+            "quantity_sold": sale.quantity_sold,
+            "unit_selling_price": sale.unit_selling_price,
+            "unit_cost_price": sale.unit_cost_price,
+            "payment_method": sale.payment_method,
+            "distance_km": sale.distance_km,
+            "amount_paid": sale.amount_paid,
+            "sale_date": sale.sale_date and sale.sale_date.date(),
+            "due_date": sale.due_date and sale.due_date.date(),
+            "sold_by": sale.sold_by,
+            "notes": sale.notes,
+            "is_fully_paid": sale.is_fully_paid,
+        })
+
     context = {
         "customers":customers,
         "stocks":stocks,
-        "sale":sale
+        "sale":sale,
+        "form": form,
     }
 
     return render(request,"edit_sale.html", context)

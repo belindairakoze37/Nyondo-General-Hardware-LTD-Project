@@ -153,6 +153,19 @@
             text-decoration: underline;
         }
 
+        .alert {
+            background: #fdecea;
+            color: #b71c1c;
+            border: 1px solid #f5c2c7;
+            border-radius: 12px;
+            padding: 14px 16px;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        .alert strong {
+            margin-right: 6px;
+        }
 
         @media (max-width: 480px) {
             .login-card {
@@ -180,7 +193,17 @@
                 <p>Login to access your dashboard</p>
             </div>
 
-            
+            {% if error_message %}
+                <div class="alert">
+                    <strong>Error:</strong> {{ error_message }}
+                </div>
+            {% endif %}
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert {{ message.tags }}">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+
             <form action="dashboard.html" method="get">
                 <div class="input-group">
                     <i class="fas fa-envelope"></i>

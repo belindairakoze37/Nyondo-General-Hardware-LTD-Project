@@ -34,32 +34,21 @@
             
             <form action="{% url 'login' %}" method="POST" novalidate>
                 {% csrf_token %}
-                {% if form.errors %}
+                {% if error_message %}
                     <div class="alert">
-                        <strong>Error</strong> You have errors the fix
+                        <strong>Error:</strong> {{ error_message }}
                     </div>
                 {% endif %}
-                    <div class="input-group">
+                <div class="input-group">
                     <i class="fas fa-user"></i>
-                    <input name="username" type="text" placeholder="Enter Username" required>
-                {% if form.errors.username %}
-                        <div class="alert">
-                            <strong>Error</strong> {{ form.errors.username }}
-                        </div>
-                {% endif %}
+                    <input name="username" type="text" placeholder="Enter Username">
                 </div>
 
                 <div class="input-group">
                     <i class="fas fa-lock"></i>
-                    <input name="password" type="password" placeholder="Password" required>
-                    {% if form.errors.password %}
-                        <div class="alert">
-                             {{ form.errors.password }}
-                        </div>
-                    {% endif %}
+                    <input name="password" type="password" placeholder="Password">
                 </div>
-                    <button type="submit" class="login-btn">Login</button></a>
-                </div> 
+                <button type="submit" class="login-btn">Login</button>
             </form>
         </div>
     </div>

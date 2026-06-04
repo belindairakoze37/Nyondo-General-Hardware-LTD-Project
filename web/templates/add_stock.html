@@ -26,139 +26,115 @@
           </p>
         </div>
 
+        {% if messages %}
+          {% for message in messages %}
+            <div class="message {{ message.tags }}">
+              {{ message }}
+            </div>
+          {% endfor %}
+        {% endif %}
+
         <form method="POST" class="stock-form" action="{% url 'add_stock' %}">
           {% csrf_token %}
 
+          {% if form.non_field_errors %}
+            <div class="form-errors">
+              {% for error in form.non_field_errors %}
+                <p>{{ error }}</p>
+              {% endfor %}
+            </div>
+          {% endif %}
+
           
           <div class="form-row">
             <div class="form-group">
-              <label>
+              <label for="{{ form.product_name.id_for_label }}">
                  Product Name
                 <span class="required">*</span>
               </label>
-              <select name="product_name" required>
-                <option value="">-- Select Product --</option>
-                <option value="Cement - CEM II N">Cement - CEM II N</option>
-                <option value="Cement - CEM III N">Cement - CEM III N</option>
-                <option value="Iron Bar - 10mm">Iron Bar - 10mm</option>
-                <option value="Iron Bar - 12mm">Iron Bar - 12mm</option>
-                <option value="Iron Bar - 16mm">Iron Bar - 16mm</option>
-                <option value="Nails - 1 inch">Nails - 1 inch</option>
-                <option value="Nails - 3 inch">Nails - 3 inch</option>
-                <option value="Nails - 4 inch">Nails - 4 inch</option>
-                <option value="Nails - 5 inch">Nails - 5 inch</option>
-                <option value="Roofing Nails">Roofing Nails</option>
-                <option value="Wheelbarrow">Wheelbarrow</option>
-                <option value="Wire Mesh">Wire Mesh</option>
-                <option value="Barbed Wire - High Tensile">
-                  Barbed Wire - High Tensile
-                </option>
-                <option value="Barbed Wire - Low Tensile">
-                  Barbed Wire - Low Tensile
-                </option>
-                <option value="Iron Sheets - Green">Iron Sheets - Green</option>
-                <option value="Iron Sheets - Blue">Iron Sheets - Blue</option>
-                <option value="Iron Sheets - Red">Iron Sheets - Red</option>
-                <option value="Iron Sheets - White">Iron Sheets - Silver</option>
-              </select>
+              {{ form.product_name }}
+              {% for error in form.product_name.errors %}
+                <small class="field-error">{{ error }}</small>
+              {% endfor %}
             </div>
 
             <div class="form-group">
-              <label>
+              <label for="{{ form.quantity.id_for_label }}">
                Quantity
                 <span class="required">*</span>
               </label>
-              <input
-                type="number"
-                name="quantity"
-                min="1"
-                step="1"
-                placeholder="Enter quantity"
-                required
-              />
+              {{ form.quantity }}
+              {% for error in form.quantity.errors %}
+                <small class="field-error">{{ error }}</small>
+              {% endfor %}
             </div>
           </div>
 
           
           <div class="form-row">
             <div class="form-group">
-              <label>
+              <label for="{{ form.unit_cost.id_for_label }}">
                  Unit Cost (UGX)
                 <span class="required">*</span>
               </label>
-              <input
-                type="number"
-                name="unit_cost"
-                min="1"
-                step="0.01"
-                placeholder="Cost from supplier"
-                required
-              />
+              {{ form.unit_cost }}
+              {% for error in form.unit_cost.errors %}
+                <small class="field-error">{{ error }}</small>
+              {% endfor %}
             </div>
 
             <div class="form-group">
-              <label>
+              <label for="{{ form.selling_price.id_for_label }}">
                  Selling Price (UGX)
                 <span class="required">*</span>
               </label>
-              <input
-                type="number"
-                name="selling_price"
-                min="1"
-                step="0.01"
-                placeholder="Price to customers"
-                required
-              />
+              {{ form.selling_price }}
+              {% for error in form.selling_price.errors %}
+                <small class="field-error">{{ error }}</small>
+              {% endfor %}
             </div>
 
             <div class="form-group">
-              <label> Category</label>
-              <select name="category" class="form-control" required>
-                <option value=""> --select category--</option>    
-                <option value="cement">Cement</option>
-                <option value="steel">Steel</option>
-                <option value="nails">Nails</option>
-                <option value="hardware">Hardware</option>
-                <option value="roofing">Roofing</option>
-              </select>
+              <label for="{{ form.category.id_for_label }}">
+                Category
+                <span class="required">*</span>
+              </label>
+              {{ form.category }}
+              {% for error in form.category.errors %}
+                <small class="field-error">{{ error }}</small>
+              {% endfor %}
             </div>
           </div>
 
           <div class="form-row">
             <div class="form-group">
-              <label>
+              <label for="{{ form.supplier.id_for_label }}">
                  Supplier
                 <span class="required">*</span>
               </label>
-              <select name="supplier" required>
-                <option value="">-- Select Supplier --</option>
-    {% for supplier in suppliers %}
-        <option value="{{ supplier.id }}">{{ supplier.name }}</option>
-    {% endfor %}
-              </select>
+              {{ form.supplier }}
+              {% for error in form.supplier.errors %}
+                <small class="field-error">{{ error }}</small>
+              {% endfor %}
             </div>
 
             <div class="form-group">
-              <label>
+              <label for="{{ form.payment_method.id_for_label }}">
                  Payment Method
                 <span class="required">*</span>
               </label>
-              <select name="payment_method" required>
-                <option value="">-- Select Payment Method --</option>
-                <option value="cash"> Cash</option>
-                <option value="bank_transfer"> Bank Transfer</option>
-                <option value="credit"> Credit (Pay Later)</option>
-                <option value="cheque"> Cheque</option>
-                <option value="mobile_money"> Mobile Money</option>
-              </select>
+              {{ form.payment_method }}
+              {% for error in form.payment_method.errors %}
+                <small class="field-error">{{ error }}</small>
+              {% endfor %}
             </div>
           </div>
 
       
           <div class="form-row">
             <div class="form-group checkbox-group">
-              <input type="checkbox" name="is_paid" id="is_paid" />
-              <label for="is_paid">
+              {{ form.is_paid }}
+              <label for="{{ form.is_paid.id_for_label }}">
                  Is Paid
               </label>
               <small style="margin-left: 8px; color: #666; font-size: 12px;">
@@ -170,22 +146,23 @@
 
           <div class="form-row">
             <div class="form-group">
-              <label>
+              <label for="{{ form.credit_due_date.id_for_label }}">
                  Credit Due Date
               </label>
-              <input type="date" name="credit_due_date" />
+              {{ form.credit_due_date }}
+              {% for error in form.credit_due_date.errors %}
+                <small class="field-error">{{ error }}</small>
+              {% endfor %}
             </div>
             <div class="form-group">
-              <label>
+              <label for="{{ form.unit.id_for_label }}">
                  Unit Of Measure
                 <span class="required">*</span>
               </label>
-              <select name="unit" required>
-                <option value="">-- Select unit of measure --</option>
-                <option value="pcs">pieces</option>
-                <option value="bags">Bags</option>
-                <option value="kg">Kilograms</option>
-              </select>
+              {{ form.unit }}
+              {% for error in form.unit.errors %}
+                <small class="field-error">{{ error }}</small>
+              {% endfor %}
             </div>
           </div>
           

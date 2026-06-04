@@ -27,7 +27,7 @@
     
         .login-card {
             background: white;
-            height: 80vh;
+            height: 90vh;
             border-radius: 30px;
             padding: 45px 40px;
             box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
@@ -144,6 +144,19 @@
             text-decoration: underline;
         }
 
+        .alert {
+            background: #fdecea;
+            color: #a00;
+            border: 1px solid #f5c2c7;
+            border-radius: 12px;
+            padding: 14px 16px;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        .alert strong {
+            margin-right: 6px;
+        }
 
         @media (max-width: 480px) {
             .login-card {

@@ -112,12 +112,35 @@
             border: none;
             border-top: 1px solid #eee;
         }
-        .message{
-            background-color: #ffe6e6;
-            color: #cc0000;
-            border: 1px solid #ffb3b3;
+        .message,
+        .form-errors {
             padding: 12px;
             border-radius: 5px;
             margin-bottom: 15px;
             font-size: 14px;
+            font-weight: 600;
+        }
+
+        .message.success {
+            background-color: #e8f5e9;
+            color: #1b5e20;
+            border: 1px solid #a5d6a7;
+        }
+
+        .message.error,
+        .form-errors {
+            background-color: #ffe6e6;
+            color: #cc0000;
+            border: 1px solid #ffb3b3;
+        }
+
+        .form-errors p {
+            margin: 0;
+        }
+
+        .field-error {
+            display: block;
+            color: #cc0000;
+            font-size: 12px;
+            margin-top: 6px;
         }

@@ -21,80 +21,64 @@
 
         <h2>Add Supplier Credit</h2>
 
+        {% if messages %}
+            {% for message in messages %}
+                <div class="message {{ message.tags }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+
         <form method="POST">
 
             {% csrf_token %}
 
-            <div class="form-group">
-                <label>Supplier</label>
-
-                <select name="supplier" required>
-
-                    <option value="">
-                        Select Supplier
-                    </option>
-
-                    {% for supplier in suppliers %}
-
-                    <option value="{{ supplier.id }}">
-                        {{ supplier.name }}
-                    </option>
-
+            {% if form.non_field_errors %}
+                <div class="form-errors">
+                    {% for error in form.non_field_errors %}
+                        <p>{{ error }}</p>
                     {% endfor %}
+                </div>
+            {% endif %}
 
-                </select>
+            <div class="form-group">
+                <label for="{{ form.supplier.id_for_label }}">Supplier</label>
+                {{ form.supplier }}
+                {% for error in form.supplier.errors %}
+                    <small class="field-error">{{ error }}</small>
+                {% endfor %}
             </div>
 
             <div class="form-group">
-                <label>Stock/Product</label>
-
-                <select name="stock" required>
-
-                    <option value="">
-                        Select Product
-                    </option>
-
-                    {% for stock in stocks %}
-
-                    <option value="{{ stock.id }}">
-                        {{ stock.product_name }}
-                    </option>
-
-                    {% endfor %}
-
-                </select>
+                <label for="{{ form.stock.id_for_label }}">Stock/Product</label>
+                {{ form.stock }}
+                {% for error in form.stock.errors %}
+                    <small class="field-error">{{ error }}</small>
+                {% endfor %}
             </div>
 
             <div class="form-group">
-                <label>Amount Owed</label>
-
-                <input
-                    type="number"
-                    step="0.01"
-                    name="amount_owed"
-                    required
-                >
+                <label for="{{ form.amount_owed.id_for_label }}">Amount Owed</label>
+                {{ form.amount_owed }}
+                {% for error in form.amount_owed.errors %}
+                    <small class="field-error">{{ error }}</small>
+                {% endfor %}
             </div>
 
             <div class="form-group">
-                <label>Amount Paid</label>
-
-                <input
-                    type="number"
-                    step="0.01"
-                    name="amount_paid"
-                    value="0"
-                >
+                <label for="{{ form.amount_paid.id_for_label }}">Amount Paid</label>
+                {{ form.amount_paid }}
+                {% for error in form.amount_paid.errors %}
+                    <small class="field-error">{{ error }}</small>
+                {% endfor %}
             </div>
 
             <div class="form-group">
-                <label>Due Date</label>
-
-                <input
-                    type="date"
-                    name="due_date"
-                    required
-                >
+                <label for="{{ form.due_date.id_for_label }}">Due Date</label>
+                {{ form.due_date }}
+                {% for error in form.due_date.errors %}
+                    <small class="field-error">{{ error }}</small>
+                {% endfor %}
             </div>
 
             <button type="submit">
