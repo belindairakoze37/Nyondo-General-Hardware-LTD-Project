@@ -53,10 +53,36 @@ def add_stock(request):
     if request.method == "POST":
         form = StockForm(request.POST)
         if form.is_valid():
-            form.save()
-            messages.success(request, "Stock added successfully")
+            # Extract key fields for matching existing stock
+            product_name = form.cleaned_data['product_name']
+            category = form.cleaned_data['category']
+            unit_cost = form.cleaned_data['unit_cost']
+            selling_price = form.cleaned_data['selling_price']
+            quantity_to_add = form.cleaned_data['quantity']
+            
+            # Try to find an existing stock with matching product details
+            try:
+                existing_stock = Stock.objects.get(
+                    product_name=product_name,
+                    category=category,
+                    unit_cost=unit_cost,
+                    selling_price=selling_price
+                )
+                # Update existing stock quantity
+                existing_stock.quantity += quantity_to_add
+                existing_stock.save()
+                messages.success(
+                    request, 
+                    f"Stock quantity updated successfully! New total: {existing_stock.quantity} units"
+                )
+            except Stock.DoesNotExist:
+                # Create new stock record when no matching product exists
+                form.save()
+                messages.success(request, "New product added to stock successfully!")
+            
             return redirect('add_stock')
-        messages.error(request, "Please correct the errors below.")
+        else:
+            messages.error(request, "Please correct the errors below.")
     else:
         form = StockForm()
 
@@ -87,7 +113,7 @@ def stock_dashboard(request):
     stocks = Stock.objects.all()
     total_value = sum(item.quantity * item.unit_cost for item in stocks)
     low_stock = stocks.filter(quantity__lt=10)
-    recent_stocks = stocks
+    recent_stocks = stocks[:7]
     
     context = {
         "total_value":total_value,
