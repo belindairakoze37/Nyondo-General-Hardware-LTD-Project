@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+{% load static %}
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -26,17 +27,25 @@
 
     .hero{
       min-height:100vh;
-      background:linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
       position:relative;
       display:flex;
       align-items:center;
       justify-content:center;
       padding:40px;
       overflow:hidden;
+      background-color:#0f172a; 
+      background-size:cover;
+      background-position:center;
+      background-attachment:fixed;
     }
 
     .overlay{
-      display:none;
+      display:block;
+      position:absolute;
+      inset:0;
+      background:linear-gradient(180deg, rgba(2,6,23,0.25), rgba(14,23,34,0.35));
+      z-index:1;
+      pointer-events:none;
     }
 
     .hero-content{
